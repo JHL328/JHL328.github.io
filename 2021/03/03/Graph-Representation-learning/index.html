@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  <title>Graph Representation learning - Hexo</title>
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    <link  rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/github-gist.min.css" />
+  
+
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_yg9cfy8wd6.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_pjno9b9zyxs.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script  src="/js/utils.js" ></script>
+<meta name="generator" content="Hexo 4.2.1"><link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+</head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Fluid</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              
+  <div class="mt-3 post-meta">
+    <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+    <time datetime="2021-03-03 16:23">
+      2021年3月3日 下午
+    </time>
+  </div>
+
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      1.4k 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      14
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <div class="post-content mx-auto" id="post">
+            
+            <article class="markdown-body">
+              <h2 id="2-Background-amp-Traditional-approaches"><a href="#2-Background-amp-Traditional-approaches" class="headerlink" title="2.Background &amp; Traditional approaches"></a>2.Background &amp; Traditional approaches</h2><h3 id="2-3-Graph-Laplacians-and-Spectral-Methods-图拉普拉斯和谱图方法"><a href="#2-3-Graph-Laplacians-and-Spectral-Methods-图拉普拉斯和谱图方法" class="headerlink" title="2.3 Graph Laplacians and Spectral Methods(图拉普拉斯和谱图方法)"></a>2.3 Graph Laplacians and Spectral Methods(图拉普拉斯和谱图方法)</h3><p>邻接矩阵可以无信息损失的表示图，而具有同样的一些效果的矩阵被称为拉普拉斯矩阵，这些矩阵是由邻接矩阵通过变换得到的</p>
+<h4 id="2-3-1-Graph-Laplacians"><a href="#2-3-1-Graph-Laplacians" class="headerlink" title="2.3.1 Graph Laplacians"></a>2.3.1 Graph Laplacians</h4><ul>
+<li><strong>Unnormalized Laplacian非规范化的拉普拉斯式</strong></li>
+</ul>
+<p><img src="/2021/03/03/Graph-Representation-learning/2.3-1.PNG" srcset="/img/loading.gif" alt="2.3-1"></p>
+<h4 id="2-3-2-Graph-Cuts-and-clustering"><a href="#2-3-2-Graph-Cuts-and-clustering" class="headerlink" title="2.3.2 Graph Cuts and clustering"></a>2.3.2 Graph Cuts and clustering</h4><p>在这一节当中会介绍使用拉普拉斯矩阵，在完全连通图中给出节点的最优聚类（optimal cluster）。</p>
+<p><strong>Graph cuts</strong></p>
+<p>首先，我们先需要找的用来衡量分割好坏的量，称之为<code>cut value</code>，而其值的定义如下：</p>
+<p><img src="/2021/03/03/Graph-Representation-learning/2.3-2.PNG" srcset="/img/loading.gif" alt="2.3-2"></p>
+<p>换句话说，就是<strong>有的多少条边越过了我们所划分的不同子集的边界</strong>，而所谓的最优聚类就算是找到cut value最小的划分方式</p>
+<p><strong>缺点：倾向于把图划分成独立的点（稍微有一些不理解！！！）</strong></p>
+<p>改进方法：不仅仅是寻找最小化切割的方式，并且要使得分区是较大的，引入<code>ratio cut</code>：</p>
+<p><img src="/2021/03/03/Graph-Representation-learning/2.3-3.PNG" srcset="/img/loading.gif" alt="2.3-3"></p>
+<p>此时，如果是较小的分区，那么分母就会是比较小的，进而ratio cut变大</p>
+<p>同时还有一种解决方法——<code>Ncut</code>：</p>
+<p><img src="/2021/03/03/Graph-Representation-learning/2.3-4.PNG" srcset="/img/loading.gif" alt="2.3-4"></p>
+<p><strong>使用拉普拉斯谱最小化RatioCut</strong></p>
+<p>目标是通过拉普拉斯谱来找到最小的ratiocut</p>
+<blockquote>
+<p>最小化目标定义为，<br><img src="/2021/03/03/Graph-Representation-learning/2.3-5.PNG" srcset="/img/loading.gif" alt="2.3-5"></p>
+<p>为了解决NP难问题，将a的条件放宽到，满足上述2个条件的实值向量即可。<br>根据瑞利-里兹定理，这个优化问题的解是由L的第二小的特征值对应的特征向量，因此，我们可以通过设置a为第二小的特征向量，来逼近RatioCut的最小值。<br>总而言之，拉普拉斯矩阵的第二小的特征向量是离散向量的连续近似，它给出了一个最优的聚类分配。<br><img src="/2021/03/03/Graph-Representation-learning/2.3-6.PNG" srcset="/img/loading.gif" alt="2.3-6"></p>
+</blockquote>
+<h4 id="2-3-3-Generalized-spectral-clustering"><a href="#2-3-3-Generalized-spectral-clustering" class="headerlink" title="2.3.3 Generalized spectral clustering"></a>2.3.3 Generalized spectral clustering</h4><p>上一节，我们找到了一个将图分成两个簇的最优划分。那么，我们也可以将这种方法推广到K个簇的最优划分问题上。</p>
+<p>这种一般方法的步骤如下：<br><img src="/2021/03/03/Graph-Representation-learning/2.3-8.PNG" srcset="/img/loading.gif" alt="2.3-8"></p>
+<p>4、使用K均值聚类方法来聚合，从而在最优划分的条件下，将图划分成K簇。</p>
+<h3 id="2-4-Towards-Learned-Representations"><a href="#2-4-Towards-Learned-Representations" class="headerlink" title="2.4 Towards Learned Representations"></a>2.4 Towards Learned Representations</h3><h1 id="Part-Ⅰ：Node-Embedding"><a href="#Part-Ⅰ：Node-Embedding" class="headerlink" title="Part Ⅰ：Node Embedding"></a>Part Ⅰ：Node Embedding</h1><h2 id="3-Neighborhood-Reconstruction-Methods"><a href="#3-Neighborhood-Reconstruction-Methods" class="headerlink" title="3.Neighborhood Reconstruction Methods"></a>3.Neighborhood Reconstruction Methods</h2><p>什么是node embedding and why we need？</p>
+<p>有监督的机器学习都要经历以下几个步骤：首先在原始数据上进行特征工程（因为计算机无法直接识别一个抽象的东西，例如graph或者图片等，需要用计算机能够理解的方式表示出来），得到结构化的数据，接着确定机器学习算法，最终训练得到模型。在这个过程中，特征工程是十分耗时费力的。因此我们更喜欢能够自动获取这些特征的方式（如深度学习）。</p>
+<p>而node embedding就是将计算机难以理解的raw data转变为可以理解的structure data，我们通过d维空间上的向量来表示一个节点，d是用来衡量节点信息的，d越大，往往代表节点所包含的信息越大，同时还要求embedding的过程是可逆的，即我们还能从所有向量中推测出原来的图的形式，同时为了评判这个过程的好坏，引入了衡量/相似函数similarity以及损失函数loss</p>
+<p>下面是一个案例，将左边的图结构的节点用一个二维向量来表示（当然在实际项目中，embedding向量通常会有几十甚至几百个维度，这里采用二维向量只是为了方便可视化）。可以看到，在右边的图上，比较接近的点在网络中的关系也比较紧密。</p>
+<p>但是，传统的深度学习框架很难解决Network Embedding，主要原因有以下几点：</p>
+<p>CNN用于固定大小的图像/网格，即像素点的拓扑结构使单一的、固定的。</p>
+<p>RNNs或word2vec用于文本/序列，即节点的次序是固定的。</p>
+<p>而网络（Networks）的结构要复杂的多得多！网络拥有更加复杂的拓扑结构，且节点的顺序并不是固定的。更有甚者，网络是动态变化的。<br>因此，我们接下来讨论网络中的embedding nodes。</p>
+<p>在第三章中，我们关心的是图的结构信息，所以忽略掉了所有的节点特征以及其他信息，同时我们的目标是在经过embedding之后，d维空间上两个向量的相似性和在图上两个节点的相似性基本上是很像的，在这里，我们首先要定义好什么是图上节点的相似性，之后才能构造编码函数并衡量向量空间上是否相似</p>
+<p>第28页</p>
+<p>假设左边就是一个我们需要输入的图结构，希望通过一个两层的神经网络来学习我们target node的一个新的表示，首先找到A的邻居B,C,D，之后再找的话就是找BCD的邻居，找到之后将相应的信息进行聚合，聚合之后会得到一层神经网络的结果，之后再次进行聚合，会得到A的经过两层神经网络的消息传递之后的结果</p>
+
+            </article>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/Graph-representation-learning/">Graph representation learning</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" target="_blank" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！</p>
+              
+              
+                <div class="post-prevnext row">
+                  <div class="post-prev col-6">
+                    
+                    
+                      <a href="/2021/03/16/Buffer-Overflow-Attack-server/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Buffer Overflow Attack server</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </div>
+                  <div class="post-next col-6">
+                    
+                    
+                      <a href="/2021/01/05/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9Flab6%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/">
+                        <span class="hidden-mobile">操作系统lab6实验报告</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </div>
+                </div>
+              
+            </div>
+
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div id="tocbot"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+  </main>
+
+  
+    <a id="scroll-top-button" href="#" role="button">
+      <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  
+
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <div>
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a>
+      <i class="iconfont icon-love"></i>
+      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener">
+        <span>Fluid</span></a>
+    </div>
+    
+
+    
+
+    
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script  src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script  src="/js/debouncer.js" ></script>
+<script  src="/js/main.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/lazyload.js" ></script>
+  
+
+
+
+  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js" ></script>
+  <script  src="/js/clipboard-use.js" ></script>
+
+
+
+
+
+
+
+  <script  src="https://cdn.staticfile.org/tocbot/4.11.1/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var boardCtn = $('#board-ctn');
+      var boardTop = boardCtn.offset().top;
+
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: 'article.markdown-body',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        collapseDepth: 0,
+        scrollSmooth: true,
+        headingsOffset: -boardTop
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc').css('visibility', 'visible');
+      }
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "Graph Representation learning&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      searchFunc(path, 'local-search-input', 'local-search-result');
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <script>
+    $('#post img:not(.no-zoom img, img[no-zoom]), img[zoom]').each(
+      function () {
+        var element = document.createElement('a');
+        $(element).attr('data-fancybox', 'images');
+        $(element).attr('href', $(this).attr('src'));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

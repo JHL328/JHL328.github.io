@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  <title>TLS实验 - Hexo</title>
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    <link  rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/github-gist.min.css" />
+  
+
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_yg9cfy8wd6.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_pjno9b9zyxs.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script  src="/js/utils.js" ></script>
+<meta name="generator" content="Hexo 4.2.1"><link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+</head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Fluid</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              
+  <div class="mt-3 post-meta">
+    <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+    <time datetime="2020-10-30 16:33">
+      2020年10月30日 下午
+    </time>
+  </div>
+
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      2.1k 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      27
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <div class="post-content mx-auto" id="post">
+            
+            <article class="markdown-body">
+              <h1 id="设计文档"><a href="#设计文档" class="headerlink" title="设计文档"></a>设计文档</h1><p align="right">姓名：贾昊龙
+</p><p align="right">学号：18307130049
+
+</p><h2 id="主体思路"><a href="#主体思路" class="headerlink" title="主体思路"></a>主体思路</h2><p><img src="/2020/10/30/TLS%E5%AE%9E%E9%AA%8C/TLS%E6%8F%A1%E6%89%8B%E8%BF%87%E7%A8%8B.png" srcset="/img/loading.gif" alt="TLS握手过程"></p>
+<ul>
+<li>通过socket编程首先先建立好明文传输的链接</li>
+<li>hello阶段（如果是SSL的话，这里是SSL中握手协议的作用，并且后面的一些过程也是该协议）<ul>
+<li>在这里，客户端通过链接来向服务器发送客户端所支持的协议以及加密算法，并生成随机数random1在这里参考了<a href="https://blog.csdn.net/ppdyhappy/article/details/68061238?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522160405698519724835856267%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&request_id=160405698519724835856267&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~first_rank_v2~rank_v28-1-68061238.pc_first_rank_v2_rank_v28&utm_term=cipher+suite%E5%AD%97%E6%AE%B5&spm=1018.2118.3001.4449" target="_blank" rel="noopener">TLS协议分析</a>这篇blog以及<a href="https://blog.csdn.net/weixin_30918415/article/details/99272349?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522160405689319724838518146%2522%252C%2522scm%2522%253A%252220140713.130102334.pc%255Fall.%2522%257D&request_id=160405689319724838518146&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~first_rank_v2~rank_v28-4-99272349.pc_first_rank_v2_rank_v28&utm_term=TLS%E9%93%BE%E6%8E%A5%E5%BB%BA%E7%AB%8B%E8%BF%87%E7%A8%8B&spm=1018.2118.3001.4449" target="_blank" rel="noopener">SSL/TLS链接的建立</a>的blog，在这里采用AES-RSA-MD5作为cipher suit</li>
+<li>服务器返回消息，在AES-RSA-MD5上与客户端达成一致，生成random 2</li>
+</ul>
+</li>
+<li>证书发送及认证（certificate）阶段<ul>
+<li>首先服务器将自己的证书下发给客户端，让客户端进行验证，之后客户端验证后从证书中取出公钥</li>
+<li>由于难以自行形成证书，所以可以通过把简写的CA.txt文件当作证书，通过私钥验签的方式验证身份</li>
+</ul>
+</li>
+<li>密钥交换<ul>
+<li>使用RSA密钥交换方式，客户端生成session key</li>
+</ul>
+</li>
+<li>将明文和计算的hash值进行连接</li>
+<li>AES将明文+mac一起进行加密传输</li>
+</ul>
+<h2 id="函数解释"><a href="#函数解释" class="headerlink" title="函数解释"></a>函数解释</h2><ul>
+<li><p><strong>server</strong></p>
+<table>
+<thead>
+<tr>
+<th align="center">函数</th>
+<th align="center">解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">send_CA()</td>
+<td align="center">利用私钥加密CA证书发送给客户端</td>
+</tr>
+<tr>
+<td align="center">key_exchanging()</td>
+<td align="center">使用私钥解密客户端发来的用公钥加密的sessionkey</td>
+</tr>
+<tr>
+<td align="center">deAes()</td>
+<td align="center">AES解密过程</td>
+</tr>
+<tr>
+<td align="center">verify_mac()</td>
+<td align="center">MD5计算收到的会话信息产生的hash值</td>
+</tr>
+<tr>
+<td align="center">getplaintext()</td>
+<td align="center">验证客户端封装的hash值和重新计算的hash值是否匹配</td>
+</tr>
+<tr>
+<td align="center">msg()</td>
+<td align="center">监听并打印会话信息</td>
+</tr>
+</tbody></table>
+</li>
+<li><p><strong>client</strong></p>
+<table>
+<thead>
+<tr>
+<th align="center">函数</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">verify_ca()</td>
+<td>客户端用公钥进行验签过程</td>
+</tr>
+<tr>
+<td align="center">key_exchanging()</td>
+<td>使用公钥加密sessionkey并发送给服务器</td>
+</tr>
+<tr>
+<td align="center">enAes()</td>
+<td>AES加密过程</td>
+</tr>
+<tr>
+<td align="center">enmac()</td>
+<td>MD5计算发送的信息产生的hash值并组装</td>
+</tr>
+<tr>
+<td align="center">add_to_16()</td>
+<td>将信息扩展位数成16整数倍</td>
+</tr>
+<tr>
+<td align="center">msg()</td>
+<td>加密信息发送到服务器</td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+<h2 id="具体实现"><a href="#具体实现" class="headerlink" title="具体实现"></a>具体实现</h2><h3 id="Socket-Connection"><a href="#Socket-Connection" class="headerlink" title="Socket Connection"></a>Socket Connection</h3><p>建立socket连接的过程如下</p>
+<ul>
+<li><p><strong>首先是server</strong></p>
+<p>  服务器创建socket对象，绑定对应端口以及IP，等待接收连接</p>
+  <pre><code class="hljs python"><span class="hljs-keyword">import</span> socket
+
+<span class="hljs-comment">#创建socket对象s，基于internet地址和tcp协议</span>
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+<span class="hljs-comment">#绑定本地端口8001</span>
+s.bind((<span class="hljs-string">"127.0.0.1"</span>, <span class="hljs-number">8001</span>))
+<span class="hljs-comment">#在本地8001端口监听，最大连接数量6</span>
+s.listen(<span class="hljs-number">6</span>)
+<span class="hljs-comment"># 接受来自客户端的连接</span>
+
+connection, address = s.accept()
+
+print(<span class="hljs-string">"服务器：Waiting for connection..."</span>)</code></pre>
+</li>
+<li><p><strong>其次是client</strong></p>
+  <pre><code class="hljs python"><span class="hljs-keyword">import</span> socket
+
+client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+client.connect((<span class="hljs-string">'127.0.0.1'</span>, <span class="hljs-number">8001</span>))</code></pre>
+
+</li>
+</ul>
+<h3 id="Hello阶段"><a href="#Hello阶段" class="headerlink" title="Hello阶段"></a>Hello阶段</h3><ul>
+<li><p><strong>server</strong></p>
+<p>  服务器等待客户的发送过来的消息，并且根据对方可用的加密算法来选择自己的加密算法，在这里直接假设双方只支持<strong>AES-RSA-MD5的cipher suit</strong></p>
+  <pre><code class="hljs python">data = connection.recv(<span class="hljs-number">1024</span>) <span class="hljs-comment">#the message received</span>
+print(<span class="hljs-string">'客户端: '</span>+data.decode(<span class="hljs-string">'utf-8'</span>))   <span class="hljs-comment">#hello,this is a hello message from the client</span>
+
+x = <span class="hljs-string">' OK.Let'</span><span class="hljs-string">'s use the AES-RSA-MD5. '</span></code></pre>
+</li>
+<li><p><strong>client</strong></p>
+<p>  客户端通过已经建立好的链接来想想服务器发送消息，消息的主要目的是发送支持的加密算法，由服务器来选择相应的加密算法，在这里采用<strong>AES-RSA-MD5</strong></p>
+  <pre><code class="hljs python">x = <span class="hljs-string">'hello,this is a hello message from the client.Can we use AES-RSA-MD5?'</span>
+print(<span class="hljs-string">'客户端：'</span>+x)
+client.send(x.encode(<span class="hljs-string">'utf-8'</span>))</code></pre>
+
+</li>
+</ul>
+<h3 id="证书发送及认证（certificate-amp-Verify）阶段"><a href="#证书发送及认证（certificate-amp-Verify）阶段" class="headerlink" title="证书发送及认证（certificate&amp;Verify）阶段"></a>证书发送及认证（certificate&amp;Verify）阶段</h3><ul>
+<li><p><strong>server</strong></p>
+<p>  当彼此选好了加密算法之后，服务器将证书发给客户端，并且用私钥数字签名的方式交付给客户端来进行CA的验证</p>
+  <pre><code class="hljs python">x1 = <span class="hljs-string">'\n服务器: These are my information, please check.'</span>
+print(<span class="hljs-string">'服务器：'</span>+x+x1)
+connection.send((x+x1).encode(<span class="hljs-string">'utf-8'</span>))
+
+<span class="hljs-comment">#私钥加密CA证书发送给客户端</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">send_CA</span><span class="hljs-params">()</span>:</span>
+    <span class="hljs-keyword">with</span> open(<span class="hljs-string">'private_key_ca.pem'</span>) <span class="hljs-keyword">as</span> privatefile:
+        p = privatefile.read()
+        privkey = rsa.PrivateKey.load_pkcs1(p)
+        x = <span class="hljs-string">'\nserver'</span><span class="hljs-string">'s private key is as following'</span>
+        print(x+<span class="hljs-string">'\n'</span>+p)
+    <span class="hljs-keyword">with</span> open(<span class="hljs-string">'CA'</span>) <span class="hljs-keyword">as</span> content:
+        ca = content.read()
+        print(<span class="hljs-string">'服务端\n'</span>+ca)
+    a = rsa.sign(ca.encode(<span class="hljs-string">'utf-8'</span>), privkey, <span class="hljs-string">'SHA-1'</span>)
+    <span class="hljs-keyword">return</span> a
+
+signature = send_CA()
+connection.sendto(signature, address)</code></pre>
+</li>
+<li><p><strong>client</strong></p>
+<p>  客户端拿到证书之后用公钥的解密并且进行验证</p>
+  <pre><code class="hljs python"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">verify_ca</span><span class="hljs-params">(data)</span>:</span>
+    <span class="hljs-keyword">with</span> open(<span class="hljs-string">'public_key_ca.pem'</span>) <span class="hljs-keyword">as</span> publickfile:
+        p = publickfile.read()
+        pubkey = rsa.PublicKey.load_pkcs1(p)
+        print(<span class="hljs-string">'---------CA公钥---------\n'</span>+p)
+    <span class="hljs-keyword">with</span> open(<span class="hljs-string">'CA'</span>) <span class="hljs-keyword">as</span> content:
+        ca = content.read()
+        print(ca)
+    <span class="hljs-keyword">try</span>:
+        rsa.verify(ca.encode(<span class="hljs-string">'utf-8'</span>), data, pubkey)
+        print(<span class="hljs-string">'验证成功'</span>)
+    <span class="hljs-keyword">except</span>:
+        print(<span class="hljs-string">'验证失败'</span>)
+
+data = client.recv(<span class="hljs-number">1024</span>)
+verify_ca(data)</code></pre>
+
+</li>
+</ul>
+<h3 id="密钥交换"><a href="#密钥交换" class="headerlink" title="密钥交换"></a>密钥交换</h3><ul>
+<li><p><strong>client</strong></p>
+<p>  采取24位长的 ‘0singdancerapbasketball0’作为session key（直接设置），之后就是用公钥进行加密，然后发送给服务器</p>
+  <pre><code class="hljs python"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">key_exchanging</span><span class="hljs-params">()</span>:</span>
+    secretkey = <span class="hljs-string">'0singdancerapbasketball0'</span>
+    <span class="hljs-keyword">with</span> open(<span class="hljs-string">'public_key_ca.pem'</span>) <span class="hljs-keyword">as</span> publicfile:
+        p = publicfile.read()
+        pubkey = rsa.PublicKey.load_pkcs1(p)
+    crypto = rsa.encrypt(secretkey.encode(<span class="hljs-string">'utf-8'</span>), pubkey)
+    <span class="hljs-keyword">return</span> crypto
+
+print(<span class="hljs-string">'开始密钥交换,用公钥来对session key进行加密然后发送'</span>)
+client.send(key_exchanging())</code></pre>
+</li>
+<li><p><strong>server</strong></p>
+<p>  服务器用私钥解密，获得session key</p>
+  <pre><code class="hljs python"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">key_exchanging</span><span class="hljs-params">(data)</span>:</span>
+    <span class="hljs-keyword">with</span> open(<span class="hljs-string">'private_key_ca.pem'</span>) <span class="hljs-keyword">as</span> privatefile:
+        p = privatefile.read()
+        privkey = rsa.PrivateKey.load_pkcs1(p)
+    secretkey = rsa.decrypt(data, privkey)
+    <span class="hljs-keyword">return</span> secretkey
+
+print(<span class="hljs-string">'开始密钥交换，等待对称密钥'</span>)
+data = connection.recv(<span class="hljs-number">1024</span>)
+secretkey = key_exchanging(data).decode(<span class="hljs-string">'utf-8'</span>)
+print(<span class="hljs-string">'服务器：客户端发过来的对称密钥为:&#123;'</span>+secretkey+<span class="hljs-string">'&#125;(忽略大括号)'</span>)</code></pre>
+
+</li>
+</ul>
+<h3 id="哈希值的计算"><a href="#哈希值的计算" class="headerlink" title="哈希值的计算"></a>哈希值的计算</h3><ul>
+<li><strong>client</strong><ul>
+<li>利用MD5来计算session的哈希值，并且之后加载到上面，中间的split为<strong>18307130049JHL</strong>，而由于加密信息的无规律，基本不会出现和split相同的内容进而引起对内容的解释的错误</li>
+</ul>
+</li>
+</ul>
+<pre><code class="hljs python"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">enmac</span><span class="hljs-params">(plaintext)</span>:</span>
+    h1 = hashlib.md5()
+    h1.update(plaintext.encode(<span class="hljs-string">'utf-8'</span>))
+    x = plaintext+<span class="hljs-string">'18307130049JHL'</span>+h1.hexdigest()
+    print(<span class="hljs-string">'明文+hash：'</span>+x)
+    <span class="hljs-keyword">return</span> x</code></pre>
+
+<ul>
+<li><p><strong>server</strong></p>
+<p>  而服务器端也需要计算哈希值，根据得到的session的内容来计算哈希值，与客户端的哈希值进行匹配</p>
+  <pre><code class="hljs python"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">verify_mac</span><span class="hljs-params">(plaintext)</span>:</span>
+    h1 = hashlib.md5()
+    h1.update(plaintext.encode(<span class="hljs-string">'utf-8'</span>))
+    <span class="hljs-keyword">return</span> h1.hexdigest()
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">getplaintext</span><span class="hljs-params">(textandmac)</span>:</span>
+    str = textandmac.split(<span class="hljs-string">'18307130049JHL'</span>)
+    <span class="hljs-keyword">if</span>(str[<span class="hljs-number">1</span>] != verify_mac(str[<span class="hljs-number">0</span>])):
+        <span class="hljs-keyword">return</span> <span class="hljs-string">'false'</span>
+    <span class="hljs-keyword">else</span>:
+        <span class="hljs-keyword">return</span> str[<span class="hljs-number">0</span>]</code></pre>
+
+</li>
+</ul>
+<h3 id="AES加密"><a href="#AES加密" class="headerlink" title="AES加密"></a>AES加密</h3><ul>
+<li><p><strong>client</strong></p>
+<p>  将明文+hash的内容利用session key进行加密并传输</p>
+  <pre><code class="hljs python"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">encAes</span><span class="hljs-params">(x)</span>:</span>
+    key = <span class="hljs-string">'0singdancerapbasketball0'</span> <span class="hljs-comment">#24位密钥</span>
+    text = x
+    aes = AES.new(str.encode(key), AES.MODE_ECB)  <span class="hljs-comment"># 采用ECB加密模式</span>
+    encrypted_text = str(base64.encodebytes(aes.encrypt(add_to_16(text))), encoding=<span class="hljs-string">'utf8'</span>).replace(<span class="hljs-string">'\n'</span>, <span class="hljs-string">''</span>)  <span class="hljs-comment"># 加密</span>
+    print(<span class="hljs-string">'加密结果为：'</span>, encrypted_text)
+    <span class="hljs-keyword">return</span> encrypted_text
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">msg</span><span class="hljs-params">(client)</span>:</span>
+    <span class="hljs-keyword">while</span> <span class="hljs-literal">True</span>:
+        re_data = input()
+        ciphertext = encAes(enmac(re_data))
+        client.send(ciphertext.encode(<span class="hljs-string">'utf-8'</span>))
+
+print(<span class="hljs-string">'------------------------------------------------'</span>)
+print(<span class="hljs-string">'验证交互信息'</span>)
+print(<span class="hljs-string">'------------------------------------------------'</span>)
+print(<span class="hljs-string">'用户请输入\n[只支持英文信息]'</span>)
+msg(client)</code></pre>
+</li>
+<li><p><strong>server</strong></p>
+<p>  在服务端，将利用session来进行解密</p>
+  <pre><code class="hljs python"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">deAes</span><span class="hljs-params">(text, key)</span>:</span>
+    aes = AES.new(str.encode(key), AES.MODE_ECB)  <span class="hljs-comment"># 采用ECB加密模式</span>
+    decrypted_text = str(aes.decrypt(base64.decodebytes(bytes(text, encoding=<span class="hljs-string">'utf8'</span>))).rstrip(<span class="hljs-string">b'\0'</span>).decode(<span class="hljs-string">"utf8"</span>))  <span class="hljs-comment"># 解密</span>
+    <span class="hljs-keyword">return</span> decrypted_text
+
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">msg</span><span class="hljs-params">(connection)</span>:</span>
+    <span class="hljs-keyword">while</span> <span class="hljs-literal">True</span>:
+        <span class="hljs-keyword">try</span>:
+            data = connection.recv(<span class="hljs-number">1024</span>)
+            ciphertext = data.decode(<span class="hljs-string">'utf-8'</span>)
+            textandmac = deAes(ciphertext, secretkey)
+            plaintext = getplaintext(textandmac)
+            <span class="hljs-keyword">if</span>(plaintext == <span class="hljs-string">'false'</span>):
+                print(<span class="hljs-string">'mac值false，退出'</span>)
+                <span class="hljs-keyword">return</span>
+            <span class="hljs-keyword">else</span>:
+                print(<span class="hljs-string">'mac值相同验证通过'</span>)
+                print(<span class="hljs-string">'客户端：'</span>, plaintext)
+        <span class="hljs-keyword">except</span>:
+            print(<span class="hljs-string">'connection failed'</span>)
+            <span class="hljs-keyword">return</span>
+
+print(<span class="hljs-string">'------------------------------------------------'</span>)
+print(<span class="hljs-string">'验证交互信息'</span>)
+print(<span class="hljs-string">'------------------------------------------------'</span>)
+print(<span class="hljs-string">'等待用户输入'</span>)
+
+msg(connection)</code></pre>
+
+</li>
+</ul>
+<h2 id="运行截图"><a href="#运行截图" class="headerlink" title="运行截图"></a>运行截图</h2><p>下面是一些运行截图</p>
+<p>首先是运行server.py之后运行client.py(server图片–client图片–server图片–client图片)</p>
+<p><img src="/2020/10/30/TLS%E5%AE%9E%E9%AA%8C/TLS-1.PNG" srcset="/img/loading.gif" alt="TLS-1"></p>
+<p><img src="/2020/10/30/TLS%E5%AE%9E%E9%AA%8C/TLS-2.PNG" srcset="/img/loading.gif" alt="TLS-2"></p>
+<p><img src="/2020/10/30/TLS%E5%AE%9E%E9%AA%8C/TLS-3.PNG" srcset="/img/loading.gif" alt="TLS-3"></p>
+<p><img src="/2020/10/30/TLS%E5%AE%9E%E9%AA%8C/TLS-4.PNG" srcset="/img/loading.gif" alt="TLS-4"></p>
+<h2 id="附CA"><a href="#附CA" class="headerlink" title="附CA"></a>附CA</h2><pre><code class="hljs angelscript">-------------Verify--------------
+Sequence num:<span class="hljs-number">01010101</span>
+Version:X<span class="hljs-number">.509</span>
+Public key Algorithm: RSA
+date:<span class="hljs-number">2020.10</span><span class="hljs-number">.28</span><span class="hljs-number">-2020.11</span><span class="hljs-number">.28</span>
+Server:jhl
+split:<span class="hljs-number">18307130049</span>JHL
+--------------DONE---------------
+-----BEGIN RSA PUBLIC KEY-----
+MIGJAoGBAMhK8UrmtY+iSUrQhhcxAA8eAgB99gpKjbx8uo15geRbcr3pqR192Wdm
+UcyXoZ7MH+FEtQ4v14awNsoub0NcgUepHj2xzzat7pes4NZz/<span class="hljs-number">9</span>YCLEgFA+<span class="hljs-number">5</span>/VnKn
+ez5FoHwfQT58XsXFXKOni35sMIVEgoCLdURELd09nBsGCqzR9tiVAgMBAAE=
+-----END RSA PUBLIC KEY-----</code></pre>
+
+<h2 id="回顾"><a href="#回顾" class="headerlink" title="回顾"></a>回顾</h2><ul>
+<li><p>首先，先了解一下什么是TLS/SSL以及他们的作用</p>
+</li>
+<li><p>相当于是在应用层和在运输层之间添加了一个SSL协议层，而SSL协议分为了两层，一层是SSL记录协议：是为上层的数据提供数据的封装加密等等；而SSL握手协议：是在数据传输开始之前，双方进行身份确认，协商机密算法，交换加密密钥的过程</p>
+</li>
+<li><p>关于TLS/SSL建立连接以及握手的过程</p>
+<p>  <img src="/2020/10/30/TLS%E5%AE%9E%E9%AA%8C/TLS%E6%8F%A1%E6%89%8B%E8%BF%87%E7%A8%8B.png" srcset="/img/loading.gif" alt="TLS握手过程"></p>
+<ul>
+<li><p>阶段一</p>
+<ul>
+<li>Client Hello，发送random 1，客户端支持的加密算法的组合列表等</li>
+<li>Server Hello，从客户端发送的加密算法的组合列表中进行选择，生成random 2</li>
+</ul>
+</li>
+<li><p>阶段二（服务器鉴别以及密钥交换）</p>
+<ul>
+<li>服务器将自己的证书CA发送给客户端，让客户端进行验证，客户端验证后从CA中取出对应的公钥</li>
+<li>可要求客户端上报CA，</li>
+<li>通知客户端Server Hello结束</li>
+</ul>
+</li>
+<li><p>客户鉴别和密钥交换</p>
+<ul>
+<li>验证好服务端的CCA之后，取出公钥，将session key用公钥加密之后发送给服务器，服务器用私钥解密之后获得session key</li>
+</ul>
+</li>
+<li><p>阶段四</p>
+<ul>
+<li>计算session对应的hash值，之后双方在进行通信的过程中，如果两个hash值匹配了，说明对应的session会话过程建立起来了，之后将hash值放在明文后面，并且用session key来进行加密</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            </article>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/Software-security-lab/">Software security lab</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" target="_blank" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！</p>
+              
+              
+                <div class="post-prevnext row">
+                  <div class="post-prev col-6">
+                    
+                    
+                      <a href="/2020/11/03/TCP-Attack/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">TCP_Attack</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </div>
+                  <div class="post-next col-6">
+                    
+                    
+                      <a href="/2020/10/24/process-lab/">
+                        <span class="hidden-mobile">process-lab</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </div>
+                </div>
+              
+            </div>
+
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div id="tocbot"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+  </main>
+
+  
+    <a id="scroll-top-button" href="#" role="button">
+      <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  
+
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <div>
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a>
+      <i class="iconfont icon-love"></i>
+      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener">
+        <span>Fluid</span></a>
+    </div>
+    
+
+    
+
+    
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script  src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script  src="/js/debouncer.js" ></script>
+<script  src="/js/main.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/lazyload.js" ></script>
+  
+
+
+
+  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js" ></script>
+  <script  src="/js/clipboard-use.js" ></script>
+
+
+
+
+
+
+
+  <script  src="https://cdn.staticfile.org/tocbot/4.11.1/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var boardCtn = $('#board-ctn');
+      var boardTop = boardCtn.offset().top;
+
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: 'article.markdown-body',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        collapseDepth: 0,
+        scrollSmooth: true,
+        headingsOffset: -boardTop
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc').css('visibility', 'visible');
+      }
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "TLS实验&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      searchFunc(path, 'local-search-input', 'local-search-result');
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <script>
+    $('#post img:not(.no-zoom img, img[no-zoom]), img[zoom]').each(
+      function () {
+        var element = document.createElement('a');
+        $(element).attr('data-fancybox', 'images');
+        $(element).attr('href', $(this).attr('src'));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

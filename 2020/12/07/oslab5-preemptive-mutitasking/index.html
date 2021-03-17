@@ -1,0 +1,1405 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  <title>oslab5_preemptive mutitasking - Hexo</title>
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    <link  rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/github-gist.min.css" />
+  
+
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_yg9cfy8wd6.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_pjno9b9zyxs.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script  src="/js/utils.js" ></script>
+<meta name="generator" content="Hexo 4.2.1"><link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+</head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Fluid</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              
+  <div class="mt-3 post-meta">
+    <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+    <time datetime="2020-12-07 17:17">
+      2020年12月7日 下午
+    </time>
+  </div>
+
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      8k 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      117
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <div class="post-content mx-auto" id="post">
+            
+            <article class="markdown-body">
+              <h1 id="Preemptive-Mutitasking"><a href="#Preemptive-Mutitasking" class="headerlink" title="Preemptive Mutitasking"></a>Preemptive Mutitasking</h1><h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><p>在提交的时候，由于换成优先级调度之后make grade不会是满分，所以就把优先级调度所写的算法注释了起来，如果需要检验，可以根据下面优先级调度算法的实现来取消部分注释即可</p>
+<h2 id="Part-A"><a href="#Part-A" class="headerlink" title="Part A"></a>Part A</h2><p>所要做的事情：</p>
+<ul>
+<li>使得JOS支持多CPU处理</li>
+<li>实现进程调用来允许普通进程创建新的进程</li>
+<li>实现协作式进程调度</li>
+</ul>
+<p>在SMP模型当中CPU分为两类：</p>
+<ul>
+<li>启动CPU（BSP）：负责初始化系统，启动操作系统</li>
+<li>应用CPU（AP）：由BSP启动，具体哪一个CPU是BSP根据硬件以及BISO决定的</li>
+</ul>
+<blockquote>
+<p>在 SMP 系统中，每个 CPU 都有一个附属的 LAPIC 单元。LAPIC 单元用于传递中断，并给它所属的 CPU 一个唯一的 ID。</p>
+</blockquote>
+<h3 id="Exercise-1"><a href="#Exercise-1" class="headerlink" title="Exercise 1"></a>Exercise 1</h3><p>首先，我们可以看到在lapic_init（）一开始就调用类这个函数，将从<code>lapicaddr</code>开始的4K大小的物理地址映射到了虚拟地址当中，并且返回起始位置，而在mmio_map_region（）当中，实际上是调用<code>boot_map_region（）</code>来建立所需映射</p>
+<p><img src="/2020/12/07/oslab5-preemptive-mutitasking/1-1.PNG" srcset="/img/loading.gif" alt="1-1"></p>
+<pre><code class="hljs c++"><span class="hljs-keyword">void</span> *
+mmio_map_region(<span class="hljs-keyword">physaddr_t</span> pa, <span class="hljs-keyword">size_t</span> <span class="hljs-built_in">size</span>)
+&#123;
+	<span class="hljs-comment">// Where to start the next region.  Initially, this is the</span>
+	<span class="hljs-comment">// beginning of the MMIO region.  Because this is static, its</span>
+	<span class="hljs-comment">// value will be preserved between calls to mmio_map_region</span>
+	<span class="hljs-comment">// (just like nextfree in boot_alloc).</span>
+	<span class="hljs-keyword">static</span> <span class="hljs-keyword">uintptr_t</span> base = MMIOBASE;
+
+	<span class="hljs-comment">// Reserve size bytes of virtual memory starting at base and</span>
+	<span class="hljs-comment">// map physical pages [pa,pa+size) to virtual addresses</span>
+	<span class="hljs-comment">// [base,base+size).  Since this is device memory and not</span>
+	<span class="hljs-comment">// regular DRAM, you'll have to tell the CPU that it isn't</span>
+	<span class="hljs-comment">// safe to cache access to this memory.  Luckily, the page</span>
+	<span class="hljs-comment">// tables provide bits for this purpose; simply create the</span>
+	<span class="hljs-comment">// mapping with PTE_PCD|PTE_PWT (cache-disable and</span>
+	<span class="hljs-comment">// write-through) in addition to PTE_W.  (If you're interested</span>
+	<span class="hljs-comment">// in more details on this, see section 10.5 of IA32 volume</span>
+	<span class="hljs-comment">// 3A.)</span>
+	<span class="hljs-comment">//</span>
+	<span class="hljs-comment">// Be sure to round size up to a multiple of PGSIZE and to</span>
+	<span class="hljs-comment">// handle if this reservation would overflow MMIOLIM (it's</span>
+	<span class="hljs-comment">// okay to simply panic if this happens).</span>
+	<span class="hljs-comment">//</span>
+	<span class="hljs-comment">// Hint: The staff solution uses boot_map_region.</span>
+	<span class="hljs-comment">//</span>
+	<span class="hljs-comment">// Your code here:</span>
+	<span class="hljs-built_in">size</span> = ROUNDUP(<span class="hljs-built_in">size</span>, PGSIZE);
+	<span class="hljs-keyword">if</span>(<span class="hljs-built_in">size</span> + base &gt; MMIOLIM)	<span class="hljs-comment">//overflow</span>
+		panic(<span class="hljs-string">"mmio_map_region overflow MMIOLIM"</span>);
+	<span class="hljs-keyword">int</span> perm = PTE_PCD | PTE_PWT | PTE_W;
+	boot_map_region(kern_pgdir, base, <span class="hljs-built_in">size</span>, pa, perm);
+	<span class="hljs-keyword">void</span> *ret = (<span class="hljs-keyword">void</span> *)base;
+	base += <span class="hljs-built_in">size</span>;
+	<span class="hljs-keyword">return</span> ret;
+&#125;</code></pre>
+
+<p><strong>应用处理器（AP）引导程序</strong></p>
+<blockquote>
+<p>在启动AP之前，BSP需要搜集多处理器的信息，比如总共有多少CPU，它们的LAPIC ID以及LAPIC MMIO地址。mp_init()函数从BIOS中读取这些信息。具体代码在mp_init()中，该函数会在进入内核后被i386_init()调用，主要作用就是读取mp configuration table中保存的CPU信息，<strong>初始化cpus数组，ncpu（总共多少可用CPU），bootcpu指针（指向BSP对应的CpuInfo结构）</strong>。</p>
+</blockquote>
+<h3 id="Exercise-2"><a href="#Exercise-2" class="headerlink" title="Exercise 2"></a>Exercise 2</h3><blockquote>
+<p>Read <code>boot_aps()</code> and <code>mp_main()</code> in <code>kern/init.c</code>, and the assembly code in <code>kern/mpentry.S</code>. Make sure you understand the control flow transfer during the bootstrap of APs. Then modify your implementation of <code>page_init()</code> in <code>kern/pmap.c</code> to avoid adding the page at <code>MPENTRY_PADDR</code> to the free list, so that we can safely copy and run AP bootstrap code at that physical address. Your code should pass the updated <code>check_page_free_list()</code> test (but might fail the updated <code>check_kern_pgdir()</code> test, which we will fix soon).</p>
+</blockquote>
+<blockquote>
+<p>真正启动AP的是在boot_aps()中，该函数遍历cpus数组，一个接一个启动所有的AP，当一个AP启动后会执行kern/mpentry.S中的代码，然后跳转到mp_main()中，该函数为当前AP设置GDT，TTS，最后设置cpus数组中当前CPU对应的结构的cpu_status为CPU_STARTED。更多关于SMP可以参考</p>
+<p><a href="https://pdos.csail.mit.edu/6.828/2018/readings/ia32/MPspec.pdf" target="_blank" rel="noopener">https://pdos.csail.mit.edu/6.828/2018/readings/ia32/MPspec.pdf</a></p>
+<p><a href="https://wenku.baidu.com/view/615ea3c6aa00b52acfc7ca97.htmlhttps://pdos.csail.mit.edu/6.828/2018/readings/ia32/MPspec.pdf" target="_blank" rel="noopener">https://wenku.baidu.com/view/615ea3c6aa00b52acfc7ca97.html</a></p>
+</blockquote>
+<p>对于此程序运行过程的理解：（这时候是运行在启动CPU上，即BSP，工作在保护模式）</p>
+<ol>
+<li><p>i386_init（）调用了boot_aps（），开始引导其他的CPU运行</p>
+<p> <img src="/2020/12/07/oslab5-preemptive-mutitasking/2-1.PNG" srcset="/img/loading.gif" alt="2-1"></p>
+</li>
+<li><p>boot_aps（）调用memmov（），将代码加载到固定位置</p>
+<p> <img src="/2020/12/07/oslab5-preemptive-mutitasking/2-2.PNG" srcset="/img/loading.gif" alt="2-2"></p>
+</li>
+<li><p>最后调用labpic_startap来执行对应的CPU</p>
+</li>
+</ol>
+<p>而exercise2实际上就是标记<code>MPENTRY_PADDR</code>开始的一个物理页面为已经使用，加一个if判断即可</p>
+<pre><code class="hljs c++"><span class="hljs-keyword">void</span>
+page_init(<span class="hljs-keyword">void</span>)
+&#123;	
+	<span class="hljs-keyword">size_t</span> i;
+	<span class="hljs-keyword">size_t</span> io_hole_start_page = (<span class="hljs-keyword">size_t</span>)IOPHYSMEM / PGSIZE;
+	<span class="hljs-keyword">size_t</span> kernel_end_page = PADDR(boot_alloc(<span class="hljs-number">0</span>)) / PGSIZE;		<span class="hljs-comment">//这里调了半天，boot_alloc返回的是虚拟地址，需要转为物理地址</span>
+	<span class="hljs-keyword">for</span> (i = <span class="hljs-number">0</span>; i &lt; npages; i++) &#123;
+		<span class="hljs-keyword">if</span> (i == <span class="hljs-number">0</span>) &#123;
+			pages[i].pp_ref = <span class="hljs-number">1</span>;
+			pages[i].pp_link = <span class="hljs-literal">NULL</span>;
+		&#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (i &gt;= io_hole_start_page &amp;&amp; i &lt; kernel_end_page) &#123;
+			pages[i].pp_ref = <span class="hljs-number">1</span>;
+			pages[i].pp_link = <span class="hljs-literal">NULL</span>;
+		&#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (i == MPENTRY_PADDR / PGSIZE) &#123;
+			pages[i].pp_ref = <span class="hljs-number">1</span>;
+			pages[i].pp_link = <span class="hljs-literal">NULL</span>;
+		&#125; <span class="hljs-keyword">else</span> &#123;
+			pages[i].pp_ref = <span class="hljs-number">0</span>;
+			pages[i].pp_link = page_free_list;
+			page_free_list = &amp;pages[i];
+		&#125;
+	&#125;
+&#125;</code></pre>
+
+<p><strong>每个CPU的状态以及初始化</strong></p>
+<p>可以通过CpuInfo结构来看到定义的CPU的信息</p>
+<p><img src="/2020/12/07/oslab5-preemptive-mutitasking/3-1.PNG" srcset="/img/loading.gif" alt="3-1"></p>
+<p>而cpunum（）则会返回调用该函数的CPU的ID，而thiscpu的宏定义则是获取当前CPU对应的CpuInfo结构</p>
+<h3 id="Exercise-3"><a href="#Exercise-3" class="headerlink" title="Exercise 3"></a>Exercise 3</h3><blockquote>
+<p>Modify <code>mem_init_mp()</code> (in <code>kern/pmap.c</code>) to map per-CPU stacks starting at <code>KSTACKTOP</code>, as shown in <code>inc/memlayout.h</code>. The size of each stack is <code>KSTKSIZE</code> bytes plus <code>KSTKGAP</code> bytes of unmapped guard pages. Your code should pass the new check in <code>check_kern_pgdir()</code></p>
+</blockquote>
+<p>从文档的描述当中我们可以得知，会给每个CPU分配一个内核栈，而BSP（CPU0）的起始位置是KSTACKTOP,每个内核栈的大小回事KSTACKSIZE个字节，而KSTACKGAP字节作为缓冲区检测，防止栈溢出，之后就是CPU1的内核栈，以此类推即可</p>
+<p>根据inc/memlayout.h来写对应的映射即可</p>
+<pre><code class="hljs c++"><span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span>
+mem_init_mp(<span class="hljs-keyword">void</span>)
+&#123;
+	<span class="hljs-comment">// Map per-CPU stacks starting at KSTACKTOP, for up to 'NCPU' CPUs.</span>
+	<span class="hljs-comment">//</span>
+	<span class="hljs-comment">// For CPU i, use the physical memory that 'percpu_kstacks[i]' refers</span>
+	<span class="hljs-comment">// to as its kernel stack. CPU i's kernel stack grows down from virtual</span>
+	<span class="hljs-comment">// address kstacktop_i = KSTACKTOP - i * (KSTKSIZE + KSTKGAP), and is</span>
+	<span class="hljs-comment">// divided into two pieces, just like the single stack you set up in</span>
+	<span class="hljs-comment">// mem_init:</span>
+	<span class="hljs-comment">//     * [kstacktop_i - KSTKSIZE, kstacktop_i)</span>
+	<span class="hljs-comment">//          -- backed by physical memory</span>
+	<span class="hljs-comment">//     * [kstacktop_i - (KSTKSIZE + KSTKGAP), kstacktop_i - KSTKSIZE)</span>
+	<span class="hljs-comment">//          -- not backed; so if the kernel overflows its stack,</span>
+	<span class="hljs-comment">//             it will fault rather than overwrite another CPU's stack.</span>
+	<span class="hljs-comment">//             Known as a "guard page".</span>
+	<span class="hljs-comment">//     Permissions: kernel RW, user NONE</span>
+	<span class="hljs-comment">//</span>
+	<span class="hljs-comment">// LAB 4: Your code here:</span>
+	<span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; NCPU; i++)
+	&#123;
+		boot_map_region(kern_pgdir, KSTACKTOP - KSTKSIZE - i * (KSTKSIZE + KSTKGAP), 
+		KSTKSIZE, PADDR(percpu_kstacks[i]), PTE_W);
+	&#125;
+	
+&#125;</code></pre>
+
+<h3 id="Exercise-4"><a href="#Exercise-4" class="headerlink" title="Exercise 4"></a>Exercise 4</h3><p> 每个CPU都需要单独的TSS和TSS描述符来指定对应的内核栈</p>
+<p>trap_init_percpu（）的作用就是初始化并且加载TSS以及IDT，具体的实现思路就是通过thiscpu来获得当前调用这个函数的CPU的CpuInfo结构，而之后cpuid就更容易了，之后就是thiscpu-&gt;cpu_ts当作当前cpu的TSS，而<code>gdt[(GD_TSS0 &gt;&gt; 3) + i]</code>作为TSS描述符</p>
+<p>具体实现</p>
+<pre><code class="hljs c++"><span class="hljs-keyword">void</span>
+trap_init_percpu(<span class="hljs-keyword">void</span>)
+&#123;
+	<span class="hljs-comment">// LAB 4: Your code here:</span>
+	<span class="hljs-comment">// Setup a TSS so that we get the right stack</span>
+	<span class="hljs-comment">// when we trap to the kernel.</span>
+	thiscpu-&gt;cpu_ts.ts_esp0 = KSTACKTOP - cpuid * (KSTKSIZE + KSTKGAP);
+	thiscpu-&gt;cpu_ts.ts_ss0 = GD_KD;
+	thiscpu-&gt;cpu_ts.ts_iomb = <span class="hljs-keyword">sizeof</span>(struct Taskstate);
+
+	<span class="hljs-comment">// Initialize the TSS slot of the gdt.</span>
+	gdt[(GD_TSS0 &gt;&gt; <span class="hljs-number">3</span>) + cpunum()] = SEG16(STS_T32A, (<span class="hljs-keyword">uint32_t</span>) (&amp;(thiscpu-&gt;cpu_ts)),
+					<span class="hljs-keyword">sizeof</span>(struct Taskstate) - <span class="hljs-number">1</span>, <span class="hljs-number">0</span>);
+	gdt[(GD_TSS0 &gt;&gt; <span class="hljs-number">3</span>) + cpunum()].sd_s = <span class="hljs-number">0</span>;
+
+	<span class="hljs-comment">// Load the TSS selector (like other segment selectors, the</span>
+	<span class="hljs-comment">// bottom three bits are special; we leave them 0)</span>
+	ltr(GD_TSS0 + (cpunum() &lt;&lt; <span class="hljs-number">3</span>));
+
+	<span class="hljs-comment">// Load the IDT</span>
+	lidt(&amp;idt_pd);
+&#125;</code></pre>
+
+<p><strong>锁</strong></p>
+<blockquote>
+<p>多个CPU在同时执行的之后，需要解决可能产生的竞争问题，在这里采用了big kernel lock的全局锁的方法，每个进程可以持有该锁，当进程从用户态向内核态切换的时候加锁，而当退出内核态的时候解锁，这就保证了只有一个CPU能够执行内核态的代码</p>
+</blockquote>
+<p>对应的lock_kernel（）和unlock_kernal（）定义在spinlock.c当中</p>
+<h3 id="Exercise-5"><a href="#Exercise-5" class="headerlink" title="Exercise 5"></a>Exercise 5</h3><p>就直接在对应位置加锁解锁就行了</p>
+<ul>
+<li><p>首先在i386_init（）函数中，BSP在唤醒其他的CPU的时候加锁</p>
+  <pre><code class="hljs c++"><span class="hljs-comment">// Starting non-boot CPUs</span>
+	lock_kernel();
+	boot_aps();</code></pre>
+</li>
+<li><p>在mp_main（）当中，AP在执行sched_yield（）之前加锁</p>
+  <pre><code class="hljs c++"><span class="hljs-comment">// Your code here:</span>
+lock_kernel();
+sched_yield();</code></pre>
+</li>
+<li><p>在trap（）里面，我们也需要加锁，因为进程从用户态切换到内核态是通过中断来实现的</p>
+  <pre><code class="hljs c++"><span class="hljs-comment">// LAB 4: Your code here.</span>
+assert(curenv);
+lock_kernel();</code></pre>
+</li>
+<li><p>在env_run（）当中，当使用完iret实现从内核态退出的啥时候解锁</p>
+  <pre><code class="hljs c++">lcr3(PADDR(e-&gt;env_pgdir));
+unlock_kernel();<span class="hljs-comment">//不放到最后是因为在env_pop_tf()后面的语句不会执行到</span>
+env_pop_tf(&amp;e-&gt;env_tf);</code></pre>
+
+</li>
+</ul>
+<p><strong>Round—Robin 调度</strong></p>
+<p>具体是实现过程</p>
+<ul>
+<li>实现sched_yield（），该函数的作用是选择一个进程来运行，而之后从当前进程的Env结构开始搜索envs数组，找到下一个可运行的进程，然后调用env_run（）在当前cpu来运行新的进程</li>
+<li>同时实现一个新的系统调用sys_yield（），来进行进程之间的切换</li>
+</ul>
+<h3 id="Exercise-6"><a href="#Exercise-6" class="headerlink" title="Exercise 6"></a>Exercise 6</h3><p>sched_yield（）的功能上面已经提到，按上面说的实现即可，同时还要注意，必须考虑到没有找到合适的进程的情况，此时重新执行前面的进程，否则CPU将会停止运行</p>
+<pre><code class="hljs c++"><span class="hljs-keyword">void</span>
+sched_yield(<span class="hljs-keyword">void</span>)
+&#123;
+	<span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">Env</span> *<span class="hljs-title">idle</span>;</span>
+
+	<span class="hljs-comment">// Implement simple round-robin scheduling.</span>
+	<span class="hljs-comment">//</span>
+	<span class="hljs-comment">// Search through 'envs' for an ENV_RUNNABLE environment in</span>
+	<span class="hljs-comment">// circular fashion starting just after the env this CPU was</span>
+	<span class="hljs-comment">// last running.  Switch to the first such environment found.</span>
+	<span class="hljs-comment">//</span>
+	<span class="hljs-comment">// If no envs are runnable, but the environment previously</span>
+	<span class="hljs-comment">// running on this CPU is still ENV_RUNNING, it's okay to</span>
+	<span class="hljs-comment">// choose that environment.</span>
+	<span class="hljs-comment">//</span>
+	<span class="hljs-comment">// Never choose an environment that's currently running on</span>
+	<span class="hljs-comment">// another CPU (env_status == ENV_RUNNING). If there are</span>
+	<span class="hljs-comment">// no runnable environments, simply drop through to the code</span>
+	<span class="hljs-comment">// below to halt the cpu.</span>
+
+	<span class="hljs-comment">// LAB 4: Your code here.</span>
+	<span class="hljs-keyword">int</span> start = <span class="hljs-number">0</span>;
+	<span class="hljs-keyword">int</span> j;
+	<span class="hljs-keyword">if</span> (curenv) &#123;
+		start = ENVX(curenv-&gt;env_id) + <span class="hljs-number">1</span>;	<span class="hljs-comment">//从当前Env结构的后一个开始查找</span>
+	&#125;
+	<span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; NENV; i++) &#123;		
+		j = (start + i) % NENV;
+		<span class="hljs-keyword">if</span> (envs[j].env_status == ENV_RUNNABLE) &#123;<span class="hljs-comment">//找到可以作为下一个运行的进程</span>
+			env_run(&amp;envs[j]);
+		&#125;
+	&#125;
+	<span class="hljs-keyword">if</span> (curenv &amp;&amp; curenv-&gt;env_status == ENV_RUNNING) &#123;	
+		env_run(curenv);
+	&#125;
+	<span class="hljs-comment">// sched_halt never returns</span>
+	sched_halt();
+&#125;</code></pre>
+
+<p>之后再<code>kern/syscall.c</code>里面加入对应的情况</p>
+<pre><code class="hljs c++"><span class="hljs-keyword">case</span> SYS_yield:
+	ret = <span class="hljs-number">0</span>;
+	sys_yield();
+	<span class="hljs-keyword">break</span>;</code></pre>
+
+<p>在<code>kern/init.c</code>中的用户进程进行修改</p>
+<pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-meta-keyword">if</span> defined(TEST)</span>
+	<span class="hljs-comment">// Don't touch -- used by grading script!</span>
+	ENV_CREATE(TEST, ENV_TYPE_USER);
+<span class="hljs-meta">#<span class="hljs-meta-keyword">else</span></span>
+	<span class="hljs-comment">// Touch all you want.</span>
+	ENV_CREATE(user_yield, ENV_TYPE_USER);
+	ENV_CREATE(user_yield, ENV_TYPE_USER);
+	ENV_CREATE(user_yield, ENV_TYPE_USER);
+<span class="hljs-meta">#<span class="hljs-meta-keyword">endif</span> <span class="hljs-comment">// TEST*</span></span>
+	<span class="hljs-comment">// Schedule and run the first user environment!</span>
+	sched_yield();</code></pre>
+
+<p><strong>进程创建的系统调用</strong></p>
+<p>现在要实现新的系统调用，该系统调用允许创建进程并且运行新的进程，具体要实现的系统调用如下</p>
+<ul>
+<li>sys_exofork：创建一个新的进程，寄存器与父进程一样，在父进程中返回值为子进程的envid，而在子进程当中返回值为0</li>
+<li>sys_env_set_status：设置一个特定进程的状态为ENV_RUNNABLE或者ENV_NOT_RUNNABLE</li>
+<li>sys_page_alloc：为指定进程分配物理页</li>
+<li>sys_page_map：拷贝页表，使得指定进程能够和当前进程有相同的映射关系</li>
+<li>sys_page_unmap：接触页映射关系</li>
+</ul>
+<h3 id="Exercise-7"><a href="#Exercise-7" class="headerlink" title="Exercise 7"></a>Exercise 7</h3><blockquote>
+<p>Implement the system calls described above in <code>kern/syscall.c</code>. You will need to use various functions in <code>kern/pmap.c</code> and <code>kern/env.c</code>, particularly <code>envid2env()</code>. For now, whenever you call <code>envid2env()</code>, pass 1 in the <code>checkperm</code> parameter. Be sure you check for any invalid system call arguments, returning <code>-E_INVAL</code> in that case. Test your JOS kernel with <code>user/dumbfork</code> and make sure it works before proceeding.</p>
+</blockquote>
+<p>按照上面的来实现对应的系统调用，该联系重点是<code>user/dumbfork.c</code>里面的duppage（）函数，它利用 <code>sys_page_alloc()</code> 为子进程分配空闲物理页，再使用<code>sys_page_map()</code> 将该新物理页映射到内核的交换区 <code>UTEMP</code>，方便在内核态进行拷贝操作。在拷贝结束后，利用 <code>sys_page_unmap()</code> 将交换区的映射删除。</p>
+<ul>
+<li><p><strong>sys_exofork（）函数</strong></p>
+<p>  在该函数中，子进程复制了父进程的 trapframe，此后把 trapframe 中的 eax 的值设为了0。最后，返回了子进程的 id。</p>
+  <pre><code class="hljs c++"><span class="hljs-keyword">static</span> <span class="hljs-keyword">envid_t</span>
+sys_exofork(<span class="hljs-keyword">void</span>)
+&#123;
+	<span class="hljs-comment">// Create the new environment with env_alloc(), from kern/env.c.</span>
+	<span class="hljs-comment">// It should be left as env_alloc created it, except that</span>
+	<span class="hljs-comment">// status is set to ENV_NOT_RUNNABLE, and the register set is copied</span>
+	<span class="hljs-comment">// from the current environment -- but tweaked so sys_exofork</span>
+	<span class="hljs-comment">// will appear to return 0.</span>
+
+	<span class="hljs-comment">// LAB 4: Your code here.</span>
+	<span class="hljs-comment">// panic("sys_exofork not implemented");</span>
+	<span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">Env</span> *<span class="hljs-title">e</span>;</span>
+	<span class="hljs-keyword">int</span> ret = env_alloc(&amp;e, curenv-&gt;env_id);    <span class="hljs-comment">//分配一个Env结构</span>
+	<span class="hljs-keyword">if</span> (ret &lt; <span class="hljs-number">0</span>) 
+	&#123;
+		<span class="hljs-keyword">return</span> ret;
+	&#125;
+	e-&gt;env_tf = curenv-&gt;env_tf;			<span class="hljs-comment">//寄存器状态保持一致</span>
+	e-&gt;env_status = ENV_NOT_RUNNABLE;    <span class="hljs-comment">//不能运行</span>
+	e-&gt;env_tf.tf_regs.reg_eax = <span class="hljs-number">0</span>;         <span class="hljs-comment">//新进程的返回值为0</span>
+	<span class="hljs-keyword">return</span> e-&gt;env_id;
+&#125;</code></pre>
+</li>
+<li><p><strong>sys_page_alloc（）</strong></p>
+<p>  在进程envid的地址va分配一个权限为perm的页面</p>
+  <pre><code class="hljs c++"><span class="hljs-keyword">static</span> <span class="hljs-keyword">int</span>
+sys_page_alloc(<span class="hljs-keyword">envid_t</span> envid, <span class="hljs-keyword">void</span> *va, <span class="hljs-keyword">int</span> perm)
+&#123;
+	<span class="hljs-comment">// Hint: This function is a wrapper around page_alloc() and</span>
+	<span class="hljs-comment">//   page_insert() from kern/pmap.c.</span>
+	<span class="hljs-comment">//   Most of the new code you write should be to check the</span>
+	<span class="hljs-comment">//   parameters for correctness.</span>
+	<span class="hljs-comment">//   If page_insert() fails, remember to free the page you</span>
+	<span class="hljs-comment">//   allocated!</span>
+
+	<span class="hljs-comment">// LAB 4: Your code here.</span>
+	<span class="hljs-comment">// panic("sys_page_alloc not implemented");</span>
+	<span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">Env</span> *<span class="hljs-title">e</span>;</span>
+	<span class="hljs-keyword">int</span> ret = envid2env(envid, &amp;e, <span class="hljs-number">1</span>);   <span class="hljs-comment">//envid对应的env结构</span>
+
+	<span class="hljs-keyword">if</span> ((va &gt;= (<span class="hljs-keyword">void</span>*)UTOP) || (ROUNDDOWN(va, PGSIZE) != va)) <span class="hljs-keyword">return</span> -E_INVAL;
+	<span class="hljs-keyword">int</span> flag = PTE_U | PTE_P;
+	<span class="hljs-keyword">if</span> ((perm &amp; flag) != flag) <span class="hljs-keyword">return</span> -E_INVAL;
+
+	<span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">PageInfo</span> *<span class="hljs-title">pg</span> = <span class="hljs-title">page_alloc</span>(1);</span>     <span class="hljs-comment">//分配物理页</span>
+	<span class="hljs-keyword">if</span> (!pg) <span class="hljs-keyword">return</span> -E_NO_MEM;      <span class="hljs-comment">//未分配成功</span>
+
+	ret = page_insert(e-&gt;env_pgdir, pg, va, perm);	<span class="hljs-comment">//建立映射关系</span>
+	<span class="hljs-keyword">if</span> (ret) 
+	&#123;
+		page_free(pg);
+		<span class="hljs-keyword">return</span> ret;
+	&#125;
+	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+&#125;</code></pre>
+</li>
+<li><p><strong>sys_page_map（）函数</strong></p>
+  <pre><code class="hljs c++"><span class="hljs-keyword">static</span> <span class="hljs-keyword">int</span>
+sys_page_map(<span class="hljs-keyword">envid_t</span> srcenvid, <span class="hljs-keyword">void</span> *srcva,
+	     <span class="hljs-keyword">envid_t</span> dstenvid, <span class="hljs-keyword">void</span> *dstva, <span class="hljs-keyword">int</span> perm)
+&#123;
+	<span class="hljs-comment">// Hint: This function is a wrapper around page_lookup() and</span>
+	<span class="hljs-comment">//   page_insert() from kern/pmap.c.</span>
+	<span class="hljs-comment">//   Again, most of the new code you write should be to check the</span>
+	<span class="hljs-comment">//   parameters for correctness.</span>
+	<span class="hljs-comment">//   Use the third argument to page_lookup() to</span>
+	<span class="hljs-comment">//   check the current permissions on the page.</span>
+
+	<span class="hljs-comment">// LAB 4: Your code here.</span>
+	<span class="hljs-comment">// panic("sys_page_map not implemented");</span>
+	<span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">Env</span> *<span class="hljs-title">se</span>, *<span class="hljs-title">de</span>;</span>           <span class="hljs-comment">//开始找对应的env结构</span>
+	<span class="hljs-keyword">int</span> ret = envid2env(srcenvid, &amp;se, <span class="hljs-number">1</span>);
+	<span class="hljs-keyword">if</span> (ret) <span class="hljs-keyword">return</span> ret;	
+	ret = envid2env(dstenvid, &amp;de, <span class="hljs-number">1</span>);
+	<span class="hljs-keyword">if</span> (ret) <span class="hljs-keyword">return</span> ret;	
+	<span class="hljs-comment">//之后是相关的条件的判断</span>
+	<span class="hljs-keyword">if</span> (srcva &gt;= (<span class="hljs-keyword">void</span>*)UTOP || dstva &gt;= (<span class="hljs-keyword">void</span>*)UTOP || 
+	ROUNDDOWN(srcva,PGSIZE) != srcva || 
+	ROUNDDOWN(dstva,PGSIZE) != dstva) 
+	<span class="hljs-keyword">return</span> -E_INVAL;
+
+	<span class="hljs-keyword">pte_t</span> *pte;
+	<span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">PageInfo</span> *<span class="hljs-title">pg</span> = <span class="hljs-title">page_lookup</span>(<span class="hljs-title">se</span>-&gt;<span class="hljs-title">env_pgdir</span>, <span class="hljs-title">srcva</span>, &amp;<span class="hljs-title">pte</span>);</span>
+	<span class="hljs-keyword">if</span> (!pg) <span class="hljs-keyword">return</span> -E_INVAL;
+
+	<span class="hljs-keyword">int</span> flag = PTE_U|PTE_P;
+	<span class="hljs-keyword">if</span> ((perm &amp; flag) != flag) <span class="hljs-keyword">return</span> -E_INVAL;
+
+	<span class="hljs-keyword">if</span> (((*pte&amp;PTE_W) == <span class="hljs-number">0</span>) &amp;&amp; (perm&amp;PTE_W)) <span class="hljs-keyword">return</span> -E_INVAL;
+	ret = page_insert(de-&gt;env_pgdir, pg, dstva, perm);
+	<span class="hljs-keyword">return</span> ret;
+&#125;</code></pre>
+</li>
+<li><p><strong>sys_page_ummap（）</strong></p>
+<p>  就是映射关系的清除，可以通过page_remove（）来实现</p>
+  <pre><code class="hljs c++"><span class="hljs-keyword">static</span> <span class="hljs-keyword">int</span>
+sys_page_unmap(<span class="hljs-keyword">envid_t</span> envid, <span class="hljs-keyword">void</span> *va)
+&#123;
+	<span class="hljs-comment">// Hint: This function is a wrapper around page_remove().</span>
+
+	<span class="hljs-comment">// LAB 4: Your code here.</span>
+	<span class="hljs-comment">// panic("sys_page_unmap not implemented");</span>
+	<span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">Env</span> *<span class="hljs-title">env</span>;</span>
+	<span class="hljs-keyword">int</span> ret = envid2env(envid, &amp;env, <span class="hljs-number">1</span>);
+	<span class="hljs-keyword">if</span> (ret) <span class="hljs-keyword">return</span> ret;
+
+	<span class="hljs-keyword">if</span> ((va &gt;= (<span class="hljs-keyword">void</span>*)UTOP) || (ROUNDDOWN(va, PGSIZE) != va)) <span class="hljs-keyword">return</span> -E_INVAL;
+	page_remove(env-&gt;env_pgdir, va);
+	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+&#125;</code></pre>
+</li>
+<li><p><strong>sys_env_set_status（）</strong></p>
+  <pre><code class="hljs c++"><span class="hljs-keyword">static</span> <span class="hljs-keyword">int</span>
+sys_env_set_status(<span class="hljs-keyword">envid_t</span> envid, <span class="hljs-keyword">int</span> status)
+&#123;
+	<span class="hljs-comment">// Hint: Use the 'envid2env' function from kern/env.c to translate an</span>
+	<span class="hljs-comment">// envid to a struct Env.</span>
+	<span class="hljs-comment">// You should set envid2env's third argument to 1, which will</span>
+	<span class="hljs-comment">// check whether the current environment has permission to set</span>
+	<span class="hljs-comment">// envid's status.</span>
+
+	<span class="hljs-comment">// LAB 4: Your code here.</span>
+	<span class="hljs-comment">// panic("sys_env_set_status not implemented");</span>
+	<span class="hljs-keyword">if</span> (status != ENV_NOT_RUNNABLE &amp;&amp; status != ENV_RUNNABLE) <span class="hljs-keyword">return</span> -E_INVAL;
+
+	<span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">Env</span> *<span class="hljs-title">e</span>;</span>
+	<span class="hljs-keyword">int</span> ret = envid2env(envid, &amp;e, <span class="hljs-number">1</span>);
+	<span class="hljs-keyword">if</span> (ret &lt; <span class="hljs-number">0</span>) <span class="hljs-keyword">return</span> ret;
+	e-&gt;env_status = status;
+	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+&#125;</code></pre>
+</li>
+<li><p><strong>在<code>kern/syscall.c</code>里面添加新的系统调用</strong></p>
+  <pre><code class="hljs c++"><span class="hljs-keyword">case</span> SYS_exofork:
+	ret = sys_exofork();
+	<span class="hljs-keyword">break</span>;
+<span class="hljs-keyword">case</span> SYS_env_set_status:
+	ret = sys_env_set_status((<span class="hljs-keyword">envid_t</span>)a1, (<span class="hljs-keyword">int</span>)a2);
+	<span class="hljs-keyword">break</span>;
+<span class="hljs-keyword">case</span> SYS_page_alloc:
+	ret = sys_page_alloc((<span class="hljs-keyword">envid_t</span>)a1, (<span class="hljs-keyword">void</span> *)a2, (<span class="hljs-keyword">int</span>)a3);
+	<span class="hljs-keyword">break</span>;
+<span class="hljs-keyword">case</span> SYS_page_map:
+	ret = sys_page_map((<span class="hljs-keyword">envid_t</span>)a1, (<span class="hljs-keyword">void</span> *)a2,(<span class="hljs-keyword">envid_t</span>)a3, (<span class="hljs-keyword">void</span> *)a4, (<span class="hljs-keyword">int</span>)a5);
+	<span class="hljs-keyword">break</span>;
+<span class="hljs-keyword">case</span> SYS_page_unmap:
+	ret = sys_page_unmap((<span class="hljs-keyword">envid_t</span>)a1, (<span class="hljs-keyword">void</span> *)a2);
+	<span class="hljs-keyword">break</span>;</code></pre>
+
+</li>
+</ul>
+<h2 id="Part-B"><a href="#Part-B" class="headerlink" title="Part B"></a>Part B</h2><h3 id="Exercise-8"><a href="#Exercise-8" class="headerlink" title="Exercise 8"></a>Exercise 8</h3><blockquote>
+<p>Exercise 8. Implement the sys_env_set_pgfault_upcall system call. Be sure to enable permission checking when looking up the environment ID of the target environment, since this is a “dangerous” system call.</p>
+</blockquote>
+<p><strong>sys_env_set_pgfault_upcall（）</strong></p>
+<p>这个系统调用为一个进程设置其用户态的页错误处理函数，当对参数进行检查之后，设置<code>env-&gt;env_pgfault_upcall</code>项即可。</p>
+<pre><code class="hljs c++"><span class="hljs-keyword">static</span> <span class="hljs-keyword">int</span>
+sys_env_set_pgfault_upcall(<span class="hljs-keyword">envid_t</span> envid, <span class="hljs-keyword">void</span> *func)
+&#123;
+	<span class="hljs-comment">// LAB 4: Your code here.</span>
+	<span class="hljs-comment">// panic("sys_env_set_pgfault_upcall not implemented");</span>
+	<span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">Env</span> *<span class="hljs-title">env</span>;</span>
+	<span class="hljs-keyword">int</span> ret;
+	<span class="hljs-keyword">if</span> ((ret = envid2env(envid, &amp;env, <span class="hljs-number">1</span>)) &lt; <span class="hljs-number">0</span>) &#123;
+		<span class="hljs-keyword">return</span> ret;
+	&#125;
+	env-&gt;env_pgfault_upcall = func;
+	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+&#125;</code></pre>
+
+<h3 id="Exercise-9"><a href="#Exercise-9" class="headerlink" title="Exercise 9"></a>Exercise 9</h3><blockquote>
+<p>Exercise 9. Implement the code in page_fault_handler in kern/trap.c required to dispatch page faults to the user-mode handler. Be sure to take appropriate precautions when writing into the exception stack. (What happens if the user environment runs out of space on the exception stack?)</p>
+</blockquote>
+<p>在这里，我们所需要做的是完善页错误处理函数，我们需要使用户进程遇到也错误<code>trap</code>进入kernel时，kernel能够让用户来运行处理函数</p>
+<p>用户程序会用到自己的<code>Exception Stack</code>保存出现中断时的错误信息供处理程序使用，而这个函数就需要将中断时进程的寄存器信息等压入栈中，并运行用户的中断程序。JOS提供了一个结构<code>UTrapframe</code>保存所有要用到的终端信息，只需要在栈中的指定位置分配一块内存给<code>UTrapframe</code>，并将<code>Trapframe</code>的信息存入即可。需要注意用户进程已经在中断栈中运行和第一次触发中断两种情况，对应的<code>esp</code>位置和<code>UTrapframe</code>存放位置也会不同。</p>
+<pre><code class="hljs c++"><span class="hljs-keyword">void</span>
+page_fault_handler(struct Trapframe *tf)
+&#123;
+	<span class="hljs-keyword">uint32_t</span> fault_va;
+
+	<span class="hljs-comment">// Read processor's CR2 register to find the faulting address</span>
+	fault_va = rcr2();
+
+	<span class="hljs-comment">// Handle kernel-mode page faults.</span>
+
+	<span class="hljs-comment">// LAB 3: Your code here.</span>
+	<span class="hljs-keyword">if</span> ((tf-&gt;tf_cs &amp; <span class="hljs-number">3</span>) == <span class="hljs-number">0</span>)
+		panic(<span class="hljs-string">"page_fault_handler():page fault in kernel mode!\n"</span>);
+	<span class="hljs-comment">// LAB 4: Your code here.</span>
+	<span class="hljs-keyword">if</span> (curenv-&gt;env_pgfault_upcall) &#123;
+		<span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">UTrapframe</span> *<span class="hljs-title">utf</span>;</span>
+		<span class="hljs-keyword">uintptr_t</span> New_esp;
+		<span class="hljs-comment">//判断是否已经在Exception Stack中</span>
+		<span class="hljs-keyword">if</span> (tf-&gt;tf_esp &gt; UXSTACKTOP - PGSIZE - <span class="hljs-number">1</span> &amp;&amp; tf-&gt;tf_esp &lt; UXSTACKTOP) 
+		&#123;	
+			New_esp = tf-&gt;tf_esp - <span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">uint32_t</span>) - <span class="hljs-keyword">sizeof</span>(struct UTrapframe);
+			utf = (struct UTrapframe*)New_esp;
+		&#125;
+		<span class="hljs-keyword">else</span> 
+		&#123;
+			New_esp = UXSTACKTOP - <span class="hljs-keyword">sizeof</span>(struct UTrapframe);
+			utf = (struct UTrapframe*)New_esp;
+		&#125;
+		<span class="hljs-comment">//为UTrapframe赋具体值</span>
+		user_mem_assert(curenv, (<span class="hljs-keyword">void</span> *) New_esp, <span class="hljs-keyword">sizeof</span>(struct UTrapframe), PTE_W | PTE_P | PTE_U);
+		utf-&gt;utf_eflags = tf-&gt;tf_eflags;
+		utf-&gt;utf_eip = tf-&gt;tf_eip;
+		utf-&gt;utf_err = tf-&gt;tf_err;
+		utf-&gt;utf_esp = tf-&gt;tf_esp;
+		utf-&gt;utf_fault_va = fault_va;
+		utf-&gt;utf_regs = tf-&gt;tf_regs;
+		
+		curenv-&gt;env_tf.tf_esp = New_esp;
+		curenv-&gt;env_tf.tf_eip = (<span class="hljs-keyword">uintptr_t</span>)curenv-&gt;env_pgfault_upcall;
+		env_run(curenv);
+	&#125;
+	<span class="hljs-comment">// Destroy the environment that caused the fault.</span>
+	cprintf(<span class="hljs-string">"[%08x] user fault va %08x ip %08x\n"</span>,
+		curenv-&gt;env_id, fault_va, tf-&gt;tf_eip);
+	print_trapframe(tf);
+	env_destroy(curenv);
+&#125;</code></pre>
+
+<h3 id="Exercise-10"><a href="#Exercise-10" class="headerlink" title="Exercise 10"></a>Exercise 10</h3><blockquote>
+<p>Exercise 10. Implement the _pgfault_upcall routine in lib/pfentry.S. The interesting part is returning to the original point in the user code that caused the page fault. You’ll return directly there, without going back through the kernel. The hard part is simultaneously switching stacks and re-loading the EIP. </p>
+</blockquote>
+<p>要实现的<code>_pgfault_upcall（）</code>的作用是调用已经实现的页错误处理程序，并且在运行完处理程序之后返回到原来的进程中继续运行，同时在实现的时候由于返回过程中需要维护寄存器的信息，所以不能直接通过ret，jmp指令实现，而是通过mov来实现</p>
+<pre><code class="hljs c++">.<span class="hljs-built_in">text</span>
+.globl _pgfault_upcall
+_pgfault_upcall:
+	<span class="hljs-comment">// Call the C page fault handler.</span>
+	pushl %esp			<span class="hljs-comment">// function argument: pointer to UTF</span>
+	movl _pgfault_handler, %eax
+	call *%eax
+	addl $<span class="hljs-number">4</span>, %esp			<span class="hljs-comment">// pop function argument</span>
+        
+	<span class="hljs-comment">// LAB 4: Your code here.</span>
+	<span class="hljs-comment">// Restore the trap-time registers.  After you do this, you</span>
+	<span class="hljs-comment">// can no longer modify any general-purpose registers.</span>
+	<span class="hljs-comment">// LAB 4: Your code here.</span>
+	addl $<span class="hljs-number">8</span>, %esp			<span class="hljs-comment">// 跳过utf_fault_va和utf_err</span>
+	movl <span class="hljs-number">40</span>(%esp), %eax 	<span class="hljs-comment">// 保存中断发生时的esp到eax</span>
+	movl <span class="hljs-number">32</span>(%esp), %ecx 	<span class="hljs-comment">// 保存终端发生时的eip到ecx</span>
+	movl %ecx, <span class="hljs-number">-4</span>(%eax) 	<span class="hljs-comment">// 将中断发生时的esp值亚入到到原来的栈中</span>
+	popal
+	addl $<span class="hljs-number">4</span>, %esp			<span class="hljs-comment">// 跳过eip</span>
+
+	<span class="hljs-comment">// Restore eflags from the stack.  After you do this, you can</span>
+	<span class="hljs-comment">// no longer use arithmetic operations or anything else that</span>
+	<span class="hljs-comment">// modifies eflags.</span>
+	<span class="hljs-comment">// LAB 4: Your code here.</span>
+	popfl
+	<span class="hljs-comment">// Switch back to the adjusted trap-time stack.</span>
+	<span class="hljs-comment">// LAB 4: Your code here.</span>
+	popl %esp
+	<span class="hljs-comment">// Return to re-execute the instruction that faulted.</span>
+	<span class="hljs-comment">// LAB 4: Your code here.</span>
+	lea <span class="hljs-number">-4</span>(%esp), %esp		<span class="hljs-comment">// 因为之前压入了eip的值但是没有减esp的值，所以现在需要将esp寄存器中的值减4</span>
+	ret</code></pre>
+
+<h3 id="Exercise-11"><a href="#Exercise-11" class="headerlink" title="Exercise 11"></a>Exercise 11</h3><blockquote>
+<p>Exercise 11. Finish set_pgfault_handler() in lib/pgfault.c.</p>
+</blockquote>
+<p><code>set_pgfault_handle()</code>为一个进程设置其页错误处理程序。如果程序没有设置处理程序，那么需要调用<code>sys_page_alloc()</code>分配一块<code>Exception Stack</code>，并使用<code>sys_env_set_pgfault_upcall()</code>将中断入口设为完成的汇编程序，最后设置<code>_pagefault_handler()</code>为C语言实现的处理函数即可</p>
+<pre><code class="hljs c++"><span class="hljs-keyword">void</span>
+set_pgfault_handler(<span class="hljs-keyword">void</span> (*handler)(struct UTrapframe *utf))
+&#123;
+	<span class="hljs-keyword">int</span> r;
+
+	<span class="hljs-keyword">if</span> (_pgfault_handler == <span class="hljs-number">0</span>) &#123;
+		<span class="hljs-comment">// First time through!</span>
+		<span class="hljs-comment">// LAB 4: Your code here.</span>
+		<span class="hljs-comment">// panic("set_pgfault_handler not implemented");</span>
+		<span class="hljs-keyword">int</span> r = sys_page_alloc(<span class="hljs-number">0</span>, (<span class="hljs-keyword">void</span> *)(UXSTACKTOP-PGSIZE), PTE_W | PTE_U | PTE_P);	<span class="hljs-comment">//分配异常栈</span>
+		<span class="hljs-keyword">if</span> (r &lt; <span class="hljs-number">0</span>) &#123;
+			panic(<span class="hljs-string">"set_pgfault_handler:sys_page_alloc failed"</span>);;
+		&#125;
+		sys_env_set_pgfault_upcall(<span class="hljs-number">0</span>, _pgfault_upcall);		<span class="hljs-comment">//系统调用，设置进程的env_pgfault_upcall属性</span>
+	&#125;
+
+	<span class="hljs-comment">// Save handler pointer for assembly to call.</span>
+	_pgfault_handler = handler;
+&#125;</code></pre>
+
+<h3 id="Exercise-12"><a href="#Exercise-12" class="headerlink" title="Exercise 12"></a>Exercise 12</h3><blockquote>
+<p>Exercise 12. Implement fork, duppage and pgfault in lib/fork.c.<br>Test your code with the forktree program. It should produce the following messages, with interspersed ‘new env’, ‘free env’, and ‘exiting gracefully’ messages. The messages may not appear in this order, and the environment IDs may be different.</p>
+</blockquote>
+<ul>
+<li><p><strong>pgfault（）</strong></p>
+<p>  该函数实现的是Copy On Write式的fork（）函数遇到也错误时候的处理程序，由于COW式的fork（）创建出来的子进程一开始就和父进程共享物理内存，因此，当父进程或者子进程要修改一个物理内存页的时候，需要新的一页物理内存来避免冲突</p>
+<p>  判断一下参数合法与否，在这里与之前稍有不同的是还需要判断当前要处理的页是否是一个COW页，以及是否由于写操作引起的页错误。判断方式与之前相同（使用JOS定义好的<code>FEC_WR</code>测试<code>err</code>，使用<code>PTE_COW</code>检查页表项标志位）。</p>
+<p>  随后首先用<code>sys_page_alloc()</code>为进程希望修改的COW页分配新的物理内存，再取消引发页错误的虚拟地址原有的映射，并将刚才映射在缓存区的新页映射给<code>addr</code>，最后取消缓存区的映射即可。中间每一步都需要检查是否有错误产生。</p>
+</li>
+</ul>
+<pre><code class="hljs c++"><span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span>
+pgfault(struct UTrapframe *utf)
+&#123;
+	<span class="hljs-keyword">void</span> *addr = (<span class="hljs-keyword">void</span> *) utf-&gt;utf_fault_va;
+	<span class="hljs-keyword">uint32_t</span> err = utf-&gt;utf_err;
+	<span class="hljs-keyword">int</span> r;
+	<span class="hljs-comment">// LAB 4: Your code here.</span>
+	<span class="hljs-keyword">uint32_t</span> pgnum = PGNUM(addr);
+	<span class="hljs-keyword">uint32_t</span> pgde = PDX(addr);
+	<span class="hljs-keyword">envid_t</span> envid = sys_getenvid();
+	<span class="hljs-keyword">if</span> (!((err&amp;FEC_WR) &amp;&amp; (uvpt[pgnum]&amp;PTE_COW) &amp;&amp; (uvpt[pgnum]&amp;PTE_P) &amp;&amp; (uvpd[pgde]&amp;PTE_P)))
+		panic(<span class="hljs-string">"Page cannot be fixed\n"</span>);
+
+	addr = ROUNDDOWN(addr,PGSIZE);
+	<span class="hljs-keyword">if</span> (sys_page_alloc(envid,(<span class="hljs-keyword">void</span>*)PFTEMP,PTE_W|PTE_P|PTE_U) &lt; <span class="hljs-number">0</span>)
+		panic(<span class="hljs-string">"sys_page_alloc panic\n"</span>);
+	memmove(PFTEMP,addr,PGSIZE);
+
+	<span class="hljs-keyword">if</span> (sys_page_unmap(envid,addr) &lt; <span class="hljs-number">0</span>)
+		panic(<span class="hljs-string">"sys_page_unmap panic\n"</span>);
+
+	<span class="hljs-keyword">if</span> (sys_page_map(envid, PFTEMP, envid, addr, PTE_P|PTE_U|PTE_W) &lt; <span class="hljs-number">0</span>)
+		panic(<span class="hljs-string">"sys_page_map panic\n"</span>);
+	
+	<span class="hljs-keyword">if</span> (sys_page_unmap(envid,PFTEMP) &lt; <span class="hljs-number">0</span>)
+		panic(<span class="hljs-string">"sys_page_unmap panic\n"</span>);
+&#125;</code></pre>
+
+<ul>
+<li><strong>deppage（）</strong></li>
+</ul>
+<p>该函数的作用式将虚拟内存也好为pn的虚拟内存映射到一个给定进程的相同虚拟空间，实现上只需要调用<code>sys_page_map()</code>即可</p>
+<pre><code class="hljs c++"><span class="hljs-keyword">static</span> <span class="hljs-keyword">int</span>
+duppage(<span class="hljs-keyword">envid_t</span> envid, <span class="hljs-keyword">unsigned</span> pn)
+&#123;
+	<span class="hljs-keyword">int</span> r;
+
+	<span class="hljs-comment">// LAB 4: Your code here.</span>
+	<span class="hljs-keyword">void</span> *addr = (<span class="hljs-keyword">void</span> *)(pn*PGSIZE);
+	<span class="hljs-keyword">envid_t</span> thisenvid = sys_getenvid();
+	<span class="hljs-keyword">if</span> ((uvpt[pn]&amp;PTE_W) || (uvpt[pn]&amp;PTE_COW)) 
+	&#123;
+		<span class="hljs-keyword">if</span> (sys_page_map(thisenvid, addr, envid, addr, PTE_P|PTE_U|PTE_COW) &lt; <span class="hljs-number">0</span>)
+			panic(<span class="hljs-string">"sys_page_map dupage"</span>);
+
+		<span class="hljs-keyword">if</span> (sys_page_map(thisenvid, addr, thisenvid, addr, PTE_P|PTE_U|PTE_COW) &lt; <span class="hljs-number">0</span>)
+			panic(<span class="hljs-string">"sys_page_map dupage"</span>);
+	&#125; <span class="hljs-keyword">else</span> 
+	&#123;
+		<span class="hljs-keyword">if</span> (sys_page_map(thisenvid, addr, envid, addr, PTE_P|PTE_U) &lt; <span class="hljs-number">0</span>)
+			panic(<span class="hljs-string">"sys_page_map dupage"</span>);
+	&#125;
+	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+&#125;</code></pre>
+
+<ul>
+<li><strong>fork（）</strong></li>
+</ul>
+<p>一个进程调用这个<code>fork()</code>后，首先会将进程的页错误处理函数设置为刚才实现的COW专用页错误处理函数；随后调用<code>sys_exofork()</code>产生一个新的进程。但是这里产生的新进程仅仅是复制了父进程的寄存器信息，接下来需要完成子进程的内存映射。在父进程中，首先需要将<code>UTEXT</code>到Exception Stack之间的用户内存映射给子进程。这里要用到刚才实现的<code>duppage()</code>函数来进行逐页映射（需要处理COW）。随后要给这个进程分配自己的Exception Stack，并初始化其中断处理函数，最后将子进程状态设为<code>ENV_RUNNABLE</code>，返回子进程id。子进程中<code>fork()</code>返回0即可</p>
+<pre><code class="hljs c++"><span class="hljs-keyword">envid_t</span>
+fork(<span class="hljs-keyword">void</span>)
+&#123;
+	<span class="hljs-comment">// LAB 4: Your code here.</span>
+	<span class="hljs-keyword">uint32_t</span> err;
+	set_pgfault_handler(pgfault); <span class="hljs-comment">// 缺页处理函数</span>
+	<span class="hljs-keyword">envid_t</span> envid = sys_exofork();<span class="hljs-comment">// 产生新的进程，设置了进程的状态，复制寄存器（TrapFrame）</span>
+	<span class="hljs-keyword">if</span> (envid == -E_NO_FREE_ENV ||envid == -E_NO_MEM)&#123;
+		panic(<span class="hljs-string">"cannot allocate an environment for %e\n"</span>, envid);
+	&#125;
+	<span class="hljs-keyword">if</span> (envid &gt; <span class="hljs-number">0</span>)&#123;
+		<span class="hljs-comment">// 父进程</span>
+		<span class="hljs-keyword">for</span> (<span class="hljs-keyword">uint32_t</span> pn = PGNUM(UTEXT); pn &lt; PGNUM(UXSTACKTOP - PGSIZE); pn++)&#123;
+			<span class="hljs-keyword">if</span> (((uvpd[PDX(pn*PGSIZE)]&amp;PTE_P) != PTE_P) || ((uvpt[pn]&amp;PTE_P) != PTE_P)) <span class="hljs-keyword">continue</span>;
+			<span class="hljs-keyword">if</span> ((err = duppage(envid, pn)) &lt; <span class="hljs-number">0</span>)
+				panic(<span class="hljs-string">"duppage err:%e\n"</span>, err);
+		&#125;
+
+		<span class="hljs-keyword">if</span> ((err = sys_page_alloc(envid, (<span class="hljs-keyword">void</span> *)(UXSTACKTOP - PGSIZE), PTE_P|PTE_U|PTE_W)) &lt; <span class="hljs-number">0</span>)
+			panic(<span class="hljs-string">"sys_page_alloc err:%e\n"</span>, err);
+
+		<span class="hljs-keyword">extern</span> <span class="hljs-keyword">void</span> _pgfault_upcall();
+		<span class="hljs-keyword">if</span> ((err =sys_env_set_pgfault_upcall(envid, _pgfault_upcall))&lt; <span class="hljs-number">0</span>)
+			panic(<span class="hljs-string">"sys_env_set_pgfault_upcall err:%e\n"</span>, err);
+		
+		<span class="hljs-keyword">if</span> ((err = sys_env_set_status(envid, ENV_RUNNABLE)) &lt; <span class="hljs-number">0</span>)
+			panic(<span class="hljs-string">"sys_env_set_status err:%e\n"</span>, err);
+	&#125;
+	<span class="hljs-keyword">else</span>&#123;
+		<span class="hljs-comment">//子进程</span>
+		thisenv = &amp;envs[ENVX(sys_getenvid())];
+		<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+	&#125;
+	<span class="hljs-keyword">return</span> envid;
+&#125;</code></pre>
+
+<h2 id="Part-C"><a href="#Part-C" class="headerlink" title="Part C"></a>Part C</h2><h3 id="Exercise-13"><a href="#Exercise-13" class="headerlink" title="Exercise 13"></a>Exercise 13</h3><blockquote>
+<p>Exercise 13. Modify kern/trapentry.S and kern/trap.c to initialize the appropriate entries in the IDT and provide handlers for IRQs 0 through 15. Then modify the code in env_alloc() in kern/env.c to ensure that user environments are always run with interrupts enabled.</p>
+</blockquote>
+<p><strong>trapentry.s</strong></p>
+<pre><code class="hljs c++">TRAPHANDLER_NOEC(handler32, IRQ_OFFSET + IRQ_TIMER)
+TRAPHANDLER_NOEC(handler33, IRQ_OFFSET + IRQ_KBD)
+TRAPHANDLER_NOEC(handler34, <span class="hljs-number">34</span>)
+TRAPHANDLER_NOEC(handler35, <span class="hljs-number">35</span>)
+TRAPHANDLER_NOEC(handler36, IRQ_OFFSET + IRQ_SERIAL)
+TRAPHANDLER_NOEC(handler37, <span class="hljs-number">37</span>)
+TRAPHANDLER_NOEC(handler38, <span class="hljs-number">38</span>)
+TRAPHANDLER_NOEC(handler39, IRQ_OFFSET + IRQ_SPURIOUS)
+TRAPHANDLER_NOEC(handler40, <span class="hljs-number">40</span>)
+TRAPHANDLER_NOEC(handler41, <span class="hljs-number">41</span>)
+TRAPHANDLER_NOEC(handler42, <span class="hljs-number">42</span>)
+TRAPHANDLER_NOEC(handler43, <span class="hljs-number">43</span>)
+TRAPHANDLER_NOEC(handler44, <span class="hljs-number">44</span>)
+TRAPHANDLER_NOEC(handler45, <span class="hljs-number">45</span>)
+TRAPHANDLER_NOEC(handler46, IRQ_OFFSET + IRQ_IDE)
+TRAPHANDLER_NOEC(handler47, <span class="hljs-number">47</span>)
+TRAPHANDLER_NOEC(handler51, IRQ_OFFSET + IRQ_ERROR)</code></pre>
+
+<p><strong>trap_init()</strong></p>
+<pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">handler32</span><span class="hljs-params">()</span></span>;
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">handler33</span><span class="hljs-params">()</span></span>;
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">handler34</span><span class="hljs-params">()</span></span>;
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">handler35</span><span class="hljs-params">()</span></span>;
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">handler36</span><span class="hljs-params">()</span></span>;
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">handler37</span><span class="hljs-params">()</span></span>;
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">handler38</span><span class="hljs-params">()</span></span>;
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">handler39</span><span class="hljs-params">()</span></span>;
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">handler40</span><span class="hljs-params">()</span></span>;
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">handler41</span><span class="hljs-params">()</span></span>;
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">handler42</span><span class="hljs-params">()</span></span>;
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">handler43</span><span class="hljs-params">()</span></span>;
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">handler44</span><span class="hljs-params">()</span></span>;
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">handler45</span><span class="hljs-params">()</span></span>;
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">handler46</span><span class="hljs-params">()</span></span>;
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">handler47</span><span class="hljs-params">()</span></span>;
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">handler51</span><span class="hljs-params">()</span></span>;
+...
+SETGATE(idt[IRQ_OFFSET + <span class="hljs-number">0</span>], <span class="hljs-number">0</span>, GD_KT, handler32, <span class="hljs-number">0</span>);
+SETGATE(idt[IRQ_OFFSET + <span class="hljs-number">1</span>], <span class="hljs-number">0</span>, GD_KT, handler33, <span class="hljs-number">0</span>);
+SETGATE(idt[IRQ_OFFSET + <span class="hljs-number">2</span>], <span class="hljs-number">0</span>, GD_KT, handler34, <span class="hljs-number">0</span>);
+SETGATE(idt[IRQ_OFFSET + <span class="hljs-number">3</span>], <span class="hljs-number">0</span>, GD_KT, handler35, <span class="hljs-number">0</span>);
+SETGATE(idt[IRQ_OFFSET + <span class="hljs-number">4</span>], <span class="hljs-number">0</span>, GD_KT, handler36, <span class="hljs-number">0</span>);
+SETGATE(idt[IRQ_OFFSET + <span class="hljs-number">5</span>], <span class="hljs-number">0</span>, GD_KT, handler37, <span class="hljs-number">0</span>);
+SETGATE(idt[IRQ_OFFSET + <span class="hljs-number">6</span>], <span class="hljs-number">0</span>, GD_KT, handler38, <span class="hljs-number">0</span>);
+SETGATE(idt[IRQ_OFFSET + <span class="hljs-number">7</span>], <span class="hljs-number">0</span>, GD_KT, handler39, <span class="hljs-number">0</span>);
+SETGATE(idt[IRQ_OFFSET + <span class="hljs-number">8</span>], <span class="hljs-number">0</span>, GD_KT, handler40, <span class="hljs-number">0</span>);
+SETGATE(idt[IRQ_OFFSET + <span class="hljs-number">9</span>], <span class="hljs-number">0</span>, GD_KT, handler41, <span class="hljs-number">0</span>);
+SETGATE(idt[IRQ_OFFSET + <span class="hljs-number">10</span>], <span class="hljs-number">0</span>, GD_KT, handler42, <span class="hljs-number">0</span>);
+SETGATE(idt[IRQ_OFFSET + <span class="hljs-number">11</span>], <span class="hljs-number">0</span>, GD_KT, handler43, <span class="hljs-number">0</span>);
+SETGATE(idt[IRQ_OFFSET + <span class="hljs-number">12</span>], <span class="hljs-number">0</span>, GD_KT, handler44, <span class="hljs-number">0</span>);
+SETGATE(idt[IRQ_OFFSET + <span class="hljs-number">13</span>], <span class="hljs-number">0</span>, GD_KT, handler45, <span class="hljs-number">0</span>);
+SETGATE(idt[IRQ_OFFSET + <span class="hljs-number">14</span>], <span class="hljs-number">0</span>, GD_KT, handler46, <span class="hljs-number">0</span>);
+SETGATE(idt[IRQ_OFFSET + <span class="hljs-number">15</span>], <span class="hljs-number">0</span>, GD_KT, handler47, <span class="hljs-number">0</span>);
+SETGATE(idt[IRQ_OFFSET + <span class="hljs-number">19</span>], <span class="hljs-number">0</span>, GD_KT, handler51, <span class="hljs-number">0</span>);</code></pre>
+
+<p><strong>env_alloc()</strong></p>
+<pre><code class="hljs c++"><span class="hljs-comment">// Enable interrupts while in user mode.</span>
+<span class="hljs-comment">// LAB 4: Your code here.</span>
+e-&gt;env_tf.tf_eflags |= FL_IF;</code></pre>
+
+<h3 id="Exercise-14"><a href="#Exercise-14" class="headerlink" title="Exercise 14"></a>Exercise 14</h3><blockquote>
+<p>Exercise 14. Modify the kernel’s trap_dispatch() function so that it calls sched_yield() to find and run a different environment whenever a clock interrupt takes place.</p>
+</blockquote>
+<p><strong>trap_dispatch()</strong></p>
+<p>修改trap_dispatch()，使得时钟中断发生时，切换到另一个进程执行，按照提示来就可以</p>
+<pre><code class="hljs c++"><span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span>
+trap_dispatch(struct Trapframe *tf)
+&#123;
+	...
+	<span class="hljs-comment">// Handle clock interrupts. Don't forget to acknowledge the</span>
+	<span class="hljs-comment">// interrupt using lapic_eoi() before calling the scheduler!</span>
+	<span class="hljs-comment">// LAB 4: Your code here.</span>
+	<span class="hljs-keyword">if</span> (tf-&gt;tf_trapno == IRQ_OFFSET + IRQ_TIMER) &#123;
+		lapic_eoi();
+		sched_yield();
+		<span class="hljs-comment">// return;</span>
+	&#125;
+	...
+&#125;</code></pre>
+
+<h3 id="Exercise-15"><a href="#Exercise-15" class="headerlink" title="Exercise 15"></a>Exercise 15</h3><blockquote>
+<p>Exercise 15. Implement sys_ipc_recv and sys_ipc_try_send in kern/syscall.c. Read the comments on both before implementing them, since they have to work together. When you call envid2env in these routines, you should set the checkperm flag to 0, meaning that any environment is allowed to send IPC messages to any other environment, and the kernel does no special permission checking other than verifying that the target envid is valid.<br>Then implement the ipc_recv and ipc_send functions in lib/ipc.c.</p>
+</blockquote>
+<p><code>sys_ipc_recv()</code>和<code>sys_ipc_try_send()</code>是怎么协作的：</p>
+<ul>
+<li><p>当某个进程调用<code>sys_ipc_recv()</code>后，该进程会阻塞（状态被置为<code>ENV_NOT_RUNNABLE</code>），直到另一个进程向它发送“消息”。当进程调用<code>sys_ipc_recv()</code>传入dstva参数时，表明当前进程准备接收页映射。</p>
+</li>
+<li><p>进程可以调用<code>sys_ipc_try_send()</code>向指定的进程发送“消息”，如果目标进程已经调用了<code>sys_ipc_recv()</code>，那么就发送数据，然后返回0，否则返回<code>-E_IPC_NOT_RECV</code>，表示目标进程不希望接受数据。当传入srcva参数时，表明发送进程希望和接收进程共享srcva对应的物理页。如果发送成功了发送进程的<code>srcva</code>和接收进程的<code>dstva</code>将指向相同的物理页。</p>
+</li>
+</ul>
+<p><strong>sys_ipc_recv()</strong></p>
+<p>需要实现的是进程接受ipc的函数。按惯例检查传入参数，然后分别设置进程自己的ipc接收状态和接收地址，将自己阻塞（状态设为<code>ENV_NOT_RUNNABLE</code>）最后调用<code>sched_yield()</code>运行其他程序即可</p>
+<pre><code class="hljs c++"><span class="hljs-keyword">static</span> <span class="hljs-keyword">int</span>
+sys_ipc_recv(<span class="hljs-keyword">void</span> *dstva)
+&#123;
+	<span class="hljs-comment">// LAB 4: Your code here.</span>
+	<span class="hljs-keyword">if</span>(dstva &lt; (<span class="hljs-keyword">void</span>*)UTOP &amp;&amp; PGOFF(dstva) != <span class="hljs-number">0</span>)
+		<span class="hljs-keyword">return</span> -E_INVAL;
+	curenv-&gt;env_ipc_recving = <span class="hljs-literal">true</span>;
+	curenv-&gt;env_ipc_dstva = dstva;
+	curenv-&gt;env_ipc_from = <span class="hljs-number">0</span>;
+	curenv-&gt;env_status = ENV_NOT_RUNNABLE;
+	sched_yield();
+	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+&#125;</code></pre>
+
+<p><strong>sys_ipc_try_send()</strong></p>
+<p>实现了IPC的发送端函数，将一个值<code>value</code>和一个虚拟地址为<code>srcva</code>的内存页发送给指定的进程。在检查参数后，调用<code>page_lookup()</code>函数查找<code>srcva</code>对应的内存页，并用<code>page_insert()</code>将这个物理页映射给接收进程的指定地址<code>dstva</code>。通过直接设置目标进程的<code>env_ipc_value</code>值即可完成值的传递，并需要以同样方式告知对方发送程序的<code>envid</code>。</p>
+<pre><code class="hljs c++"><span class="hljs-keyword">static</span> <span class="hljs-keyword">int</span>
+sys_ipc_try_send(<span class="hljs-keyword">envid_t</span> envid, <span class="hljs-keyword">uint32_t</span> value, <span class="hljs-keyword">void</span> *srcva, <span class="hljs-keyword">unsigned</span> perm)
+&#123;
+	<span class="hljs-comment">// LAB 4: Your code here.</span>
+	<span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">Env</span> * <span class="hljs-title">envstore</span>;</span>
+	<span class="hljs-keyword">if</span> (envid2env(envid, &amp;envstore, <span class="hljs-number">0</span>) != <span class="hljs-number">0</span>) 
+		<span class="hljs-keyword">return</span> -E_BAD_ENV;
+	<span class="hljs-keyword">if</span> (envstore-&gt;env_ipc_recving == <span class="hljs-number">0</span>) 
+		<span class="hljs-keyword">return</span> -E_IPC_NOT_RECV;
+
+	<span class="hljs-keyword">if</span> (srcva &lt; (<span class="hljs-keyword">void</span> *)UTOP) &#123;
+		<span class="hljs-keyword">if</span> ((<span class="hljs-keyword">uintptr_t</span>)srcva % PGSIZE != <span class="hljs-number">0</span>) 
+			<span class="hljs-keyword">return</span> -E_INVAL;
+		<span class="hljs-keyword">if</span> (((perm&amp;(~(PTE_U|PTE_P|PTE_AVAIL|PTE_W))) != <span class="hljs-number">0</span>)||((perm&amp;(PTE_U | PTE_P)) != (PTE_U | PTE_P))) 
+			<span class="hljs-keyword">return</span> -E_INVAL;
+		<span class="hljs-keyword">pte_t</span>* pte;
+		<span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">PageInfo</span> *<span class="hljs-title">pg</span> = <span class="hljs-title">page_lookup</span>(<span class="hljs-title">curenv</span>-&gt;<span class="hljs-title">env_pgdir</span>, <span class="hljs-title">srcva</span>, &amp;<span class="hljs-title">pte</span>);</span>
+		<span class="hljs-keyword">if</span> (pg == <span class="hljs-literal">NULL</span>) 
+			<span class="hljs-keyword">return</span> -E_INVAL;
+		<span class="hljs-keyword">if</span> ((perm &amp; PTE_W) &amp;&amp; !(*pte &amp; PTE_W)) 
+			<span class="hljs-keyword">return</span> -E_INVAL;
+		<span class="hljs-keyword">if</span> ((<span class="hljs-keyword">uintptr_t</span>)(envstore-&gt;env_ipc_dstva) &lt; UTOP) &#123;
+			<span class="hljs-keyword">uint32_t</span> ret;
+			<span class="hljs-keyword">if</span> ((ret = page_insert(envstore-&gt;env_pgdir, pg, envstore-&gt;env_ipc_dstva, perm)) != <span class="hljs-number">0</span>)
+				<span class="hljs-keyword">return</span> ret;
+			envstore-&gt;env_ipc_perm = perm;
+		&#125;
+		<span class="hljs-keyword">else</span> envstore-&gt;env_ipc_perm = <span class="hljs-number">0</span>;
+	&#125;
+
+	envstore-&gt;env_ipc_recving = <span class="hljs-number">0</span>;
+	envstore-&gt;env_ipc_from = curenv-&gt;env_id;
+	envstore-&gt;env_ipc_value = value;
+	envstore-&gt;env_status = ENV_RUNNABLE;
+	envstore-&gt;env_tf.tf_regs.reg_eax = <span class="hljs-number">0</span>;
+	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+&#125;</code></pre>
+
+<p><strong>ipc_recv()</strong></p>
+<p>用户库函数中的ipc接收端。它的主要功能是在接收完成后，判断是否收到了信息，收到了则存入<code>from_env_store</code>和<code>perm_store</code>中，并返回ipc接受到的<code>value</code>。</p>
+<pre><code class="hljs c++"><span class="hljs-keyword">int32_t</span>
+ipc_recv(<span class="hljs-keyword">envid_t</span> *from_env_store, <span class="hljs-keyword">void</span> *pg, <span class="hljs-keyword">int</span> *perm_store)
+&#123;
+	<span class="hljs-comment">// LAB 4: Your code here.</span>
+	<span class="hljs-keyword">if</span> (pg == <span class="hljs-literal">NULL</span>)
+		pg = (<span class="hljs-keyword">void</span> *)KERNBASE;
+	<span class="hljs-keyword">uint32_t</span> ret = sys_ipc_recv(pg);
+	<span class="hljs-keyword">if</span> (ret != <span class="hljs-number">0</span>) &#123;
+		<span class="hljs-keyword">if</span> (from_env_store) *from_env_store = <span class="hljs-number">0</span>;
+		<span class="hljs-keyword">if</span> (perm_store) *perm_store = <span class="hljs-number">0</span>;
+		<span class="hljs-keyword">return</span> ret;
+	&#125;
+	<span class="hljs-keyword">if</span> (from_env_store) *from_env_store =thisenv-&gt;env_ipc_from;
+	<span class="hljs-keyword">if</span> (perm_store) *perm_store = thisenv-&gt;env_ipc_value;
+
+	<span class="hljs-keyword">return</span> thisenv-&gt;env_ipc_value;
+&#125;</code></pre>
+
+<p><strong>ipc_send()</strong></p>
+<pre><code class="hljs c++"><span class="hljs-keyword">void</span>
+ipc_send(<span class="hljs-keyword">envid_t</span> to_env, <span class="hljs-keyword">uint32_t</span> val, <span class="hljs-keyword">void</span> *pg, <span class="hljs-keyword">int</span> perm)
+&#123;
+	<span class="hljs-comment">// LAB 4: Your code here.</span>
+	<span class="hljs-keyword">uint32_t</span> ret = <span class="hljs-number">1</span>;
+	<span class="hljs-keyword">if</span> (pg == <span class="hljs-literal">NULL</span>)
+		pg = (<span class="hljs-keyword">void</span> *)KERNBASE;
+	<span class="hljs-keyword">while</span> (ret != <span class="hljs-number">0</span>) &#123;
+		ret = sys_ipc_try_send(to_env, val, pg, perm);
+		<span class="hljs-keyword">if</span> (ret &lt; <span class="hljs-number">0</span> &amp;&amp; ret != -E_IPC_NOT_RECV)
+			panic(<span class="hljs-string">"ipc_send:%e"</span>, ret);
+		sys_yield();
+	&#125;
+&#125;</code></pre>
+
+<h2 id="运行结果"><a href="#运行结果" class="headerlink" title="运行结果"></a>运行结果</h2><p><img src="/2020/12/07/oslab5-preemptive-mutitasking/3-2.PNG" srcset="/img/loading.gif" alt="3-2"></p>
+<h2 id="优先级调度"><a href="#优先级调度" class="headerlink" title="优先级调度"></a>优先级调度</h2><h3 id="优先级调度函数"><a href="#优先级调度函数" class="headerlink" title="优先级调度函数"></a>优先级调度函数</h3><p>我们要实现一个优先级调度函数<code>sched_priority_yield()</code>，作用是根据进程的优先级来选择所要运行的进程，而不是像之前一样，运行找到的第一个可运行进程</p>
+<p>实现思路：此时的优先级应该是在Env结构中存储的，要修改env结构，在里面加入一项<strong>int env_priority</strong>来存储当前进程的优先级，并且在<code>env_alloc()</code>时初始化为-1，而之后的话就只是按照时间顺序来逐渐升高优先级</p>
+<p>而我们的调度函数所要做的就是遍历所有的进程，找到可运行并且优先级最高的那个并且运行它</p>
+<p>具体实现</p>
+<pre><code class="hljs c++"><span class="hljs-comment">//choose a user environment that is both runnable and have the most priority </span>
+<span class="hljs-keyword">void</span>
+sched_yield(<span class="hljs-keyword">void</span>)
+&#123;
+	<span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">Env</span> *<span class="hljs-title">idle</span>;</span>
+
+	<span class="hljs-keyword">uint32_t</span> env_index;
+ 	<span class="hljs-keyword">uint32_t</span> first_env_index;
+	<span class="hljs-keyword">static</span> <span class="hljs-keyword">uint32_t</span> prior = <span class="hljs-number">0</span>;
+	
+	idle = thiscpu-&gt;cpu_env;
+ 	<span class="hljs-keyword">if</span>(idle == <span class="hljs-literal">NULL</span>) 
+ 		first_env_index = env_index = <span class="hljs-number">-1</span>;
+ 	<span class="hljs-keyword">else</span>&#123;
+  		first_env_index = env_index = ENVX(idle-&gt;env_id);
+  		<span class="hljs-keyword">if</span>(idle-&gt;env_priority == <span class="hljs-number">-1</span>)	<span class="hljs-comment">//等待时间越长，优先级越高</span>
+   			idle-&gt;env_priority = prior++;
+	&#125;
+
+ 	<span class="hljs-keyword">for</span>(<span class="hljs-keyword">uint32_t</span> i = <span class="hljs-number">0</span>; i &lt; NENV; i++)
+	&#123;	
+  		<span class="hljs-keyword">uint32_t</span> n = (env_index + i) % NENV;
+  		<span class="hljs-comment">//给没有被调度过的进程设置优先级</span>
+ 		<span class="hljs-keyword">if</span>(envs[n].env_status == ENV_RUNNABLE &amp;&amp; envs[n].env_priority == <span class="hljs-number">-1</span>) 
+ 			envs[n].env_priority = prior++;
+  		<span class="hljs-comment">//找到优先级最高的进程</span>
+  		<span class="hljs-keyword">if</span>(envs[n].env_status == ENV_RUNNABLE &amp;&amp; envs[n].env_priority &gt; envs[first_env_index].env_priority)
+   			first_env_index = n;
+ 	&#125;
+ 	<span class="hljs-keyword">if</span>(first_env_index != <span class="hljs-number">-1</span>)&#123;
+ 		env_run(&amp;envs[first_env_index]);
+ 		<span class="hljs-keyword">return</span>;
+ 	&#125;
+ 	
+	<span class="hljs-keyword">if</span>(idle &amp;&amp; idle-&gt;env_status == ENV_RUNNING)&#123;		
+ 		env_run(idle);
+ 		<span class="hljs-keyword">return</span>;
+ 	&#125;
+	sched_halt();
+&#125;</code></pre>
+
+<p>之后我们需要参考user/yield.c来实现我们的测试文件，我是在原来的基础上直接修改的</p>
+<pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;inc/lib.h&gt;</span></span>
+
+<span class="hljs-keyword">void</span>
+umain(<span class="hljs-keyword">int</span> argc, <span class="hljs-keyword">char</span> **argv)
+&#123;
+    <span class="hljs-keyword">int</span> i;
+
+	cprintf(<span class="hljs-string">"Hello, I am environment %08x. Priority: %d\n"</span>, thisenv-&gt;env_id, thisenv-&gt;env_priority);
+	<span class="hljs-keyword">for</span> (i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">3</span>; i++) &#123;
+		sys_yield();
+		cprintf(<span class="hljs-string">"Back in environment %08x, iteration %d.\n"</span>, thisenv-&gt;env_id, i);
+	&#125;
+	cprintf(<span class="hljs-string">"All done in environment %08x.\n"</span>, thisenv-&gt;env_id);
+&#125;</code></pre>
+
+<p>运行结果</p>
+<p><img src="/2020/12/07/oslab5-preemptive-mutitasking/4-1.png" srcset="/img/loading.gif" alt="4-1"></p>
+<h2 id="问题回答"><a href="#问题回答" class="headerlink" title="问题回答"></a>问题回答</h2><ul>
+<li><h3 id="详细描述JOS启动多个APs的过程"><a href="#详细描述JOS启动多个APs的过程" class="headerlink" title="详细描述JOS启动多个APs的过程"></a>详细描述JOS启动多个APs的过程</h3></li>
+</ul>
+<p>在<code>kern/init.c</code>当中，BSP通过运行<code>i386_init()</code>来完成内存、进程等的初始化，之后就开始了APs的初始化过程，通过调用<code>mp_init()</code>以及<code>lapic_init()</code>两个函数来完成基本的信息收集以及APIC初始化</p>
+<p><code>mp_init()</code>首先从BIOS中获取多处理器配置信息。在BIOS所在的内存区中可以读取MP配置表获得CPU总数，<code>APIC ID</code>，<code>LAPIC</code>的内存映射地址等。随后则由<code>lapic_init()</code>初始化<code>LAPIC</code>上的寄存器。</p>
+<p>在得到基本的CPU信息之后，会转到<code>boot_aps()</code>，由它来一个一个的启动找到的APs。</p>
+<p>在<code>mpentry</code>中，AP从实模式启动，这里与boot.S类似。这时会进行寄存器初始化，<code>GDT</code>载入，设置页表和分页，初始化堆栈等工作。完成后<code>mpentry</code>会调用<code>mp_main()</code>继续进行AP启动工作，设置页表目录，建立<code>LAPIC</code>的<code>MMIO</code>映射，初始化<code>GDT</code>与<code>TSS</code>，设置CPU状态。</p>
+<p>回到<code>boot_aps()</code>，只有当程序确认一个AP启动完成（CPU状态为<code>CPU_STARTED</code>）后，才会继续启动下一个AP；否则会一直忙等。</p>
+<ul>
+<li><h3 id="详细描述JOS中执行COW-fork时，-用户程序一次执行了哪些步骤，这些步骤包含哪些系统调用？"><a href="#详细描述JOS中执行COW-fork时，-用户程序一次执行了哪些步骤，这些步骤包含哪些系统调用？" class="headerlink" title="详细描述JOS中执行COW fork时， 用户程序一次执行了哪些步骤，这些步骤包含哪些系统调用？"></a>详细描述JOS中执行COW fork时， 用户程序一次执行了哪些步骤，这些步骤包含哪些系统调用？</h3></li>
+</ul>
+<ol>
+<li><p>当一个用户程序调用COW fork（即lib中的 <code>fork()</code>）时，<code>fork()</code>首先会将用户程序的页错误处理程序设置为COW专用的<code>pgfault()</code>函数</p>
+</li>
+<li><p>随后会调用<code>sys_exofork()</code>来实现基本的fork进程创建。</p>
+</li>
+</ol>
+<p>在这些步骤中，第一步会涉及到<code>sys_page_alloc()</code>（分配异常处理栈）和<code>sys_env_set_pgfault_upcall()</code>（设置页错误处理程序）。而在用<code>duppage()</code>复制COW页过程中，则会调用<code>sys_getenvid()</code>和<code>sys_page_map()</code>两个系统调用。最后还会用到<code>sys_env_set_status()</code>设定进程状态。</p>
+<ul>
+<li><h3 id="详细描述当进程发生COW相关page-fault时，这个中断是如何被处理的？哪些步骤在内核中，哪些步骤在用户空间中？"><a href="#详细描述当进程发生COW相关page-fault时，这个中断是如何被处理的？哪些步骤在内核中，哪些步骤在用户空间中？" class="headerlink" title="详细描述当进程发生COW相关page fault时，这个中断是如何被处理的？哪些步骤在内核中，哪些步骤在用户空间中？"></a>详细描述当进程发生COW相关page fault时，这个中断是如何被处理的？哪些步骤在内核中，哪些步骤在用户空间中？</h3></li>
+</ul>
+<ol>
+<li><p>在用户程序发生一个页错误后，系统都会陷入内核，调用一般的内核中断处理程序。当中断处理被分发给trap.c中的<code>page_fault_handler()</code>中后，内核的页错误处理程序则会将<code>UTrapframe</code>压入<code>Exception Stack</code>，并开始运行进程自己的COW页错误处理程序<code>pgfault()</code>。</p>
+</li>
+<li><p>之后系统又一次回到用户态，并且执行完成后直接回到用户进程。而在<code>pgfault()</code>中，处理函数会判断页错误类型是否是写入一个COW页面造成的，如果是则将要写入的COW页复制一个，并分配给当前进程的内存空间。</p>
+</li>
+</ol>
+<ul>
+<li><h3 id="user-primes-c-这段代码很有趣，请详细解释这段代码如何执行，画出代码流程图，并指出所谓的素数体现在哪"><a href="#user-primes-c-这段代码很有趣，请详细解释这段代码如何执行，画出代码流程图，并指出所谓的素数体现在哪" class="headerlink" title="user/primes.c 这段代码很有趣，请详细解释这段代码如何执行，画出代码流程图，并指出所谓的素数体现在哪"></a>user/primes.c 这段代码很有趣，请详细解释这段代码如何执行，画出代码流程图，并指出所谓的素数体现在哪</h3></li>
+</ul>
+<p>这段代码实际上就是由一个进程创建一个子进程后，不断地给子进程发送一些数字。每个被创建出来的子进程同样会再创建出一个孩子进程，然后不断给子进程发送数字。main进程发送从2开始的自然数给子进程，子进程留下第一个数字2，即为这个子进程找到的素数。而后子进程会将所有2的倍数筛掉，将剩下的数字再发给自己的子进程（这里也就是main进程子进程的子进程），由被fork出的进程重复这个过程。而每个进程留下的第一个数字一定是素数，因为这个数已经被比他小的数字检验过了–如果是比他小的数字的倍数，会被筛选掉。而这样每个进程就都能够找到一个素数。</p>
+<p>代码流程图：</p>
+<p><img src="/2020/12/07/oslab5-preemptive-mutitasking/5.png" srcset="/img/loading.gif" alt="5"></p>
+
+            </article>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/Operating-System/">Operating System</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" target="_blank" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！</p>
+              
+              
+                <div class="post-prevnext row">
+                  <div class="post-prev col-6">
+                    
+                    
+                      <a href="/2020/12/13/VPN-Tunneling/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">VPN-Tunneling</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </div>
+                  <div class="post-next col-6">
+                    
+                    
+                      <a href="/2020/12/02/Firewall-VPN/">
+                        <span class="hidden-mobile">Firewall_VPN</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </div>
+                </div>
+              
+            </div>
+
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div id="tocbot"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+  </main>
+
+  
+    <a id="scroll-top-button" href="#" role="button">
+      <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  
+
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <div>
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a>
+      <i class="iconfont icon-love"></i>
+      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener">
+        <span>Fluid</span></a>
+    </div>
+    
+
+    
+
+    
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script  src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script  src="/js/debouncer.js" ></script>
+<script  src="/js/main.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/lazyload.js" ></script>
+  
+
+
+
+  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js" ></script>
+  <script  src="/js/clipboard-use.js" ></script>
+
+
+
+
+
+
+
+  <script  src="https://cdn.staticfile.org/tocbot/4.11.1/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var boardCtn = $('#board-ctn');
+      var boardTop = boardCtn.offset().top;
+
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: 'article.markdown-body',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        collapseDepth: 0,
+        scrollSmooth: true,
+        headingsOffset: -boardTop
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc').css('visibility', 'visible');
+      }
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "oslab5_preemptive mutitasking&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      searchFunc(path, 'local-search-input', 'local-search-result');
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <script>
+    $('#post img:not(.no-zoom img, img[no-zoom]), img[zoom]').each(
+      function () {
+        var element = document.createElement('a');
+        $(element).attr('data-fancybox', 'images');
+        $(element).attr('href', $(this).attr('src'));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

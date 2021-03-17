@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  <title>Firewall_VPN - Hexo</title>
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    <link  rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/github-gist.min.css" />
+  
+
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_yg9cfy8wd6.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_pjno9b9zyxs.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script  src="/js/utils.js" ></script>
+<meta name="generator" content="Hexo 4.2.1"><link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+</head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Fluid</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              
+  <div class="mt-3 post-meta">
+    <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+    <time datetime="2020-12-02 18:33">
+      2020年12月2日 晚上
+    </time>
+  </div>
+
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      1k 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      12
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <div class="post-content mx-auto" id="post">
+            
+            <article class="markdown-body">
+              <h1 id="Firewall-VPN"><a href="#Firewall-VPN" class="headerlink" title="Firewall_VPN"></a>Firewall_VPN</h1><h2 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h2><p>在这里，主要是想要对于防火墙的过滤以及对应的VPN（虚拟私人网络）来进行绕过，希望对于VPN的原理能够有一个比较全面的了解</p>
+<h2 id="Tasks"><a href="#Tasks" class="headerlink" title="Tasks"></a>Tasks</h2><h3 id="task1：VM设置"><a href="#task1：VM设置" class="headerlink" title="task1：VM设置"></a>task1：VM设置</h3><ul>
+<li><p>VM1</p>
+<p>  <img src="/2020/12/02/Firewall-VPN/1-1.PNG" srcset="/img/loading.gif" alt="1-1"></p>
+</li>
+<li><p>VM2</p>
+<p>  <img src="/2020/12/02/Firewall-VPN/1-2.PNG" srcset="/img/loading.gif" alt="1-2"></p>
+</li>
+</ul>
+<h3 id="task2：设置防火墙"><a href="#task2：设置防火墙" class="headerlink" title="task2：设置防火墙"></a>task2：设置防火墙</h3><p>在这里设置对应的目标网站为<a href="http://www.fudan.edu.cn，通过nslookup查询可知，目标主机IP为202.120.224.81" target="_blank" rel="noopener">www.fudan.edu.cn，通过nslookup查询可知，目标主机IP为202.120.224.81</a></p>
+<blockquote>
+<p>在设置对应的防火墙规则前，我们不能在路由之前进行设置，并且只能在真实的网络接口上面进行设置，而不是在虚拟网络接口上进行设置</p>
+</blockquote>
+<p><img src="/2020/12/02/Firewall-VPN/1-3.PNG" srcset="/img/loading.gif" alt="1-3"></p>
+<h4 id="具体实现"><a href="#具体实现" class="headerlink" title="具体实现"></a>具体实现</h4><p>执行对应的下面的命令</p>
+<pre><code class="hljs angelscript">sudo ufw enable
+sudo ufw deny <span class="hljs-keyword">out</span> on enp0s3 to <span class="hljs-number">202.120</span><span class="hljs-number">.224</span><span class="hljs-number">.81</span>
+sudo ufw status</code></pre>
+
+<p><img src="/2020/12/02/Firewall-VPN/1-5.PNG" srcset="/img/loading.gif" alt="1-5"></p>
+<p>之后清理浏览器缓存并且访问<a href="http://www.fudan.edu.cn，会发现访问被拒绝" target="_blank" rel="noopener">www.fudan.edu.cn，会发现访问被拒绝</a></p>
+<p><img src="/2020/12/02/Firewall-VPN/2-1.PNG" srcset="/img/loading.gif" alt="2-1"></p>
+<h3 id="task3：通过VPN来绕过防火墙"><a href="#task3：通过VPN来绕过防火墙" class="headerlink" title="task3：通过VPN来绕过防火墙"></a>task3：通过VPN来绕过防火墙</h3><h4 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h4><p>VM2是一台在防火墙的内网外面的主机，而VM1之所以能绕过防火墙，是通过VM1和VM2之间VPN通道来实现的</p>
+<p>疑问：</p>
+<ul>
+<li>数据包在VPN隧道里面是通过什么协议来实现的</li>
+<li>对应的虚拟网卡是怎么产生的/怎么工作的呢</li>
+</ul>
+<p><img src="/2020/12/02/Firewall-VPN/2-2.PNG" srcset="/img/loading.gif" alt="2-2"></p>
+<blockquote>
+<p>The vpnclient and vpnserver programs are the two ends of a VPN tunnel. They communicate with each other using either TCP or UDP via the sockets depicted in Figure 3. In our sample code, we choose to use UDP for the sake of simplicity. The dotted line between the client and server depicts the path for the VPN tunnel. The VPN client and server programs connect to the hosting system via a TUN interface, through which they do two things: (1) get IP packets from the hosting system, so the packets can be sent through the tunnel, (2) get IP packets from the tunnel, and then forward it to the hosting system, which will forward the packet to its final destination.</p>
+</blockquote>
+<h4 id="step1：运行VPNserver"><a href="#step1：运行VPNserver" class="headerlink" title="step1：运行VPNserver"></a>step1：运行VPNserver</h4><p>所要做的无非就是两步：1. 建立一个虚拟网卡，给它分配IP地址并让它等待连接 2.打开端口转发功能，让主机作为路由器/网关来出现</p>
+<p><img src="/2020/12/02/Firewall-VPN/2-3.PNG" srcset="/img/loading.gif" alt="2-3"></p>
+<p><img src="/2020/12/02/Firewall-VPN/3-1.PNG" srcset="/img/loading.gif" alt="3-1"></p>
+<h4 id="step2：运行VPN客户端"><a href="#step2：运行VPN客户端" class="headerlink" title="step2：运行VPN客户端"></a>step2：运行VPN客户端</h4><p>和上面所做的没有什么不同</p>
+<p><img src="/2020/12/02/Firewall-VPN/3-2.PNG" srcset="/img/loading.gif" alt="3-2"></p>
+<h4 id="step3：在VPN服务端和客户端之间设置路由"><a href="#step3：在VPN服务端和客户端之间设置路由" class="headerlink" title="step3：在VPN服务端和客户端之间设置路由"></a>step3：在VPN服务端和客户端之间设置路由</h4><p>当我们在建立网络的时候，还需要说能够进行基本的通信，这也就需要我们进行路由表的设置，将一些包有选择的放到对应的接口上面去，运行下面的命令并且检查对应的路由表，将对应IP地址为202.120.224.81的IP数据包发往对应的tun0接口</p>
+<pre><code class="hljs routeros">sudo<span class="hljs-built_in"> route </span><span class="hljs-builtin-name">add</span> -host 202.120.224.81 tun0</code></pre>
+
+<p><img src="/2020/12/02/Firewall-VPN/3-3.PNG" srcset="/img/loading.gif" alt="3-3"></p>
+<h4 id="step4：在服务器VM上面设置NAT"><a href="#step4：在服务器VM上面设置NAT" class="headerlink" title="step4：在服务器VM上面设置NAT"></a>step4：在服务器VM上面设置NAT</h4><p>为什么会先发给VPN server端的主机</p>
+<p>首先要对于VPN整个过程有个了解，当内网中的A要访问外部网址的时候，首先会产生一个数据包，之后当这个数据包查询本地的路由表的时候，会发现用于发送该数据包的IP地址为主机A的外网网tun0，而目标地址是主机B的外网网关。而当主机B的外网网关收到该数据包的时候，会剥离外面的头部字段并且重新生成新的数据包，之后进行访问对应的外部网址</p>
+<p><strong>总的来说，相当于是将主机A的接受服务放到了B的上面，让B来替A进行访问，所以返回的报文理所当然的是要先到B</strong></p>
+<p>参考：<a href="https://zhuanlan.zhihu.com/p/127785818" target="_blank" rel="noopener">VPN过程</a>、<a href="http://huyue.xn--6qq986b3xl/2019/08/01/VPN%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86/#VPN%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86" target="_blank" rel="noopener">VPN工作原理</a></p>
+<p>当我们上面步骤都做完之后，可以在client和server端分别看到以下内容</p>
+<p><img src="/2020/12/02/Firewall-VPN/3-4.PNG" srcset="/img/loading.gif" alt="3-4"></p>
+<p><img src="/2020/12/02/Firewall-VPN/3-5.PNG" srcset="/img/loading.gif" alt="3-5"></p>
+<p>对数据包的分析</p>
+<p><img src="/2020/12/02/Firewall-VPN/3-7.PNG" srcset="/img/loading.gif" alt="3-7"></p>
+<p>在这里我们可以发现，首先，当发送数据包的时候，192.168.53.5其实也会向目标地址发送数据包，而10.0.2.5在这里其实相当于是扮演了VPN网关，所有的宝石加上是由10.0.2.5来进行传输出去的，而之后当收到这个包的时候，会转发到对应的192.168.53.5，之后对应的socket可以得到相应的数据</p>
+<p>参考blog：<a href="https://cshihong.github.io/2019/05/11/SSL-VPN%E6%8A%80%E6%9C%AF%E5%8E%9F%E7%90%86/" target="_blank" rel="noopener">SSL_VPN技术原理</a>以及NAT网络：</p>
+<p><img src="/2020/12/02/Firewall-VPN/3-8.PNG" srcset="/img/loading.gif" alt="3-8"></p>
+
+            </article>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/Network-Security/">Network Security</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" target="_blank" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！</p>
+              
+              
+                <div class="post-prevnext row">
+                  <div class="post-prev col-6">
+                    
+                    
+                      <a href="/2020/12/07/oslab5-preemptive-mutitasking/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">oslab5_preemptive mutitasking</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </div>
+                  <div class="post-next col-6">
+                    
+                    
+                      <a href="/2020/11/30/Linuc-Firewall-Exploration/">
+                        <span class="hidden-mobile">Linuc Firewall Exploration</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </div>
+                </div>
+              
+            </div>
+
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div id="tocbot"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+  </main>
+
+  
+    <a id="scroll-top-button" href="#" role="button">
+      <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  
+
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <div>
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a>
+      <i class="iconfont icon-love"></i>
+      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener">
+        <span>Fluid</span></a>
+    </div>
+    
+
+    
+
+    
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script  src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script  src="/js/debouncer.js" ></script>
+<script  src="/js/main.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/lazyload.js" ></script>
+  
+
+
+
+  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js" ></script>
+  <script  src="/js/clipboard-use.js" ></script>
+
+
+
+
+
+
+
+  <script  src="https://cdn.staticfile.org/tocbot/4.11.1/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var boardCtn = $('#board-ctn');
+      var boardTop = boardCtn.offset().top;
+
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: 'article.markdown-body',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        collapseDepth: 0,
+        scrollSmooth: true,
+        headingsOffset: -boardTop
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc').css('visibility', 'visible');
+      }
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "Firewall_VPN&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      searchFunc(path, 'local-search-input', 'local-search-result');
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <script>
+    $('#post img:not(.no-zoom img, img[no-zoom]), img[zoom]').each(
+      function () {
+        var element = document.createElement('a');
+        $(element).attr('data-fancybox', 'images');
+        $(element).attr('href', $(this).attr('src'));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

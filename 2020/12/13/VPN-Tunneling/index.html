@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  <title>VPN-Tunneling - Hexo</title>
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    <link  rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/github-gist.min.css" />
+  
+
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_yg9cfy8wd6.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_pjno9b9zyxs.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script  src="/js/utils.js" ></script>
+<meta name="generator" content="Hexo 4.2.1"><link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+</head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Fluid</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              
+  <div class="mt-3 post-meta">
+    <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+    <time datetime="2020-12-13 17:30">
+      2020年12月13日 下午
+    </time>
+  </div>
+
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      2.6k 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      34
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <div class="post-content mx-auto" id="post">
+            
+            <article class="markdown-body">
+              <h2 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h2><p>核心内容：了解VPN的两个基本部分（隧道以及加密），涉及到的板块/主题：VPN、TUN/TAP虚拟接口、IP隧道、路由</p>
+<h2 id="Tasks"><a href="#Tasks" class="headerlink" title="Tasks"></a>Tasks</h2><h3 id="Task-1：网络设置"><a href="#Task-1：网络设置" class="headerlink" title="Task 1：网络设置"></a>Task 1：网络设置</h3><table>
+<thead>
+<tr>
+<th align="center">VPN Client/Host U</th>
+<th align="center">10.0.2.4</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><strong>Gateway</strong></td>
+<td align="center"><strong>10.0.2.5、192.168.60.1</strong></td>
+</tr>
+<tr>
+<td align="center"><strong>Host V</strong></td>
+<td align="center"><strong>192.168.60.101</strong></td>
+</tr>
+</tbody></table>
+<ul>
+<li><strong>U和VPN Server之间通信</strong></li>
+</ul>
+<p><img src="/2020/12/13/VPN-Tunneling/1-1.PNG" srcset="/img/loading.gif" alt="1-1"></p>
+<ul>
+<li><strong>VPN Server和V之间进行通信</strong></li>
+</ul>
+<p><img src="/2020/12/13/VPN-Tunneling/1-2.PNG" srcset="/img/loading.gif" alt="1-2"></p>
+<ul>
+<li><strong>Host U和Host V之间不能通信</strong></li>
+</ul>
+<p><img src="/2020/12/13/VPN-Tunneling/1-3.PNG" srcset="/img/loading.gif" alt="1-3"></p>
+<h3 id="Task-2：创建和配置TUN接口"><a href="#Task-2：创建和配置TUN接口" class="headerlink" title="Task 2：创建和配置TUN接口"></a>Task 2：创建和配置TUN接口</h3><p><a href="https://blog.kghost.info/2013/03/27/linux-network-tun/" target="_blank" rel="noopener">TUN/TAP设备</a></p>
+<p><a href="https://cloud.tencent.com/developer/article/1432451" target="_blank" rel="noopener">TUN/TAP解析</a></p>
+<p><img src="/2020/12/13/VPN-Tunneling/2-1.PNG" srcset="/img/loading.gif" alt="2-1"></p>
+<h4 id="Task-2-a：接口命名"><a href="#Task-2-a：接口命名" class="headerlink" title="Task 2.a：接口命名"></a>Task 2.a：接口命名</h4><p>直接在py文件中把<code>tun%d</code>改为<code>jia%d</code>就行，结果如下</p>
+<p><img src="/2020/12/13/VPN-Tunneling/2-2.png" srcset="/img/loading.gif" alt="2-2"></p>
+<h4 id="Task-2-b：设置TUN接口"><a href="#Task-2-b：设置TUN接口" class="headerlink" title="Task 2.b：设置TUN接口"></a>Task 2.b：设置TUN接口</h4><p><img src="/2020/12/13/VPN-Tunneling/2-3.PNG" srcset="/img/loading.gif" alt="2-3"></p>
+<p>可以看到此时的<code>jia0</code>端口已经有了对应的IP地址192.168.53.99，并且端口已经打开</p>
+<h4 id="Task-2-c：从TUN接口中读取"><a href="#Task-2-c：从TUN接口中读取" class="headerlink" title="Task 2.c：从TUN接口中读取"></a>Task 2.c：从TUN接口中读取</h4><p><img src="/2020/12/13/VPN-Tunneling/2-4.PNG" srcset="/img/loading.gif" alt="2-4"></p>
+<p>可以看到打印出来发往192.168.53.0/24的IP包的信息，因为调用了标准的read来从tun文件来读取数据</p>
+<p>而当我们ping 192.168.60.0/24内的主机的时候，此时并没有打印出任何信息，因为tun接口的IP地址为192.168.53.99，和192.168.60.1不属于同一个子网，也没有设置相应的路由表项</p>
+<p><img src="/2020/12/13/VPN-Tunneling/2-5.PNG" srcset="/img/loading.gif" alt="2-5"></p>
+<h4 id="Task-2-d：写入到TUN接口"><a href="#Task-2-d：写入到TUN接口" class="headerlink" title="Task 2.d：写入到TUN接口"></a>Task 2.d：写入到TUN接口</h4><p>如果是echo request包的时候，构造echo response包并写入</p>
+<pre><code class="hljs python"><span class="hljs-keyword">while</span> <span class="hljs-literal">True</span>:
+	<span class="hljs-comment"># Get a packet from the tun interface</span>
+	packet = os.read(tun, <span class="hljs-number">2048</span>)
+	<span class="hljs-keyword">if</span> <span class="hljs-literal">True</span>:
+		ip = IP(packet)
+		<span class="hljs-comment"># print(ip.summary())</span>
+		<span class="hljs-keyword">if</span> ip.proto == <span class="hljs-number">1</span>: <span class="hljs-comment"># ICMP package</span>
+			newip = IP(src = ip.dst, dst = ip.src)
+			newpkt = newip/ICMP(type = <span class="hljs-number">0</span>, code = <span class="hljs-number">0</span>)
+			os.write(tun, bytes(newpkt))
+			print(ip.summary())</code></pre>
+
+<p>之后再次选择<code>ping 192.168.53.1</code>，同时用wireshark抓包，抓包情况如下，tun收到了相应的回显包的请求</p>
+<p><img src="/2020/12/13/VPN-Tunneling/2-6.PNG" srcset="/img/loading.gif" alt="2-6"></p>
+<p>向接口中写入任意的数据，而不是IP包的时候</p>
+<p><img src="/2020/12/13/VPN-Tunneling/2-8.PNG" srcset="/img/loading.gif" alt="2-8"></p>
+<p>同样运行ping 192.168.53.1，之后wireshark抓包情况如下，可以看出来tun会把写入的东西当作IP数据包来处理</p>
+<p><img src="/2020/12/13/VPN-Tunneling/2-7.PNG" srcset="/img/loading.gif" alt="2-7"></p>
+<h3 id="Task-3：通过隧道将IP包发往VPN-server"><a href="#Task-3：通过隧道将IP包发往VPN-server" class="headerlink" title="Task 3：通过隧道将IP包发往VPN server"></a>Task 3：通过隧道将IP包发往VPN server</h3><p><img src="/2020/12/13/VPN-Tunneling/3-1.PNG" srcset="/img/loading.gif" alt="3-1"></p>
+<p>当我们ping 192.168.53.1的时候，内部会有一个IP数据包发往对应的IP地址，之后外层的UDP包是由10.0.2.4发往10.0.2.5的，wireshark抓包如下</p>
+<p><img src="/2020/12/13/VPN-Tunneling/3-2.PNG" srcset="/img/loading.gif" alt="3-2"></p>
+<p>当我们选择ping 192.168.60.10的时候，VPN Server端什么都不会打印出来，通过wireshark抓包可以发现，我认为这是由于目的IP和TUN接口不在一个子网当中，并且没有对应的路由表项，所以会将发给192.168.60.0/24的数据包交给10.0.2.4来发送，而此时tun_client.py相当于是不发挥作用</p>
+<p><img src="/2020/12/13/VPN-Tunneling/3-3.PNG" srcset="/img/loading.gif" alt="3-3"></p>
+<p>为了解决这个问题，我们需要设置路由，将发给192.168.60.0/24的数据包交给TUN接口来发送</p>
+<p><img src="/2020/12/13/VPN-Tunneling/3-4.PNG" srcset="/img/loading.gif" alt="3-4"></p>
+<p>之后再次ping 192.168.60.0/24，VPN_Server端会收到相应的数据包，并且wireshark会显示发包过程</p>
+<p><img src="/2020/12/13/VPN-Tunneling/3-5.PNG" srcset="/img/loading.gif" alt="3-5"></p>
+<p><img src="/2020/12/13/VPN-Tunneling/3-6.PNG" srcset="/img/loading.gif" alt="3-6"></p>
+<h3 id="Task-3回顾"><a href="#Task-3回顾" class="headerlink" title="Task 3回顾"></a>Task 3回顾</h3><p>对于整个过程要有所理解，首先我们前面之所以ping 192.168.53.0/24能够成功，是因为Host U知道发往这个子网的IP数据包应该交给192.168.53.99（TUN接口）来处理，而之后当我们ping 192.168.60.0/24的时候，并不知道是路由表项，会交给10.0.2.4来处理，这就有了上面我们用wireshark抓包会显示从10.0.2.4这个接口发出的原因，因为这时候TUN接口压根不起作用，而之后，当我们知道要将发给192.168.60.0/24的IP数据包交给TUN接口的时候，我们就可以开始执行后面的code</p>
+<p><img src="/2020/12/13/VPN-Tunneling/3-7.PNG" srcset="/img/loading.gif" alt="3-7"></p>
+<h3 id="Task-4：设置VPN服务器"><a href="#Task-4：设置VPN服务器" class="headerlink" title="Task 4：设置VPN服务器"></a>Task 4：设置VPN服务器</h3><blockquote>
+<p>在tun_server.py收到一个来自于隧道当中的包的时候，需要提交给内核，之后内核将其路由到最终目的地。这需要TUN接口来完成</p>
+</blockquote>
+<p>我认为之所以需要TUN接口来运行，其实是相当于是解包的过程，因为在Host U的那一端，我们首先是将数据写入到tun文件当中，这时候相当于是有了一个IP包（里），但是之后这个包会在10.0.2.4那里被放到UDP的有效载荷那里，之后外面再包上UDP头部以及IP头部。现在在VPN server端，其实只能是读取到pkt的信息，也就是里面的IP包那一层，还需要TUN接口来进一步解包</p>
+<p>首先，在VPN_Server上面可以根据terminal打印的东西看到，ping 192.168.60.101的数据包是到达了VPN_Server的</p>
+<p><img src="/2020/12/13/VPN-Tunneling/4-1.PNG" srcset="/img/loading.gif" alt="4-1"></p>
+<p>之后，我们进行抓包，可以看到在wireshak中，192.168.53.99是向192.168.60.101发送了ICMP request包并且目的主机返回了ICMP的response包的</p>
+<p><img src="/2020/12/13/VPN-Tunneling/4-2.PNG" srcset="/img/loading.gif" alt="4-2"></p>
+<p>但是此时根据在VPN_Client运行的TUN接口的termina可以得知，是没有收到相应的数据包的。分析可以得知ICMP request包的确到达，此时单方面ping通</p>
+<h3 id="Task-5：处理两个方向上的流量"><a href="#Task-5：处理两个方向上的流量" class="headerlink" title="Task 5：处理两个方向上的流量"></a>Task 5：处理两个方向上的流量</h3><ul>
+<li><p>在VPN server上面，当监听的是socket的时候，那说明是收到了来自于其他地方的包，所以需要将包递交给TUN接口来进一步解包，而当时tun接口的时候，需要把包读出来，通过socket发给Host V</p>
+  <pre><code class="hljs python"><span class="hljs-comment">#!/usr/bin/python3</span>
+
+<span class="hljs-keyword">import</span> fcntl
+<span class="hljs-keyword">import</span> struct
+<span class="hljs-keyword">import</span> os
+<span class="hljs-keyword">import</span> time
+<span class="hljs-keyword">from</span> scapy.all <span class="hljs-keyword">import</span> *
+
+
+IP_A = <span class="hljs-string">"0.0.0.0"</span>
+PORT = <span class="hljs-number">9090</span>
+TUNSETIFF = <span class="hljs-number">0x400454ca</span>
+IFF_TUN = <span class="hljs-number">0x0001</span>
+IFF_TAP = <span class="hljs-number">0x0002</span>
+IFF_NO_PI = <span class="hljs-number">0x1000</span>
+<span class="hljs-keyword">global</span> port
+
+sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+sock.bind((IP_A, PORT))
+
+
+<span class="hljs-comment"># Create the tun interface</span>
+tun = os.open(<span class="hljs-string">"/dev/net/tun"</span>, os.O_RDWR)
+ifr = struct.pack(<span class="hljs-string">'16sH'</span>, <span class="hljs-string">b'long%d'</span>, IFF_TUN | IFF_NO_PI)
+ifname_bytes = fcntl.ioctl(tun, TUNSETIFF, ifr)
+
+<span class="hljs-comment"># Get the interface name</span>
+ifname = ifname_bytes.decode(<span class="hljs-string">'UTF-8'</span>)[:<span class="hljs-number">16</span>].strip(<span class="hljs-string">"\x00"</span>)
+print(<span class="hljs-string">"Interface Name: &#123;&#125;"</span>.format(ifname))
+
+os.system(<span class="hljs-string">"ip addr add 192.168.53.100/24 dev &#123;&#125;"</span>.format(ifname))
+os.system(<span class="hljs-string">"ip link set dev &#123;&#125; up"</span>.format(ifname))
+
+<span class="hljs-keyword">while</span> <span class="hljs-literal">True</span>:
+	<span class="hljs-comment"># this will block until at least one interface is ready</span>
+	ready, _, _ = select.select([sock, tun], [], [])
+	<span class="hljs-keyword">for</span> fd <span class="hljs-keyword">in</span> ready:
+		<span class="hljs-keyword">if</span> fd <span class="hljs-keyword">is</span> sock:
+			data, (ip, port) = sock.recvfrom(<span class="hljs-number">2048</span>)
+			pkt = IP(data)
+			print(<span class="hljs-string">"From socket &lt;==: &#123;&#125; --&gt; &#123;&#125;"</span>.format(pkt.src, pkt.dst))
+			<span class="hljs-comment">#we need to send the IP packet to the TUN interface</span>
+			os.write(tun, bytes(pkt))
+
+		<span class="hljs-keyword">if</span> fd <span class="hljs-keyword">is</span> tun:
+			<span class="hljs-comment"># read from the file</span>
+			packet = os.read(tun, <span class="hljs-number">2048</span>)
+			pkt = IP(packet)
+			print(<span class="hljs-string">"From tun ==&gt;: &#123;&#125; --&gt; &#123;&#125;"</span>.format(pkt.src, pkt.dst))
+			sock.sendto(packet, (<span class="hljs-string">"10.0.2.4"</span>, port))</code></pre>
+</li>
+<li><p>在VPN_Client上面，当监听到socket的时候，说明是来自外面的包，需要发给TUN接口，而当是TUN接口的时候，需要利用socket发给VPN_Server</p>
+  <pre><code class="hljs python"><span class="hljs-comment">#!/usr/bin/python3</span>
+<span class="hljs-comment"># -*- coding: UTF-8 -*-</span>
+
+<span class="hljs-keyword">import</span> fcntl
+<span class="hljs-keyword">import</span> struct
+<span class="hljs-keyword">import</span> os
+<span class="hljs-keyword">import</span> time
+<span class="hljs-keyword">import</span> select
+<span class="hljs-keyword">import</span> socket
+<span class="hljs-keyword">from</span> scapy.all <span class="hljs-keyword">import</span> *
+
+TUNSETIFF = <span class="hljs-number">0x400454ca</span>
+IFF_TUN = <span class="hljs-number">0x0001</span>
+IFF_TAP = <span class="hljs-number">0x0002</span>
+IFF_NO_PI = <span class="hljs-number">0x1000</span>
+PORT = <span class="hljs-number">9090</span>
+
+<span class="hljs-comment"># Create the tun interface</span>
+tun = os.open(<span class="hljs-string">"/dev/net/tun"</span>, os.O_RDWR)
+ifr = struct.pack(<span class="hljs-string">'16sH'</span>, <span class="hljs-string">b'jia%d'</span>, IFF_TUN | IFF_NO_PI)
+ifname_bytes = fcntl.ioctl(tun, TUNSETIFF, ifr)
+
+<span class="hljs-comment"># Get the interface name</span>
+ifname = ifname_bytes.decode(<span class="hljs-string">'UTF-8'</span>)[:<span class="hljs-number">16</span>].strip(<span class="hljs-string">"\x00"</span>)
+print(<span class="hljs-string">"Interface Name: &#123;&#125;"</span>.format(ifname))
+
+os.system(<span class="hljs-string">"ip addr add 192.168.53.99/24 dev &#123;&#125;"</span>.format(ifname))
+os.system(<span class="hljs-string">"ip link set dev &#123;&#125; up"</span>.format(ifname))
+
+sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+<span class="hljs-keyword">while</span> <span class="hljs-literal">True</span>:
+	<span class="hljs-comment"># this will block until at least one interface is ready</span>
+	ready, _, _ = select.select([sock, tun], [], [])
+	<span class="hljs-keyword">for</span> fd <span class="hljs-keyword">in</span> ready:
+		<span class="hljs-keyword">if</span> fd <span class="hljs-keyword">is</span> sock:
+			data, (ip, port) = sock.recvfrom(<span class="hljs-number">2048</span>)
+			pkt = IP(data)
+			print(<span class="hljs-string">"From socket &lt;==: &#123;&#125; --&gt; &#123;&#125;"</span>.format(pkt.src, pkt.dst))
+			<span class="hljs-comment">#we need to send the IP packet to the TUN interface</span>
+			os.write(tun, bytes(pkt))
+
+		<span class="hljs-keyword">if</span> fd <span class="hljs-keyword">is</span> tun:
+			<span class="hljs-comment"># read from the file</span>
+			packet = os.read(tun, <span class="hljs-number">2048</span>)
+			pkt = IP(packet)
+			print(<span class="hljs-string">"From tun ==&gt;: &#123;&#125; --&gt; &#123;&#125;"</span>.format(pkt.src, pkt.dst))
+			sock.sendto(packet, (<span class="hljs-string">"10.0.2.5"</span>, <span class="hljs-number">9090</span>))</code></pre>
+
+</li>
+</ul>
+<p>当我们选择ping的时候，可以看到ping成功</p>
+<p><img src="/2020/12/13/VPN-Tunneling/5-2.PNG" srcset="/img/loading.gif" alt="5-2"></p>
+<p>对于包流动的分析</p>
+<p><img src="/2020/12/13/VPN-Tunneling/5-3.PNG" srcset="/img/loading.gif" alt="5-3"></p>
+<p>数据包流动情况：执行命令时，通过 TUN 发包，client 程序检测到 TUN 接收到包后，读取并通过 socket 发给 VPN server；这时 server 程序又检测到 socket 收到包，取 出内层 IP 包并写到 TUN，VPN server 通过内部网发给主机 V；主机 V 收到 echo-request 包后回 复 echo-reply 包；该包到达 VPN server 后，server 程序又检测到 TUN 收到包，读取并通过 socket 发给主机 U；client 程序又检测到 socket 收到包，读取并写到 TUN 接口，完成通信。</p>
+<p>之后再host U上面telnet host V，数据包流动情况和上面基本一样</p>
+<p><img src="/2020/12/13/VPN-Tunneling/5-5.PNG" srcset="/img/loading.gif" alt="5-5"></p>
+<p><img src="/2020/12/13/VPN-Tunneling/5-4.PNG" srcset="/img/loading.gif" alt="5-4"></p>
+<h3 id="Task-6：隧道破除实验"><a href="#Task-6：隧道破除实验" class="headerlink" title="Task 6：隧道破除实验"></a>Task 6：隧道破除实验</h3><p>关闭tun_client.py,并不能看到输入的内容，此时TCP链接发送RST、ACK包，连接被断开</p>
+<p><img src="/2020/12/13/VPN-Tunneling/6-1.PNG" srcset="/img/loading.gif" alt="6-1"></p>
+<p>当我们重新运行时，之前在断开连接后输入的命令会显示出来，并且在运行py文件的terminal上面会有包发送和收到的打印</p>
+<p><img src="/2020/12/13/VPN-Tunneling/6-2.PNG" srcset="/img/loading.gif" alt="6-2"></p>
+<p>原因我认为是我们在破坏了VPN隧道之后，数据包不能到达，但是由于是TCP连接，会持续发包一段时间，这段时间内重新建立VPN隧道连接，那么TCP连接就可以重新得以建立，所以之后telnet的命令会显示出来</p>
+<h3 id="Task-7：主机V上面的路由实验"><a href="#Task-7：主机V上面的路由实验" class="headerlink" title="Task 7：主机V上面的路由实验"></a>Task 7：主机V上面的路由实验</h3><ul>
+<li>删除默认条目，添加发往192.168.53.0/24的数据包要通过192.168.60.1这个路由器的条目</li>
+</ul>
+<p><img src="/2020/12/13/VPN-Tunneling/7-1.PNG" srcset="/img/loading.gif" alt="7-1"></p>
+<ul>
+<li>测试，用主机U ping V，成功</li>
+</ul>
+<p><img src="/2020/12/13/VPN-Tunneling/7-2.PNG" srcset="/img/loading.gif" alt="7-2"></p>
+<h3 id="Task-8：试验TUN的IP地址"><a href="#Task-8：试验TUN的IP地址" class="headerlink" title="Task 8：试验TUN的IP地址"></a>Task 8：试验TUN的IP地址</h3><p>更改IP后再次ping 192.168.60.101 ，并且我认为这时候一个是需要设置Host U上面的路由的，即需要选择哪个接口来发包，可以发现<strong>丢包位置是在VPN_Server</strong></p>
+<p><img src="/2020/12/13/VPN-Tunneling/8-1.PNG" srcset="/img/loading.gif" alt="8-1"></p>
+<p><strong>丢包原因：</strong>违反了反向路由机制，VPN_Server的应用层是从TUN接口收到数据包的，这时候进行模拟，模拟reply包从哪里发回去，由于未设置路由并且不是在同一个子网当中，所以会选择默认接口（在这里是10.0.2.5）而不是TUN接口，这就造成了输入和输出接口不一致（输入端口是TUN接口，输出是10.0.2.5的接口），所以会在收到这个包的时候将包丢弃</p>
+<p><strong>解决方法：</strong>在VPN_Server上面设置路由，设置发往192.168.30.0/24子网的包是通过TUN接口的</p>
+<p>再次运行ping 192.168.60.101，ping 成功（记得把task 7修改的路由表改回来或者重新添加）</p>
+<p><img src="/2020/12/13/VPN-Tunneling/8-3.PNG" srcset="/img/loading.gif" alt="8-3"></p>
+<h3 id="Task-9：试验TAP接口"><a href="#Task-9：试验TAP接口" class="headerlink" title="Task 9：试验TAP接口"></a>Task 9：试验TAP接口</h3><p>当我们修改配置对应的TAP接口，命名为jia0，并且设置他的IP地址为192.168.53.99，开始运行<code>ping 192.168.53.0/24</code>（注意设置对应的路由）</p>
+<p>根据相应的代码</p>
+<p><img src="/2020/12/13/VPN-Tunneling/9-2.PNG" srcset="/img/loading.gif" alt="9-2"></p>
+<p><img src="/2020/12/13/VPN-Tunneling/9-1.PNG" srcset="/img/loading.gif" alt="9-1"></p>
+<p>可以看到此时会产生一个ARP包，结合上面代码，会发现这是先构造了一个数据包，之后把这个包发送给TAP接口，而之后会由于打印出summary而显示在运行TUN.py的terminal上面</p>
+<p><strong>判断是否是ARP请求并返回ARP应答实现思路：</strong>在while上面加一个条件判断，当读出的数据包是ARP请求的时候，进行一个write来返回</p>
+<p>实现：</p>
+<p><img src="/2020/12/13/VPN-Tunneling/9-4.PNG" srcset="/img/loading.gif" alt="9-4"></p>
+<p><code>arping -I tap0 192.168.53.33</code>的时候，而在<code>arping -I tap0 1.2.3.4</code>的时候和下面结果一样</p>
+<p><img src="/2020/12/13/VPN-Tunneling/9-3.PNG" srcset="/img/loading.gif" alt="9-3"></p>
+
+            </article>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/Network-Security/">Network Security</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" target="_blank" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！</p>
+              
+              
+                <div class="post-prevnext row">
+                  <div class="post-prev col-6">
+                    
+                    
+                      <a href="/2020/12/17/%E7%88%AC%E8%99%ABPJ/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">爬虫PJ</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </div>
+                  <div class="post-next col-6">
+                    
+                    
+                      <a href="/2020/12/07/oslab5-preemptive-mutitasking/">
+                        <span class="hidden-mobile">oslab5_preemptive mutitasking</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </div>
+                </div>
+              
+            </div>
+
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div id="tocbot"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+  </main>
+
+  
+    <a id="scroll-top-button" href="#" role="button">
+      <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  
+
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <div>
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a>
+      <i class="iconfont icon-love"></i>
+      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener">
+        <span>Fluid</span></a>
+    </div>
+    
+
+    
+
+    
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script  src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script  src="/js/debouncer.js" ></script>
+<script  src="/js/main.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/lazyload.js" ></script>
+  
+
+
+
+  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js" ></script>
+  <script  src="/js/clipboard-use.js" ></script>
+
+
+
+
+
+
+
+  <script  src="https://cdn.staticfile.org/tocbot/4.11.1/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var boardCtn = $('#board-ctn');
+      var boardTop = boardCtn.offset().top;
+
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: 'article.markdown-body',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        collapseDepth: 0,
+        scrollSmooth: true,
+        headingsOffset: -boardTop
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc').css('visibility', 'visible');
+      }
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "VPN-Tunneling&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      searchFunc(path, 'local-search-input', 'local-search-result');
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <script>
+    $('#post img:not(.no-zoom img, img[no-zoom]), img[zoom]').each(
+      function () {
+        var element = document.createElement('a');
+        $(element).attr('data-fancybox', 'images');
+        $(element).attr('href', $(this).attr('src'));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

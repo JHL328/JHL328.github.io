@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  <title>DNS Rebinding Attack lab - Hexo</title>
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    <link  rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/github-gist.min.css" />
+  
+
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_yg9cfy8wd6.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_pjno9b9zyxs.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script  src="/js/utils.js" ></script>
+<meta name="generator" content="Hexo 4.2.1"><link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+</head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Fluid</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              
+  <div class="mt-3 post-meta">
+    <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+    <time datetime="2020-11-19 20:16">
+      2020年11月19日 晚上
+    </time>
+  </div>
+
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      966 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      12
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <div class="post-content mx-auto" id="post">
+            
+            <article class="markdown-body">
+              <h1 id="DNS-Rebinding-Attack-lab"><a href="#DNS-Rebinding-Attack-lab" class="headerlink" title="DNS Rebinding Attack lab"></a>DNS Rebinding Attack lab</h1><h2 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h2><p>对于DNS服务器在日常生活中具体是怎么发生作用的过程更加熟悉，同时了解对于一个内部网络的服务器/主机来说，如何进行DNS重绑定攻击，并且有什么样的应对策略，以及为什么会出产生这样的漏洞</p>
+<p>参考链接：<a href="https://bbs.pediy.com/thread-230047.htm#msg_header_h1_1" target="_blank" rel="noopener">https://bbs.pediy.com/thread-230047.htm#msg_header_h1_1</a></p>
+<h2 id="Setup"><a href="#Setup" class="headerlink" title="Setup"></a>Setup</h2><p><img src="/2020/11/19/DNS-Rebinding-Attack-lab/1-1.PNG" srcset="/img/loading.gif" alt="1-1"></p>
+<h3 id="task-1：配置用户主机"><a href="#task-1：配置用户主机" class="headerlink" title="task 1：配置用户主机"></a>task 1：配置用户主机</h3><ul>
+<li>修改对应的DNS缓存在Firefox浏览器中的TTL到10s</li>
+</ul>
+<p><img src="/2020/11/19/DNS-Rebinding-Attack-lab/1-2.PNG" srcset="/img/loading.gif" alt="1-2"></p>
+<ul>
+<li>之后修改对应的/etc/hosts文件，在其中添加<a href="http://www.seedIoT32.com对应的IP地址，在这里就是User主机的IP地址10.0.2.4" target="_blank" rel="noopener">www.seedIoT32.com对应的IP地址，在这里就是User主机的IP地址10.0.2.4</a></li>
+</ul>
+<p><img src="/2020/11/19/DNS-Rebinding-Attack-lab/1-3.PNG" srcset="/img/loading.gif" alt="1-3"></p>
+<ul>
+<li>设置本地服务器，和前两个实验一样</li>
+<li>测试，用dig命令来获取百度的web服务器的IP地址，通过wireshark抓包来证明</li>
+</ul>
+<p><img src="/2020/11/19/DNS-Rebinding-Attack-lab/1-5.PNG" srcset="/img/loading.gif" alt="1-5"></p>
+<p><img src="/2020/11/19/DNS-Rebinding-Attack-lab/1-6.PNG" srcset="/img/loading.gif" alt="1-6"></p>
+<p>可以看到对应的DNS服务器的IP地址是10.0.2.5，测试通过</p>
+<h3 id="task-2：在User虚拟机上面开启物联网服务器"><a href="#task-2：在User虚拟机上面开启物联网服务器" class="headerlink" title="task 2：在User虚拟机上面开启物联网服务器"></a>task 2：在User虚拟机上面开启物联网服务器</h3><p>按照教程里的进行即可，screenshot如下：</p>
+<p><img src="/2020/11/19/DNS-Rebinding-Attack-lab/2-1.PNG" srcset="/img/loading.gif" alt="2-1"></p>
+<h3 id="task-3：在attacker虚拟机上面开启attack-web服务器"><a href="#task-3：在attacker虚拟机上面开启attack-web服务器" class="headerlink" title="task 3：在attacker虚拟机上面开启attack web服务器"></a>task 3：在attacker虚拟机上面开启attack web服务器</h3><p>攻击原理</p>
+<blockquote>
+<p>A typical way to get our malicious code onto the User VM is to get the user to visit our website, so the JavaScript code placed on our web pages can get into the User VM. In this task, we will start a web server to host such web pages</p>
+</blockquote>
+<p>按照教程弄好之后访问对应URL</p>
+<p><img src="/2020/11/19/DNS-Rebinding-Attack-lab/3-1.PNG" srcset="/img/loading.gif" alt="3-1"></p>
+<h3 id="task-4：在attacker虚拟机上面配置DNS服务器"><a href="#task-4：在attacker虚拟机上面配置DNS服务器" class="headerlink" title="task 4：在attacker虚拟机上面配置DNS服务器"></a>task 4：在attacker虚拟机上面配置DNS服务器</h3><p>依旧是按照教程来，最后进行测试</p>
+<p><img src="/2020/11/19/DNS-Rebinding-Attack-lab/4-1.PNG" srcset="/img/loading.gif" alt="4-1"></p>
+<p>上面的内容是和文件中一样的</p>
+<p><img src="/2020/11/19/DNS-Rebinding-Attack-lab/4-2.PNG" srcset="/img/loading.gif" alt="4-2"></p>
+<h3 id="task-5：配置本地DNS服务器"><a href="#task-5：配置本地DNS服务器" class="headerlink" title="task 5：配置本地DNS服务器"></a>task 5：配置本地DNS服务器</h3><p>让其他的DNS服务器可以看到刚刚配置的attacker32.com域的DNS服务器</p>
+<blockquote>
+<p>In order for others to find this nameserver, we need to register our nameserver with the .com nameserver, so an NS record is added to its database. Without this step, DNS requests from others will not be able to reach our nameserver</p>
+</blockquote>
+<p>在这里，我们通过设置本地服务器上面attacker32.com的转发记录来实现，而不是通过查询root服务器，进而迭代查询</p>
+<p><img src="/2020/11/19/DNS-Rebinding-Attack-lab/4-3.PNG" srcset="/img/loading.gif" alt="4-3"></p>
+<p>之后在用户主机上面dig进行测试，测试通过</p>
+<p><img src="/2020/11/19/DNS-Rebinding-Attack-lab/5-1.PNG" srcset="/img/loading.gif" alt="5-1"></p>
+<h2 id="launch-the-attack-on-IoT-device"><a href="#launch-the-attack-on-IoT-device" class="headerlink" title="launch the attack on IoT device"></a>launch the attack on IoT device</h2><h3 id="task-6：理解同源策略保护"><a href="#task-6：理解同源策略保护" class="headerlink" title="task 6：理解同源策略保护"></a>task 6：理解同源策略保护</h3><p>参考blog：<a href="https://www.jianshu.com/p/6c6f277fa189" target="_blank" rel="noopener">一文了解同源策略细节</a></p>
+<p>点击第二个网页上面的按钮，即: <code>http://www.seedIoT32.com:8080/change</code>上面的click按钮，此时温度计显示为99摄氏度，而当我们点击第三个连接上面的按钮的时候，即<code>http://www.attacker32.com:8080/change</code>上面的click按钮，此时温度计显示温度不发生改变</p>
+<p>对比两个不同URL上面的Web Console</p>
+<p><code>http://www.seedIoT32.com:8080/change</code></p>
+<p><img src="/2020/11/19/DNS-Rebinding-Attack-lab/6-1.PNG" srcset="/img/loading.gif" alt="6-1"></p>
+<p><code>http://www.attacker32.com:8080/change</code></p>
+<p><img src="/2020/11/19/DNS-Rebinding-Attack-lab/6-2.PNG" srcset="/img/loading.gif" alt="6-2"></p>
+<p>同源策略的描述</p>
+<blockquote>
+<p>就是只有Js脚本和Html模块必须在同一个源下，Js脚本才能读取或处理Html模块。如果Js脚本在另一个源，如域名<a href="http://www.hack.com，则这个Js脚本不能读取别域名下如www.chaoshi.com的Html模块&gt;" target="_blank" rel="noopener">www.hack.com，则这个Js脚本不能读取别域名下如www.chaoshi.com的Html模块&gt;</a></p>
+</blockquote>
+<h3 id="task-7：击败同源保护策略"><a href="#task-7：击败同源保护策略" class="headerlink" title="task 7：击败同源保护策略"></a>task 7：击败同源保护策略</h3><p>修改对应的js文件</p>
+<p><img src="/2020/11/19/DNS-Rebinding-Attack-lab/7-1.PNG" srcset="/img/loading.gif" alt="7-1"></p>
+<p>之后重启web服务器，可以看到已经没有错误消息了</p>
+<p><img src="/2020/11/19/DNS-Rebinding-Attack-lab/7-2.PNG" srcset="/img/loading.gif" alt="7-2"></p>
+<p><strong>解释</strong>：分析对应的js文件，此时是从<code>www.attacker32.com</code>来读取对应的html元素，并且进行修改，此时并不会访问<code>www.seedIoT32.com:8080</code>的温度计，所以这时候是同源访问，进而不会显示同源错误</p>
+<p><img src="/2020/11/19/DNS-Rebinding-Attack-lab/7-3.PNG" srcset="/img/loading.gif" alt="7-3"></p>
+<p>可以看到此时温度计温度已经改为了99摄氏度</p>
+<h3 id="task-8：执行攻击"><a href="#task-8：执行攻击" class="headerlink" title="task 8：执行攻击"></a>task 8：执行攻击</h3><p>修改对应的js文件</p>
+<pre><code class="hljs javascript"><span class="hljs-keyword">let</span> url_prefix = <span class="hljs-string">'http://www.attacker32.com:8080'</span>
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">updateTemperature</span>(<span class="hljs-params"></span>) </span>&#123;
+  $.<span class="hljs-keyword">get</span>(url_prefix + '/password', function(data) &#123;
+	$.post(url_prefix + <span class="hljs-string">'/temperature?value=88'</span>  
+               + <span class="hljs-string">'&amp;password='</span>+ data.password, 
+               <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">data</span>) </span>&#123;
+                  <span class="hljs-built_in">console</span>.debug(<span class="hljs-string">'Got a response from the server!'</span>);
+               &#125;);
+  &#125;);
+&#125;
+
+button = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">"change"</span>);
+button.addEventListener(<span class="hljs-string">"click"</span>, updateTemperature);</code></pre>
+
+<p>之后和上面一样，先在.zone区域中<code>www.attacker32.com</code>对应10.0.2.7（attacker VM）的时候先访问对应的网页，之后修改.zone文件，让<code>www.attacker32.com</code>对应用户的IP地址，之后就可以修改温度计示数</p>
+<p><img src="/2020/11/19/DNS-Rebinding-Attack-lab/8-2.PNG" srcset="/img/loading.gif" alt="8-2"></p>
+
+            </article>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/Network-Security/">Network Security</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" target="_blank" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！</p>
+              
+              
+                <div class="post-prevnext row">
+                  <div class="post-prev col-6">
+                    
+                    
+                      <a href="/2020/11/21/oslab-2-Memory-Management/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">oslab-2 Memory Management</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </div>
+                  <div class="post-next col-6">
+                    
+                    
+                      <a href="/2020/11/16/Remote-DNS-Attack-lab/">
+                        <span class="hidden-mobile">Remote DNS Attack lab</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </div>
+                </div>
+              
+            </div>
+
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div id="tocbot"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+  </main>
+
+  
+    <a id="scroll-top-button" href="#" role="button">
+      <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  
+
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <div>
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a>
+      <i class="iconfont icon-love"></i>
+      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener">
+        <span>Fluid</span></a>
+    </div>
+    
+
+    
+
+    
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script  src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script  src="/js/debouncer.js" ></script>
+<script  src="/js/main.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/lazyload.js" ></script>
+  
+
+
+
+  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js" ></script>
+  <script  src="/js/clipboard-use.js" ></script>
+
+
+
+
+
+
+
+  <script  src="https://cdn.staticfile.org/tocbot/4.11.1/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var boardCtn = $('#board-ctn');
+      var boardTop = boardCtn.offset().top;
+
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: 'article.markdown-body',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        collapseDepth: 0,
+        scrollSmooth: true,
+        headingsOffset: -boardTop
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc').css('visibility', 'visible');
+      }
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "DNS Rebinding Attack lab&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      searchFunc(path, 'local-search-input', 'local-search-result');
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <script>
+    $('#post img:not(.no-zoom img, img[no-zoom]), img[zoom]').each(
+      function () {
+        var element = document.createElement('a');
+        $(element).attr('data-fancybox', 'images');
+        $(element).attr('href', $(this).attr('src'));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

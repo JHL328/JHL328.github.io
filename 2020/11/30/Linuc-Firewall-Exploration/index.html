@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  <title>Linuc Firewall Exploration - Hexo</title>
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    <link  rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/github-gist.min.css" />
+  
+
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_yg9cfy8wd6.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_pjno9b9zyxs.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script  src="/js/utils.js" ></script>
+<meta name="generator" content="Hexo 4.2.1"><link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+</head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Fluid</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              
+  <div class="mt-3 post-meta">
+    <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+    <time datetime="2020-11-30 16:05">
+      2020年11月30日 下午
+    </time>
+  </div>
+
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      2.9k 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      39
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <div class="post-content mx-auto" id="post">
+            
+            <article class="markdown-body">
+              <h1 id="Firewall-Exploration"><a href="#Firewall-Exploration" class="headerlink" title="Firewall Exploration"></a>Firewall Exploration</h1><h2 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h2><blockquote>
+<p>防火墙的本质是查看对应的会话表，根据会话表中不同的内容和规则对数据包采取不同的操作</p>
+</blockquote>
+<p>防火墙主要工作在网络层</p>
+<p><a href="http://www.zsythink.net/archives/1199" target="_blank" rel="noopener">iptables详解</a></p>
+<p><a href="http://www.zsythink.net/archives/tag/iptables/page/2/" target="_blank" rel="noopener">IPtables系列讲解</a></p>
+<h2 id="Tasks"><a href="#Tasks" class="headerlink" title="Tasks"></a>Tasks</h2><h3 id="task1：使用防火墙"><a href="#task1：使用防火墙" class="headerlink" title="task1：使用防火墙"></a>task1：使用防火墙</h3><h4 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h4><p>当我们对于链、规则以及表有了一个初始概念的时候就可以做了，这里面明显要进行的就是过滤，这里是在A上面进行的防火墙设置，所以此时明显要操作的是input和output链</p>
+<p><img src="/2020/11/30/Linuc-Firewall-Exploration/1-2.PNG" srcset="/img/loading.gif" alt="1-2"></p>
+<p><img src="/2020/11/30/Linuc-Firewall-Exploration/1-1.PNG" srcset="/img/loading.gif" alt="1-1"></p>
+<h4 id="具体实现"><a href="#具体实现" class="headerlink" title="具体实现"></a>具体实现</h4><ul>
+<li><p>防止A（10.0.2.4）对B（10.0.2.5）进行telnet操作</p>
+<p>  这时候在A的output链上面添加filter表规则（防火墙运行在A上面），输入命令</p>
+</li>
+</ul>
+<pre><code class="hljs angelscript">sudo iptables -A OUTPUT -d <span class="hljs-number">10.0</span><span class="hljs-number">.2</span><span class="hljs-number">.5</span> -j DROP</code></pre>
+
+<p>之后查看对应的filter表的内容并且ping 10.0.2.5，会发现一直在trying，阻止telnet成功</p>
+<ul>
+<li><p>防止B对A进行telnet操作</p>
+<p>  一样的道理，首先未设置防火墙规则的时候在B上telnet A（10.0.2.4），发现可以登录</p>
+<p>  <img src="/2020/11/30/Linuc-Firewall-Exploration/1-4.PNG" srcset="/img/loading.gif" alt="1-4"></p>
+<p>  之后在A上面设置INPUT链的filter表规则</p>
+</li>
+</ul>
+<pre><code class="hljs angelscript">sudo iptables -A INPUT -s <span class="hljs-number">10.0</span><span class="hljs-number">.2</span><span class="hljs-number">.5</span> -j DROP</code></pre>
+
+<p>运行并查看filter表规则</p>
+<p><img src="/2020/11/30/Linuc-Firewall-Exploration/1-5.PNG" srcset="/img/loading.gif" alt="1-5"></p>
+<p>此时在B上进行telnet会发现无法连接上</p>
+<p><img src="/2020/11/30/Linuc-Firewall-Exploration/1-6.PNG" srcset="/img/loading.gif" alt="1-6"></p>
+<ul>
+<li>阻止A对外部网站的访问</li>
+</ul>
+<p>以百度为例，百度对应的IP地址为182.61.200.6和182.61.200.7，将其添加到对应的OUTPUT链里面，在添加前可以正常访问百度</p>
+<p><img src="/2020/11/30/Linuc-Firewall-Exploration/1-7.PNG" srcset="/img/loading.gif" alt="1-7"></p>
+<p>运行以下命令</p>
+<pre><code class="hljs angelscript">sudo iptables -A OUTPUT -d <span class="hljs-number">182.61</span><span class="hljs-number">.200</span><span class="hljs-number">.6</span> -j DROP
+sudo iptables -A OUTPUT -d <span class="hljs-number">182.61</span><span class="hljs-number">.200</span><span class="hljs-number">.7</span> -j DROP</code></pre>
+
+<p>此时的filter表</p>
+<p><img src="/2020/11/30/Linuc-Firewall-Exploration/1-8.PNG" srcset="/img/loading.gif" alt="1-8"></p>
+<p>采取ping操作来访问，操作不被允许，访问失败</p>
+<p><img src="/2020/11/30/Linuc-Firewall-Exploration/1-9.PNG" srcset="/img/loading.gif" alt="1-9"></p>
+<h3 id="task2：实现一个简单的防火墙"><a href="#task2：实现一个简单的防火墙" class="headerlink" title="task2：实现一个简单的防火墙"></a>task2：实现一个简单的防火墙</h3><blockquote>
+<p>LKM允许我们在运行期间给内核添加一个新的模块。这种新的模块使我们能扩展内核功能，而无需重建核心甚至是重启电脑。作为LKM中防火墙的包过滤部分是可以被实现的。然而，这还不够。为了使过滤模块能够阻止传入/传出的数据包，必须将模块插入到数据包处理路径中。</p>
+<p>Netfilter旨在促进授权用户对数据包的操作。Netfilter通过在Linux内核中实现许多<em>hooks</em>来实现此目标。这些钩子被插入到多个地点，包括数据包流入与流出的路径。如果我们想操作流入的数据包，我们只需要连接我们的程序（在LKM内）到相应的钩子上即可。当一个流入数据包到达，我们的程序将被唤醒。我们的程序可以决定这个数据包是否该被阻止或是放行；此外，我们还可以在程序中修改数据包。</p>
+<p>我们写了一个调用hook_func的函数，当满足nf_hook_ops条件的包出现时，它就会被调用。这个函数执行适当的逻辑，在我们的例子中就是丢弃数据包。我们填入nf_hook_ops结构，它定义了特定的Netfilter钩子到target target，它的优先级(如果你有多个钩子，这很重要)，并给目标包的类型(在本例中是IPV4)，并将hook_func绑定到它</p>
+</blockquote>
+<p>在这里除了task1之外新增了两个规则：阻止A到B的SSH连接以及阻止B到A的SSH连接</p>
+<p>一定不要让自己的文件夹有空格！！！！！</p>
+<h4 id="具体实现-1"><a href="#具体实现-1" class="headerlink" title="具体实现"></a>具体实现</h4><p>终于make成功了</p>
+<p><img src="/2020/11/30/Linuc-Firewall-Exploration/2-1.PNG" srcset="/img/loading.gif" alt="2-1"></p>
+<p>之后加载模块，加载成功</p>
+<p><img src="/2020/11/30/Linuc-Firewall-Exploration/2-2.PNG" srcset="/img/loading.gif" alt="2-2"></p>
+<p>并且确保此时的filter表为空</p>
+<p><img src="/2020/11/30/Linuc-Firewall-Exploration/2-3.PNG" srcset="/img/loading.gif" alt="2-3"></p>
+<p>之后开始测试</p>
+<ul>
+<li><p>首先是A（10.0.2.4）到B（10.0.2.5）的telnet和ssh测试，可以看到这些包都被drop掉了并且connection没有建立</p>
+<p>  <img src="/2020/11/30/Linuc-Firewall-Exploration/2-4.PNG" srcset="/img/loading.gif" alt="2-4"></p>
+</li>
+<li><p>之后是B到A的telnet和ssh测试，可以看到后面六条记录记录了从B到A进行telnet和ssh操作时被drop掉的包</p>
+<p>  <img src="/2020/11/30/Linuc-Firewall-Exploration/2-6.PNG" srcset="/img/loading.gif" alt="2-6"></p>
+<p>  <img src="/2020/11/30/Linuc-Firewall-Exploration/2-5.PNG" srcset="/img/loading.gif" alt="2-5"></p>
+</li>
+<li><p>最后是访问从A访问百度的测试，在浏览器上访问百度</p>
+<p>  <img src="/2020/11/30/Linuc-Firewall-Exploration/2-7.PNG" srcset="/img/loading.gif" alt="2-7"></p>
+</li>
+</ul>
+<p><strong>code</strong></p>
+<pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;linux/kernel.h&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;linux/module.h&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;linux/netfilter.h&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;linux/netfilter_ipv4.h&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;linux/ip.h&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;linux/tcp.h&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;linux/inet.h&gt;</span></span>
+
+<span class="hljs-keyword">static</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">nf_hook_ops</span> <span class="hljs-title">FilterHookRule_1</span>;</span>
+<span class="hljs-keyword">static</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">nf_hook_ops</span> <span class="hljs-title">FilterHookRule_2</span>;</span>
+<span class="hljs-keyword">static</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">nf_hook_ops</span> <span class="hljs-title">FilterHookRule_3</span>;</span>
+<span class="hljs-keyword">static</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">nf_hook_ops</span> <span class="hljs-title">FilterHookRule_4</span>;</span>
+<span class="hljs-keyword">static</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">nf_hook_ops</span> <span class="hljs-title">FilterHookRule_5</span>;</span>
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">eq_daddr</span><span class="hljs-params">(<span class="hljs-keyword">const</span> struct iphdr *iph, <span class="hljs-keyword">const</span> <span class="hljs-keyword">char</span> *ip_addr)</span></span>
+<span class="hljs-function"></span>&#123;
+    <span class="hljs-comment">//check if the dst ip address equals the given address</span>
+    <span class="hljs-keyword">char</span> source[<span class="hljs-number">16</span>];
+    <span class="hljs-built_in">snprintf</span>(source, <span class="hljs-number">16</span>, <span class="hljs-string">"%pI4"</span>, &amp;iph-&gt;daddr);
+    <span class="hljs-keyword">if</span> (<span class="hljs-built_in">strcmp</span>(source, ip_addr) == <span class="hljs-number">0</span>)
+        <span class="hljs-keyword">return</span> <span class="hljs-number">1</span>;
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">eq_saddr</span><span class="hljs-params">(<span class="hljs-keyword">const</span> struct iphdr *iph, <span class="hljs-keyword">const</span> <span class="hljs-keyword">char</span> *ip_addr)</span></span>
+<span class="hljs-function"></span>&#123;
+    <span class="hljs-comment">//check if the src ip address equals the given address</span>
+    <span class="hljs-keyword">char</span> source[<span class="hljs-number">16</span>];
+    <span class="hljs-built_in">snprintf</span>(source, <span class="hljs-number">16</span>, <span class="hljs-string">"%pI4"</span>, &amp;iph-&gt;saddr);
+    <span class="hljs-keyword">if</span> (<span class="hljs-built_in">strcmp</span>(source, ip_addr) == <span class="hljs-number">0</span>)
+        <span class="hljs-keyword">return</span> <span class="hljs-number">1</span>;
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">unsigned</span> <span class="hljs-keyword">int</span> <span class="hljs-title">Filter_1</span><span class="hljs-params">(<span class="hljs-keyword">void</span> * priv, struct sk_buff * skb, <span class="hljs-keyword">const</span>  struct nf_hook_state * state)</span></span>
+<span class="hljs-function"></span>&#123;
+    <span class="hljs-comment">//考虑task1.1规则的实现，防止AtelnetB</span>
+    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">iphdr</span> *<span class="hljs-title">iph</span>;</span>
+    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">tcphdr</span> *<span class="hljs-title">tcph</span>;</span>
+    iph = ip_hdr(skb);
+    tcph = (<span class="hljs-keyword">void</span> *)iph + iph-&gt;ihl * <span class="hljs-number">4</span>;
+    <span class="hljs-keyword">if</span> (iph-&gt;protocol == IPPROTO_TCP &amp;&amp; tcph-&gt;dest == htons(<span class="hljs-number">23</span>) &amp;&amp; eq_daddr(iph, <span class="hljs-string">"10.0.2.5"</span>) &amp;&amp; eq_saddr(iph, <span class="hljs-string">"10.0.2.4"</span>))
+    &#123;
+        printk(KERN_INFO <span class="hljs-string">"Dropping telnet from %pI4 packet to %pI4\n"</span>, &amp;iph-&gt;saddr, &amp;iph-&gt;daddr);
+        <span class="hljs-keyword">return</span> NF_DROP;
+    &#125;
+    <span class="hljs-keyword">else</span>
+    &#123;
+        <span class="hljs-keyword">return</span> NF_ACCEPT;
+    &#125;
+&#125;
+
+
+<span class="hljs-function"><span class="hljs-keyword">unsigned</span> <span class="hljs-keyword">int</span> <span class="hljs-title">Filter_2</span><span class="hljs-params">(<span class="hljs-keyword">void</span> * priv, struct sk_buff * skb, <span class="hljs-keyword">const</span>  struct nf_hook_state * state)</span></span>
+<span class="hljs-function"></span>&#123;
+    <span class="hljs-comment">//考虑task1.2规则的实现，防止BtelnetA</span>
+    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">iphdr</span> *<span class="hljs-title">iph</span>;</span>
+    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">tcphdr</span> *<span class="hljs-title">tcph</span>;</span>
+    iph = ip_hdr(skb);
+    tcph = (<span class="hljs-keyword">void</span> *)iph + iph-&gt;ihl * <span class="hljs-number">4</span>;
+    <span class="hljs-keyword">if</span> (iph-&gt;protocol == IPPROTO_TCP &amp;&amp; tcph-&gt;dest == htons(<span class="hljs-number">23</span>) &amp;&amp; eq_daddr(iph, <span class="hljs-string">"10.0.2.4"</span>) &amp;&amp; eq_saddr(iph, <span class="hljs-string">"10.0.2.5"</span>))
+    &#123;
+        printk(KERN_INFO <span class="hljs-string">"Dropping telnet from %pI4 packet to %pI4\n"</span>, &amp;iph-&gt;saddr, &amp;iph-&gt;daddr);
+        <span class="hljs-keyword">return</span> NF_DROP;
+    &#125;
+    <span class="hljs-keyword">else</span>
+    &#123;
+        <span class="hljs-keyword">return</span> NF_ACCEPT;
+    &#125;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">unsigned</span> <span class="hljs-keyword">int</span> <span class="hljs-title">Filter_3</span><span class="hljs-params">(<span class="hljs-keyword">void</span> * priv, struct sk_buff * skb, <span class="hljs-keyword">const</span>  struct nf_hook_state * state)</span></span>
+<span class="hljs-function"></span>&#123;
+    <span class="hljs-comment">//考虑task1.3规则的实现，防止A访问外部网站,比如百度</span>
+    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">iphdr</span> *<span class="hljs-title">iph</span>;</span>
+    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">tcphdr</span> *<span class="hljs-title">tcph</span>;</span>
+    iph = ip_hdr(skb);
+    tcph = (<span class="hljs-keyword">void</span> *)iph + iph-&gt;ihl * <span class="hljs-number">4</span>;
+    <span class="hljs-keyword">if</span> (iph-&gt;protocol == IPPROTO_TCP &amp;&amp; (tcph-&gt;dest == htons(<span class="hljs-number">80</span>) || tcph-&gt;dest == htons(<span class="hljs-number">443</span>)) &amp;&amp; (eq_daddr(iph, <span class="hljs-string">"180.101.49.11"</span>) || eq_daddr(iph, <span class="hljs-string">"180.101.49.12"</span>)) &amp;&amp; eq_saddr(iph, <span class="hljs-string">"10.0.2.4"</span>))
+    &#123;
+        printk(KERN_INFO <span class="hljs-string">"Dropping web packet from %pI4 packet to %pI4\n"</span>, &amp;iph-&gt;saddr, &amp;iph-&gt;daddr);
+        <span class="hljs-keyword">return</span> NF_DROP;
+    &#125;
+    <span class="hljs-keyword">else</span>
+    &#123;
+        <span class="hljs-keyword">return</span> NF_ACCEPT;
+    &#125;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">unsigned</span> <span class="hljs-keyword">int</span> <span class="hljs-title">Filter_4</span><span class="hljs-params">(<span class="hljs-keyword">void</span> * priv, struct sk_buff * skb, <span class="hljs-keyword">const</span>  struct nf_hook_state * state)</span></span>
+<span class="hljs-function"></span>&#123;
+    <span class="hljs-comment">//新规则的实现，防止B ssh A</span>
+    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">iphdr</span> *<span class="hljs-title">iph</span>;</span>
+    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">tcphdr</span> *<span class="hljs-title">tcph</span>;</span>
+    iph = ip_hdr(skb);
+    tcph = (<span class="hljs-keyword">void</span> *)iph + iph-&gt;ihl * <span class="hljs-number">4</span>;
+    <span class="hljs-keyword">if</span> (iph-&gt;protocol == IPPROTO_TCP &amp;&amp; tcph-&gt;dest == htons(<span class="hljs-number">22</span>) &amp;&amp; eq_daddr(iph, <span class="hljs-string">"10.0.2.4"</span>) &amp;&amp; eq_saddr(iph, <span class="hljs-string">"10.0.2.5"</span>))
+    &#123;
+        printk(KERN_INFO <span class="hljs-string">"Dropping ssh from %pI4 packet to %pI4\n"</span>, &amp;iph-&gt;saddr, &amp;iph-&gt;daddr);
+        <span class="hljs-keyword">return</span> NF_DROP;
+    &#125;
+    <span class="hljs-keyword">else</span>
+    &#123;
+        <span class="hljs-keyword">return</span> NF_ACCEPT;
+    &#125;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">unsigned</span> <span class="hljs-keyword">int</span> <span class="hljs-title">Filter_5</span><span class="hljs-params">(<span class="hljs-keyword">void</span> * priv, struct sk_buff * skb, <span class="hljs-keyword">const</span>  struct nf_hook_state * state)</span></span>
+<span class="hljs-function"></span>&#123;
+    <span class="hljs-comment">//新规则的实现，防止A ssh B</span>
+    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">iphdr</span> *<span class="hljs-title">iph</span>;</span>
+    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">tcphdr</span> *<span class="hljs-title">tcph</span>;</span>
+    iph = ip_hdr(skb);
+    tcph = (<span class="hljs-keyword">void</span> *)iph + iph-&gt;ihl * <span class="hljs-number">4</span>;
+    <span class="hljs-keyword">if</span> (iph-&gt;protocol == IPPROTO_TCP &amp;&amp; tcph-&gt;dest == htons(<span class="hljs-number">22</span>) &amp;&amp; eq_daddr(iph, <span class="hljs-string">"10.0.2.5"</span>) &amp;&amp; eq_saddr(iph, <span class="hljs-string">"10.0.2.4"</span>))
+    &#123;
+        printk(KERN_INFO <span class="hljs-string">"Dropping ssh from %pI4 packet to %pI4\n"</span>, &amp;iph-&gt;saddr, &amp;iph-&gt;daddr);
+        <span class="hljs-keyword">return</span> NF_DROP;
+    &#125;
+    <span class="hljs-keyword">else</span>
+    &#123;
+        <span class="hljs-keyword">return</span> NF_ACCEPT;
+    &#125;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">setUpFilter</span><span class="hljs-params">(<span class="hljs-keyword">void</span>)</span></span>
+<span class="hljs-function"></span>&#123;
+    printk(KERN_INFO <span class="hljs-string">"Registering filters.\n"</span>);
+    FilterHookRule_1.hook = Filter_1;        <span class="hljs-comment">//对应的function</span>
+    FilterHookRule_1.hooknum = NF_INET_LOCAL_OUT;  <span class="hljs-comment">//对应OUTPUT链</span>
+    FilterHookRule_1.pf = PF_INET;
+    FilterHookRule_1.priority = NF_IP_PRI_FIRST;   <span class="hljs-comment">//优先级</span>
+    nf_register_hook(&amp;FilterHookRule_1);
+
+    FilterHookRule_2.hook = Filter_2;        <span class="hljs-comment">//对应的function</span>
+    FilterHookRule_2.hooknum = NF_INET_LOCAL_IN;  <span class="hljs-comment">//对应input链</span>
+    FilterHookRule_2.pf = PF_INET;
+    FilterHookRule_2.priority = NF_IP_PRI_FIRST;   <span class="hljs-comment">//优先级</span>
+    nf_register_hook(&amp;FilterHookRule_2);
+
+    FilterHookRule_3.hook = Filter_3;        <span class="hljs-comment">//对应的function</span>
+    FilterHookRule_3.hooknum = NF_INET_LOCAL_OUT;  <span class="hljs-comment">//对应OUTPUT链</span>
+    FilterHookRule_3.pf = PF_INET;
+    FilterHookRule_3.priority = NF_IP_PRI_FIRST;   <span class="hljs-comment">//优先级</span>
+    nf_register_hook(&amp;FilterHookRule_3);
+
+    FilterHookRule_4.hook = Filter_4;        <span class="hljs-comment">//对应的function</span>
+    FilterHookRule_4.hooknum = NF_INET_LOCAL_IN;  <span class="hljs-comment">//对应INPUT链</span>
+    FilterHookRule_4.pf = PF_INET;
+    FilterHookRule_4.priority = NF_IP_PRI_FIRST;   <span class="hljs-comment">//优先级</span>
+    nf_register_hook(&amp;FilterHookRule_4);
+
+    FilterHookRule_5.hook = Filter_5;        <span class="hljs-comment">//对应的function</span>
+    FilterHookRule_5.hooknum = NF_INET_LOCAL_OUT;  <span class="hljs-comment">//对应OUTPUT链</span>
+    FilterHookRule_5.pf = PF_INET;
+    FilterHookRule_5.priority = NF_IP_PRI_FIRST;   <span class="hljs-comment">//优先级</span>
+    nf_register_hook(&amp;FilterHookRule_5);
+
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">removeFilter</span><span class="hljs-params">(<span class="hljs-keyword">void</span>)</span></span>
+<span class="hljs-function"></span>&#123;
+    nf_unregister_hook(&amp;FilterHookRule_1);
+    nf_unregister_hook(&amp;FilterHookRule_2);
+    nf_unregister_hook(&amp;FilterHookRule_3);
+    nf_unregister_hook(&amp;FilterHookRule_4);
+    nf_unregister_hook(&amp;FilterHookRule_5);
+&#125;
+
+module_init(setUpFilter);
+module_exit(removeFilter);
+
+MODULE_LICENSE(<span class="hljs-string">"GPL"</span>);</code></pre>
+
+<h4 id="task2复盘"><a href="#task2复盘" class="headerlink" title="task2复盘"></a>task2复盘</h4><p>文件夹命名尽量不要带空格，makefile哭泣</p>
+<p>其实这个task的思路还是比较简单的，本质上来讲就是当满足对应的条件（匹配条件if）的时候，来完成相应的东作用（drop）。其实是引入的比较新的东西的话也就是LKM和netfilter的与挂钩点register的东西，不存在理解上面的难点</p>
+<h3 id="task3：规避出口过滤"><a href="#task3：规避出口过滤" class="headerlink" title="task3：规避出口过滤"></a>task3：规避出口过滤</h3><h4 id="实验背景"><a href="#实验背景" class="headerlink" title="实验背景"></a>实验背景</h4><blockquote>
+<p>we show how such egress filtering can be bypassed using the tunnel mechanism. There are many ways to establish tunnels; in this task, we only focus on SSH tunnels.</p>
+</blockquote>
+<h4 id="实验过程"><a href="#实验过程" class="headerlink" title="实验过程"></a>实验过程</h4><h5 id="设置iptables来屏蔽对应的telnet连接和发往www-fudan-edu-cn主机的数据包"><a href="#设置iptables来屏蔽对应的telnet连接和发往www-fudan-edu-cn主机的数据包" class="headerlink" title="设置iptables来屏蔽对应的telnet连接和发往www.fudan.edu.cn主机的数据包"></a>设置iptables来屏蔽对应的telnet连接和发往<a href="http://www.fudan.edu.cn主机的数据包" target="_blank" rel="noopener">www.fudan.edu.cn主机的数据包</a></h5><p>首先，查看现在的filter表并且查询<a href="http://www.fudan.edu.cn的IP地址，发现是202.120.224.81" target="_blank" rel="noopener">www.fudan.edu.cn的IP地址，发现是202.120.224.81</a></p>
+<p><img src="/2020/11/30/Linuc-Firewall-Exploration/3-1.PNG" srcset="/img/loading.gif" alt="3-1"></p>
+<p><img src="/2020/11/30/Linuc-Firewall-Exploration/3-2.PNG" srcset="/img/loading.gif" alt="3-2"></p>
+<p>之后运行下面两条命令</p>
+<pre><code class="hljs angelscript">sudo iptables -A OUTPUT -s <span class="hljs-number">10.0</span><span class="hljs-number">.2</span><span class="hljs-number">.4</span> -p tcp --dport <span class="hljs-number">23</span> -j DROP
+sudo iptables -A OUTPUT -s <span class="hljs-number">10.0</span><span class="hljs-number">.2</span><span class="hljs-number">.4</span> -d <span class="hljs-number">202.120</span><span class="hljs-number">.224</span><span class="hljs-number">.81</span> -j DROP</code></pre>
+
+<p>之后查看filter表</p>
+<p><img src="/2020/11/30/Linuc-Firewall-Exploration/3-3.PNG" srcset="/img/loading.gif" alt="3-3"></p>
+<h5 id="task3-a：建立穿过防火墙的隧道"><a href="#task3-a：建立穿过防火墙的隧道" class="headerlink" title="task3.a：建立穿过防火墙的隧道"></a>task3.a：建立穿过防火墙的隧道</h5><p><img src="/2020/11/30/Linuc-Firewall-Exploration/3-4.PNG" srcset="/img/loading.gif" alt="3-4"></p>
+<p>在这个task里面，我只采用了两个VM来实现，首先，当我们直接telnet B（10.0.2.5）的时候，会发现不能成功</p>
+<p><img src="/2020/11/30/Linuc-Firewall-Exploration/3-5.PNG" srcset="/img/loading.gif" alt="3-5"></p>
+<p>之后运行下面的命令来建立A（端口为8000）和B（端口22）之间的ssh连接，并且设置B转发到本机的23端口</p>
+<p><img src="/2020/11/30/Linuc-Firewall-Exploration/3-6.PNG" srcset="/img/loading.gif" alt="3-6"></p>
+<p>这时候已经建立好了ssh连接，当A上面从端口8000发送过去的数据包到达B的22端口的时候，B会转发到23端口，所以之后我们在主机A上面运行telnet localhost 8000的时候，从本质上来讲，是在将端口与localhost 8000发送TCP包来建立telnet连接，但是之后端口8000收到TCP数据包之后并不用来建立telnet连接，而是利用ssh隧道来实现转发，这时候wireshark抓包可以看见，并没有telnet数据包，而是ssh数据包</p>
+<p><img src="/2020/11/30/Linuc-Firewall-Exploration/3-7.PNG" srcset="/img/loading.gif" alt="3-7"></p>
+<p><img src="/2020/11/30/Linuc-Firewall-Exploration/3-9.PNG" srcset="/img/loading.gif" alt="3-9"></p>
+<h5 id="task3-b：通过ssh隧道来访问外部网站（以www-fudan-edu-cn为例）"><a href="#task3-b：通过ssh隧道来访问外部网站（以www-fudan-edu-cn为例）" class="headerlink" title="task3.b：通过ssh隧道来访问外部网站（以www.fudan.edu.cn为例）"></a>task3.b：通过ssh隧道来访问外部网站（以<a href="http://www.fudan.edu.cn为例）" target="_blank" rel="noopener">www.fudan.edu.cn为例）</a></h5><p>使用了<strong>动态端口转发</strong>：当数据包到达VM B的时候，并不是静态的转发到目的地IP，而是根据包的信息来决定目的地</p>
+<ul>
+<li><p>将本地端口9000与B主机22端口建立ssh隧道</p>
+<p>  <img src="/2020/11/30/Linuc-Firewall-Exploration/3-10.PNG" srcset="/img/loading.gif" alt="3-10"></p>
+<p>  此时本地端口与B主机的22端口已经建立好了连接，之后就是浏览器与本地9000的连接的建立</p>
+</li>
+<li><p>建立浏览器连接</p>
+<p>  <img src="/2020/11/30/Linuc-Firewall-Exploration/3-11.PNG" srcset="/img/loading.gif" alt="3-11"></p>
+</li>
+<li><p>访问以及抓包观察</p>
+<p>  我们可以看到，访问<a href="http://www.fudan.edu.cn成功，并且通过抓数据包可以看到并不是通过10.0.2.4来直接进行访问202.120.224.81的，而是通过ssh连接来让B进行访问" target="_blank" rel="noopener">www.fudan.edu.cn成功，并且通过抓数据包可以看到并不是通过10.0.2.4来直接进行访问202.120.224.81的，而是通过ssh连接来让B进行访问</a></p>
+<p>  <img src="/2020/11/30/Linuc-Firewall-Exploration/3-13.PNG" srcset="/img/loading.gif" alt="3-13"></p>
+<p>  <img src="/2020/11/30/Linuc-Firewall-Exploration/3-12.PNG" srcset="/img/loading.gif" alt="3-12"></p>
+<p>  同时，当经过ssh隧道，由于并不在是直接访问对应IP，而是通过ssh连接来访问，所以绕过了防火墙，同时我们结合上面的图来一起分析，可以看到A到B是通过ssh，而B到对应的web服务器是通过http连接</p>
+<p>  <img src="/2020/11/30/Linuc-Firewall-Exploration/3-14.PNG" srcset="/img/loading.gif" alt="3-14"></p>
+<p>  之后断开ssh连接并且清除缓存，此时发现代理拒绝连接</p>
+<p>  <img src="/2020/11/30/Linuc-Firewall-Exploration/3-15.PNG" srcset="/img/loading.gif" alt="3-15"></p>
+<p>  之后当我们重新家里ssh隧道之后，我们又可以看到对应界面，就和之前访问成功的时候一样</p>
+</li>
+</ul>
+<h3 id="task4：规避进入过滤"><a href="#task4：规避进入过滤" class="headerlink" title="task4：规避进入过滤"></a>task4：规避进入过滤</h3><p>首先是要进行访问的内部网络的网络页面</p>
+<p><img src="/2020/11/30/Linuc-Firewall-Exploration/4-1.PNG" srcset="/img/loading.gif" alt="4-1"></p>
+<p>下面是要输入的防火墙的INPUT里面的规则以及此时防火墙filter表中的规则</p>
+<p><img src="/2020/11/30/Linuc-Firewall-Exploration/4-2.PNG" srcset="/img/loading.gif" alt="4-2"></p>
+<p>之后我们无法通过建立ssh连接以及http进行访问，因为这时候从外部进行访问的ssh连接也被屏蔽掉了，之后我们需要建立一个reverse连接，原理是此时并不制止从内部发往外部的ssh连接，我们建立了反向ssh隧道</p>
+<p><img src="/2020/11/30/Linuc-Firewall-Exploration/4-3.PNG" srcset="/img/loading.gif" alt="4-3"></p>
+<p>此时A的80端口已经与远程端的8000端口建立了连接，并且进行转发的主机是10.0.2.5</p>
+<p>之后可以看到，成功访问</p>
+<p><img src="/2020/11/30/Linuc-Firewall-Exploration/4-4.PNG" srcset="/img/loading.gif" alt="4-4"></p>
+<p>原理示意图：</p>
+<p><img src="/2020/11/30/Linuc-Firewall-Exploration/4-5.PNG" srcset="/img/loading.gif" alt="4-5"></p>
+<p>参考blog：<a href="https://github.com/li-xin-yi/seedlab/tree/master/Firewall-Exploration" target="_blank" rel="noopener">reverse ssh在最后</a>、<a href="https://unix.stackexchange.com/questions/46235/how-does-reverse-ssh-tunneling-work" target="_blank" rel="noopener">how does the reverse tunnel work</a></p>
+<h2 id="复盘"><a href="#复盘" class="headerlink" title="复盘"></a>复盘</h2><p>这个lab给我的感觉就是太过于狭小、太偏向于技术层面而失去了对于整体系统的把握，虽然能够对于iptables这一种防火墙有所了解，但是对于所有的防火墙的认知还是有一点匮乏，其中task3和task4有比较好的理解，task2其实感觉就是task1的一种具体实现</p>
+
+            </article>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/Network-Security/">Network Security</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" target="_blank" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！</p>
+              
+              
+                <div class="post-prevnext row">
+                  <div class="post-prev col-6">
+                    
+                    
+                      <a href="/2020/12/02/Firewall-VPN/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Firewall_VPN</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </div>
+                  <div class="post-next col-6">
+                    
+                    
+                      <a href="/2020/11/27/RBAC%E8%AE%BF%E9%97%AE%E6%8E%A7%E5%88%B6/">
+                        <span class="hidden-mobile">RBAC访问控制</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </div>
+                </div>
+              
+            </div>
+
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div id="tocbot"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+  </main>
+
+  
+    <a id="scroll-top-button" href="#" role="button">
+      <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  
+
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <div>
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a>
+      <i class="iconfont icon-love"></i>
+      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener">
+        <span>Fluid</span></a>
+    </div>
+    
+
+    
+
+    
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script  src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script  src="/js/debouncer.js" ></script>
+<script  src="/js/main.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/lazyload.js" ></script>
+  
+
+
+
+  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js" ></script>
+  <script  src="/js/clipboard-use.js" ></script>
+
+
+
+
+
+
+
+  <script  src="https://cdn.staticfile.org/tocbot/4.11.1/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var boardCtn = $('#board-ctn');
+      var boardTop = boardCtn.offset().top;
+
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: 'article.markdown-body',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        collapseDepth: 0,
+        scrollSmooth: true,
+        headingsOffset: -boardTop
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc').css('visibility', 'visible');
+      }
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "Linuc Firewall Exploration&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      searchFunc(path, 'local-search-input', 'local-search-result');
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <script>
+    $('#post img:not(.no-zoom img, img[no-zoom]), img[zoom]').each(
+      function () {
+        var element = document.createElement('a');
+        $(element).attr('data-fancybox', 'images');
+        $(element).attr('href', $(this).attr('src'));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

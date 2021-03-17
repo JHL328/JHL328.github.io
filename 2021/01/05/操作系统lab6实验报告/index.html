@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  <title>操作系统lab6实验报告 - Hexo</title>
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    <link  rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/github-gist.min.css" />
+  
+
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_yg9cfy8wd6.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_pjno9b9zyxs.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script  src="/js/utils.js" ></script>
+<meta name="generator" content="Hexo 4.2.1"><link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+</head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Fluid</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              
+  <div class="mt-3 post-meta">
+    <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+    <time datetime="2021-01-05 10:38">
+      2021年1月5日 上午
+    </time>
+  </div>
+
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      2.8k 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      47
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <div class="post-content mx-auto" id="post">
+            
+            <article class="markdown-body">
+              <p align="right">姓名：贾昊龙
+</p><p align="right">学号：18307130049
+
+</p><h1 id="PartⅠ：运行结果"><a href="#PartⅠ：运行结果" class="headerlink" title="PartⅠ：运行结果"></a>PartⅠ：运行结果</h1><p><img src="/2021/01/05/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9Flab6%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/1.PNG" srcset="/img/loading.gif" alt="1"></p>
+<h1 id="Part-Ⅱ：问题回答"><a href="#Part-Ⅱ：问题回答" class="headerlink" title="Part Ⅱ：问题回答"></a>Part Ⅱ：问题回答</h1><ul>
+<li><strong>请回答Exercise 1后的Question 1，Do you have to do anything else to ensure that this I/O privilege setting is saved and restored properly when you subsequently switch from one environment to another? Why?</strong></li>
+</ul>
+<p>不需要，当进程陷入中断后，所有寄存器信息会被保存到进程的 env_tf 中，在之前的lab当中已经实现过了</p>
+<ul>
+<li><strong>详细描述JOS 中文件存储的结构、打开文件的过程以及往文件中写入数据的过程。</strong></li>
+</ul>
+<p>在JOS中，文件系统是一个运行在userspace的进程，而其他进程通过类似Clinet-Server的方式来与文件系统进程进行进程间通信，从而实现文件操作。</p>
+<p>存储结构定义在<code>fs.h</code>当中</p>
+<p><img src="/2021/01/05/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9Flab6%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/3.png" srcset="/img/loading.gif" alt="3"></p>
+<p>而文件读写过程可以参考问题5的回答</p>
+<ul>
+<li><strong>对于此JOS，一个磁盘有多少个扇区？</strong></li>
+</ul>
+<p>JOS的磁盘总大小为定义在fs.h中的 DISKSIZE ,值为3GB；而每个扇区的大小为 SECTSIZE , 值为 512B。因此JOS总共有：3 * 2^21个扇区</p>
+<ul>
+<li><strong>请详细阐述，JOS中superblock的概念，以及superblock的布局和结构。</strong></li>
+</ul>
+<p>超级块指的是文件系统保存文件系统元数据的数据块</p>
+<p>JOS中文件系统的第1块（块号为0）是磁盘块，用来用作保存bootloader和分区表，而第2块（块号为1）就是超级块，用来保存文件系统元信息的，布局如下：</p>
+<p><img src="/2021/01/05/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9Flab6%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/4.PNG" srcset="/img/loading.gif" alt="4"></p>
+<ul>
+<li>以open文件为例，阐述regular环境访问磁盘的流程</li>
+</ul>
+<p>以磁盘读为例，当一个进程在发起一次磁盘读取请求的时候，首先会调用JOS提供的库函数 <code>read()</code>，而 <code>read()</code> 函数会调用 <code>devfile_read()</code> 函数，这个函数是进程端的磁盘读接口，它会继续将用户的读取请求递交给 <code>fsipc()</code> 函数，之后通过进程间通信IPC机制，将读取请求发送给接收端的文件系统进程。</p>
+<p>文件系统进程<code>serve</code>会不断的进行 <code>ipc_recv()</code>来 检查是否有进程发起读写请求。在接收到进程读文件的 IPC信息后，serve会将这个信息发送给 <code>serve_read()</code> ，最后调用<code>file_read()</code> 函数完成真正的文件读取过程，而之前的过程都是在进行信息传递。</p>
+<ul>
+<li><strong>画出对应的流程图</strong></li>
+</ul>
+<p><img src="/2021/01/05/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9Flab6%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/7.PNG" srcset="/img/loading.gif" alt="7"></p>
+<ul>
+<li><strong>5-c fd page是什么时候设置好的？</strong></li>
+</ul>
+<p>fd page在JOS中的作用类似于文件描述符，它是OpenFile结构体中的一项，结构如下：</p>
+<p><img src="/2021/01/05/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9Flab6%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/5.PNG" srcset="/img/loading.gif" alt="5"></p>
+<p>当文件系统进程接收到文件读写请求时，会调用<code>server_open()</code>函数打开文件，并写入fd page信息。</p>
+<p><img src="/2021/01/05/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9Flab6%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/6.PNG" srcset="/img/loading.gif" alt="6"></p>
+<h1 id="Part-A：the-file-system"><a href="#Part-A：the-file-system" class="headerlink" title="Part A：the file system"></a>Part A：the file system</h1><h4 id="Exercise-1"><a href="#Exercise-1" class="headerlink" title="Exercise 1"></a>Exercise 1</h4><blockquote>
+<p><code>i386_init</code> identifies the file system environment by passing the type <code>ENV_TYPE_FS</code> to your environment creation function, <code>env_create</code>. Modify <code>env_create</code> in <code>env.c</code>, so that it gives the file system environment I/O privilege, but never gives that privilege to any other environment.</p>
+<p>Make sure you can start the file environment without causing a General Protection fault. You should pass the “fs i/o” test in make grade.</p>
+</blockquote>
+<p><strong><code>env_create()</code></strong></p>
+<p>只需要在文件系统进程创建的时候给予访问文件的权限即可（设置eflags寄存器的IOPL标志位）</p>
+<pre><code class="hljs c"><span class="hljs-keyword">void</span>
+env_create(<span class="hljs-keyword">uint8_t</span> *binary, <span class="hljs-keyword">enum</span> EnvType type)
+&#123;
+	<span class="hljs-comment">// LAB 3: Your code here.</span>
+
+	<span class="hljs-comment">// If this is the file server (type == ENV_TYPE_FS) give it I/O privileges.</span>
+	<span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">Env</span> *<span class="hljs-title">e</span>;</span>
+	<span class="hljs-keyword">int</span> r;
+	<span class="hljs-keyword">if</span> ((r = env_alloc(&amp;e, <span class="hljs-number">0</span>) != <span class="hljs-number">0</span>)) &#123;
+		panic(<span class="hljs-string">"create env failed\n"</span>);
+	&#125;
+	<span class="hljs-comment">// LAB 5: Your code here.</span>
+	<span class="hljs-keyword">if</span> (type == ENV_TYPE_FS)
+	&#123;
+		e-&gt;env_tf.tf_eflags = e-&gt;env_tf.tf_eflags | FL_IOPL_MASK;
+	&#125;
+	
+	load_icode(e, binary);
+	e-&gt;env_type = type;
+&#125;</code></pre>
+
+<h4 id="Exercise-2"><a href="#Exercise-2" class="headerlink" title="Exercise 2"></a>Exercise 2</h4><blockquote>
+<p>IUse <code>free_block</code> as a model to implement <code>alloc_block</code> in <code>fs/fs.c</code>, which should find a free disk block in the bitmap, mark it used, and return the number of that block. When you allocate a block, you should immediately flush the changed bitmap block to disk with <code>flush_block</code>, to help file system consistency.</p>
+<p>Use make grade to test your code. Your code should now pass “alloc_block”.mplement the <code>bc_pgfault</code> and <code>flush_block</code> functions in <code>fs/bc.c</code>. <code>bc_pgfault</code> is a page fault handler, just like the one your wrote in the previous lab for copy-on-write fork, except that its job is to load pages in from the disk in response to a page fault. When writing this, keep in mind that (1) <code>addr</code> may not be aligned to a block boundary and (2) <code>ide_read</code> operates in sectors, not blocks.</p>
+<p>The <code>flush_block</code> function should write a block out to disk <em>if necessary</em>. <code>flush_block</code> shouldn’t do anything if the block isn’t even in the block cache (that is, the page isn’t mapped) or if it’s not dirty. We will use the VM hardware to keep track of whether a disk block has been modified since it was last read from or written to disk. To see whether a block needs writing, we can just look to see if the <code>PTE_D</code> “dirty” bit is set in the <code>uvpt</code> entry. (The <code>PTE_D</code> bit is set by the processor in response to a write to that page; see 5.2.4.3 in <a href="http://pdos.csail.mit.edu/6.828/2011/readings/i386/s05_02.htm" target="_blank" rel="noopener">chapter 5</a> of the 386 reference manual.) After writing the block to disk, <code>flush_block</code> should clear the <code>PTE_D</code> bit using <code>sys_page_map</code>.</p>
+<p>Use make grade to test your code. Your code should pass “check_bc”, “check_super”, and “check_bitmap”</p>
+</blockquote>
+<p><strong><code>bc_pgfault</code></strong></p>
+<p>该函数的作用是文件系统进程的缺页处理，将磁盘块数据读取到相应的内存位置</p>
+<pre><code class="hljs c"><span class="hljs-comment">// LAB 5: you code here:</span>
+addr = (<span class="hljs-keyword">void</span> *)ROUNDDOWN(addr, BLKSIZE);
+<span class="hljs-keyword">if</span>((r = SYS_page_alloc(<span class="hljs-number">0</span>, addr, PTE_U | PTE_W | PTE_P)) &lt; <span class="hljs-number">0</span>)
+	panic(<span class="hljs-string">"in bc_pgfault, sys_page_alloc: %e"</span>, r);
+<span class="hljs-keyword">if</span> ((r = (ide_read(blockno*BLKSECTS, addr, BLKSECTS))) &lt; <span class="hljs-number">0</span>)
+	panic(<span class="hljs-string">"in bc_pgfault, sys_page_alloc: %e"</span>, r);
+<span class="hljs-comment">// Clear the dirty bit for the disk block page since we just read the</span>
+<span class="hljs-comment">// block from disk</span></code></pre>
+
+<p> <strong><code>flush_block</code></strong> </p>
+<p>这个函数将缓存的block写回到磁盘中，如果数据块没有被写过，则不需要做任何事。通过 PTE_D 标志位可以判断数据块是否被写入过。</p>
+<pre><code class="hljs c"><span class="hljs-keyword">void</span>
+flush_block(<span class="hljs-keyword">void</span> *addr)
+&#123;
+	<span class="hljs-keyword">uint32_t</span> blockno = ((<span class="hljs-keyword">uint32_t</span>)addr - DISKMAP) / BLKSIZE;
+	<span class="hljs-keyword">int</span> r;
+	<span class="hljs-keyword">if</span> (addr &lt; (<span class="hljs-keyword">void</span>*)DISKMAP || addr &gt;= (<span class="hljs-keyword">void</span>*)(DISKMAP + DISKSIZE))
+		panic(<span class="hljs-string">"flush_block of bad va %08x"</span>, addr);
+
+	<span class="hljs-comment">// LAB 5: Your code here.</span>
+	<span class="hljs-comment">// panic("flush_block not implemented");</span>
+	addr = (<span class="hljs-keyword">void</span>*)ROUNDDOWN(addr, BLKSIZE);
+	<span class="hljs-keyword">if</span>(!va_is_mapped(addr) || !va_is_dirty(addr)) <span class="hljs-keyword">return</span>;
+	<span class="hljs-keyword">if</span>((r = ide_write(blockno*BLKSECTS, addr, BLKSECTS)) &lt; <span class="hljs-number">0</span>)
+		panic(<span class="hljs-string">"in flush_block, ide_write: %e"</span>, r);
+	<span class="hljs-keyword">if</span> ((r = sys_page_map(<span class="hljs-number">0</span>, addr, <span class="hljs-number">0</span>, addr, uvpt[PGNUM(addr)] &amp; PTE_SYSCALL)) &lt; <span class="hljs-number">0</span>)
+		panic(<span class="hljs-string">"in flush_block, sys_page_map: %e"</span>, r);
+&#125;</code></pre>
+
+<h4 id="Exercise-3"><a href="#Exercise-3" class="headerlink" title="Exercise 3"></a>Exercise 3</h4><blockquote>
+<p>Use <code>free_block</code> as a model to implement <code>alloc_block</code> in <code>fs/fs.c</code>, which should find a free disk block in the bitmap, mark it used, and return the number of that block. When you allocate a block, you should immediately flush the changed bitmap block to disk with <code>flush_block</code>, to help file system consistency.</p>
+<p>Use make grade to test your code. Your code should now pass “alloc_block”.</p>
+</blockquote>
+<p><strong><code>alloc_block</code></strong></p>
+<p>函数的作用是从 bitmap 中找到一个空的数据块，并给调用函数的进程分配它。</p>
+<pre><code class="hljs c"><span class="hljs-keyword">int</span>
+alloc_block(<span class="hljs-keyword">void</span>)
+&#123;
+	<span class="hljs-comment">// The bitmap consists of one or more blocks.  A single bitmap block</span>
+	<span class="hljs-comment">// contains the in-use bits for BLKBITSIZE blocks.  There are</span>
+	<span class="hljs-comment">// super-&gt;s_nblocks blocks in the disk altogether.</span>
+
+	<span class="hljs-comment">// LAB 5: Your code here.</span>
+	<span class="hljs-keyword">for</span> (<span class="hljs-keyword">uint32_t</span> i = <span class="hljs-number">2</span> ; i &lt; super-&gt;s_nblocks ; i++)
+	&#123;
+		<span class="hljs-keyword">if</span> (block_is_free(i))
+		&#123;
+			bitmap[i&gt;&gt;<span class="hljs-number">5</span>] &amp;= ~(<span class="hljs-number">1</span> &lt;&lt; (i % <span class="hljs-number">32</span>));
+			flush_block(diskaddr(i));
+			<span class="hljs-keyword">return</span> i;
+		&#125;
+		
+	&#125;
+	
+	<span class="hljs-comment">// panic("alloc_block not implemented");</span>
+	
+	<span class="hljs-keyword">return</span> -E_NO_DISK;
+&#125;</code></pre>
+
+<h4 id="Exercise-4"><a href="#Exercise-4" class="headerlink" title="Exercise 4"></a>Exercise 4</h4><blockquote>
+<p>Implement <code>file_block_walk</code> and <code>file_get_block</code>. <code>file_block_walk</code> maps from a block offset within a file to the pointer for that block in the <code>struct File</code> or the indirect block, very much like what <code>pgdir_walk</code> did for page tables. <code>file_get_block</code> goes one step further and maps to the actual disk block, allocating a new one if necessary.</p>
+<p>Use make grade to test your code. Your code should pass “file_open”, “file_get_block”, and “file_flush/file_truncated/file rewrite”, and “testfile”.</p>
+</blockquote>
+<p><strong><code>file_block_walk</code></strong></p>
+<p>这个函数的功能是找到文件 f 中第 filebno 号数据块的数据块号slot并保存到 ppdiskbno 中。</p>
+<pre><code class="hljs c"><span class="hljs-comment">// Hint: Don't forget to clear any block you allocate.</span>
+<span class="hljs-keyword">static</span> <span class="hljs-keyword">int</span>
+file_block_walk(struct <span class="hljs-built_in">File</span> *f, <span class="hljs-keyword">uint32_t</span> filebno, <span class="hljs-keyword">uint32_t</span> **ppdiskbno, <span class="hljs-keyword">bool</span> alloc)
+&#123;
+    <span class="hljs-comment">// LAB 5: Your code here.</span>
+	<span class="hljs-keyword">if</span>(filebno&gt;= NDIRECT + NINDIRECT) <span class="hljs-keyword">return</span> -E_INVAL;
+	<span class="hljs-keyword">if</span>(filebno&lt;NDIRECT)&#123;
+		*ppdiskbno = &amp;(f-&gt;f_direct[filebno]);
+		<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+	&#125;
+	<span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (f-&gt;f_indirect == <span class="hljs-number">0</span>)&#123;
+		<span class="hljs-keyword">if</span>(alloc) &#123;
+			<span class="hljs-keyword">int</span> blockno = alloc_block();
+			<span class="hljs-keyword">if</span>(blockno &lt; <span class="hljs-number">0</span>) <span class="hljs-keyword">return</span> -E_NO_DISK;
+			<span class="hljs-built_in">memset</span>(diskaddr(blockno), <span class="hljs-number">0</span>, BLKSIZE);
+			f-&gt;f_indirect = blockno;
+		&#125;
+		<span class="hljs-keyword">else</span> <span class="hljs-keyword">return</span> -E_NOT_FOUND;
+	&#125;
+	<span class="hljs-keyword">uint32_t</span> * addr = (<span class="hljs-keyword">uint32_t</span>*)diskaddr(f-&gt;f_indirect);
+	*ppdiskbno = &amp;addr[filebno];
+	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+	<span class="hljs-comment">// panic("file_block_walk not implemented");</span>
+&#125;</code></pre>
+
+<p><strong><code>file_get_block</code></strong></p>
+<p>这个函数的功能是查找文件 f 第 filebno 个数据块对应的虚拟地址 addr ，并将其保存到给定的地 址 blk 处。根据提示实现即可</p>
+<pre><code class="hljs c"><span class="hljs-comment">// Hint: Use file_block_walk and alloc_block.</span>
+<span class="hljs-keyword">int</span>
+file_get_block(struct <span class="hljs-built_in">File</span> *f, <span class="hljs-keyword">uint32_t</span> filebno, <span class="hljs-keyword">char</span> **blk)
+&#123;
+    <span class="hljs-comment">// LAB 5: Your code here.</span>
+    <span class="hljs-comment">// panic("file_get_block not implemented");</span>
+	<span class="hljs-keyword">uint32_t</span> *ppdiskbno;
+	<span class="hljs-keyword">int</span> r = file_block_walk(f,filebno, &amp;ppdiskbno,<span class="hljs-number">1</span>);
+	<span class="hljs-keyword">if</span>(r &lt; <span class="hljs-number">0</span>) <span class="hljs-keyword">return</span> r;
+	<span class="hljs-keyword">if</span>((*ppdiskbno) == <span class="hljs-number">0</span>)
+	&#123;
+		<span class="hljs-keyword">if</span>((*ppdiskbno = alloc_block()) &lt; <span class="hljs-number">0</span>)
+		&#123;
+			<span class="hljs-keyword">return</span> -E_NO_DISK;
+		&#125;
+	&#125;
+	*blk = diskaddr(*ppdiskbno);
+	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+&#125;</code></pre>
+
+<h4 id="Exercise-5"><a href="#Exercise-5" class="headerlink" title="Exercise 5"></a>Exercise 5</h4><blockquote>
+<p>Implement <code>serve_read</code> in <code>fs/serv.c</code>.</p>
+<p><code>serve_read</code>‘s heavy lifting will be done by the already-implemented <code>file_read</code> in <code>fs/fs.c</code> (which, in turn, is just a bunch of calls to <code>file_get_block</code>). <code>serve_read</code> just has to provide the RPC interface for file reading. Look at the comments and code in <code>serve_set_size</code> to get a general idea of how the server functions should be structured.</p>
+<p>Use make grade to test your code. Your code should pass “serve_open/file_stat/file_close” and “file_read” for a score of 70/150.</p>
+</blockquote>
+<p><strong><code>serve_read</code></strong></p>
+<p>这个函数是文件系统进程的服务端接口，调用 <code>file_read()</code> 来实现真正的文件读取</p>
+<pre><code class="hljs c"><span class="hljs-comment">// Read at most ipc-&gt;read.req_n bytes from the current seek position</span>
+<span class="hljs-comment">// in ipc-&gt;read.req_fileid.  Return the bytes read from the file to</span>
+<span class="hljs-comment">// the caller in ipc-&gt;readRet, then update the seek position.  Returns</span>
+<span class="hljs-comment">// the number of bytes successfully read, or &lt; 0 on error.</span>
+<span class="hljs-keyword">int</span>
+serve_read(<span class="hljs-keyword">envid_t</span> envid, <span class="hljs-keyword">union</span> Fsipc *ipc)
+&#123;
+	<span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">Fsreq_read</span> *<span class="hljs-title">req</span> = &amp;<span class="hljs-title">ipc</span>-&gt;<span class="hljs-title">read</span>;</span>
+	<span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">Fsret_read</span> *<span class="hljs-title">ret</span> = &amp;<span class="hljs-title">ipc</span>-&gt;<span class="hljs-title">readRet</span>;</span>
+
+	<span class="hljs-keyword">if</span> (debug)
+		cprintf(<span class="hljs-string">"serve_read %08x %08x %08x\n"</span>, envid, req-&gt;req_fileid, req-&gt;req_n);
+
+	<span class="hljs-comment">// Lab 5: Your code here:</span>
+	<span class="hljs-keyword">int</span> r;
+	<span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">OpenFile</span> *<span class="hljs-title">o</span>;</span>
+	<span class="hljs-keyword">if</span> ((r = openfile_lookup(envid, req-&gt;req_fileid, &amp;o)) &lt; <span class="hljs-number">0</span>) <span class="hljs-keyword">return</span> r;
+	r = file_read(o-&gt;o_file, ret-&gt;ret_buf, req-&gt;req_n, o-&gt;o_fd-&gt;fd_offset);
+	<span class="hljs-keyword">if</span> (r &lt; <span class="hljs-number">0</span>) <span class="hljs-keyword">return</span> r;
+	o-&gt;o_fd-&gt;fd_offset += r;
+	<span class="hljs-keyword">return</span> r;
+&#125;</code></pre>
+
+<h4 id="Exercise-6"><a href="#Exercise-6" class="headerlink" title="Exercise 6"></a>Exercise 6</h4><blockquote>
+<p>Implement <code>serve_write</code> in <code>fs/serv.c</code> and <code>devfile_write</code> in <code>lib/file.c</code>.</p>
+<p>Use make grade to test your code. Your code should pass “file_write”, “file_read after file_write”, “open”, and “large file” for a score of 90/150.</p>
+</blockquote>
+<p><strong><code>serve_write</code></strong></p>
+<p>与之前的 serve_read() 实现方法基本一样</p>
+<pre><code class="hljs c"><span class="hljs-comment">// Write req-&gt;req_n bytes from req-&gt;req_buf to req_fileid, starting at</span>
+<span class="hljs-comment">// the current seek position, and update the seek position</span>
+<span class="hljs-comment">// accordingly.  Extend the file if necessary.  Returns the number of</span>
+<span class="hljs-comment">// bytes written, or &lt; 0 on error.</span>
+<span class="hljs-keyword">int</span>
+serve_write(<span class="hljs-keyword">envid_t</span> envid, struct Fsreq_write *req)
+&#123;
+	<span class="hljs-keyword">if</span> (debug)
+		cprintf(<span class="hljs-string">"serve_write %08x %08x %08x\n"</span>, envid, req-&gt;req_fileid, req-&gt;req_n);
+
+	<span class="hljs-comment">// LAB 5: Your code here.</span>
+	<span class="hljs-comment">// panic("serve_write not implemented");</span>
+	<span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">OpenFile</span>* <span class="hljs-title">o</span> = <span class="hljs-title">NULL</span>;</span>
+	<span class="hljs-keyword">int</span> r = openfile_lookup(envid, req-&gt;req_fileid, &amp;o);
+	<span class="hljs-keyword">if</span>(r &lt; <span class="hljs-number">0</span>) <span class="hljs-keyword">return</span> r;
+	r = file_write(o-&gt;o_file, req-&gt;req_buf, req-&gt;req_n, o-&gt;o_fd-&gt;fd_offset);
+	<span class="hljs-keyword">if</span>(r &gt; <span class="hljs-number">0</span>) o-&gt;o_fd-&gt;fd_offset += r;
+	<span class="hljs-keyword">return</span> r;
+	
+&#125;</code></pre>
+
+<p><strong><code>devfile_write</code></strong></p>
+<p>是客户端进程函数，通过调用 fsipc() 将传入的参数发送给文件系统进程。</p>
+<pre><code class="hljs c"><span class="hljs-comment">// Write at most 'n' bytes from 'buf' to 'fd' at the current seek position.</span>
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">// Returns:</span>
+<span class="hljs-comment">//	 The number of bytes successfully written.</span>
+<span class="hljs-comment">//	 &lt; 0 on error.</span>
+<span class="hljs-keyword">static</span> <span class="hljs-keyword">ssize_t</span>
+devfile_write(struct Fd *fd, <span class="hljs-keyword">const</span> <span class="hljs-keyword">void</span> *buf, <span class="hljs-keyword">size_t</span> n)
+&#123;
+	<span class="hljs-comment">// Make an FSREQ_WRITE request to the file system server.  Be</span>
+	<span class="hljs-comment">// careful: fsipcbuf.write.req_buf is only so large, but</span>
+	<span class="hljs-comment">// remember that write is always allowed to write *fewer*</span>
+	<span class="hljs-comment">// bytes than requested.</span>
+	<span class="hljs-comment">// LAB 5: Your code here</span>
+	<span class="hljs-comment">// panic("devfile_write not implemented");</span>
+	fsipcbuf.<span class="hljs-built_in">write</span>.req_fileid = fd-&gt;fd_file.id;
+	fsipcbuf.<span class="hljs-built_in">write</span>.req_n = MIN(n, PGSIZE);
+	memmove(fsipcbuf.<span class="hljs-built_in">write</span>.req_buf, buf, fsipcbuf.<span class="hljs-built_in">write</span>.req_n);
+	<span class="hljs-keyword">int</span> r = fsipc(FSREQ_WRITE, <span class="hljs-literal">NULL</span>);
+	<span class="hljs-keyword">return</span> r;
+&#125;</code></pre>
+
+<h1 id="Part-B：Spawning-Processes"><a href="#Part-B：Spawning-Processes" class="headerlink" title="Part B：Spawning Processes"></a>Part B：Spawning Processes</h1><h4 id="Exercise-7"><a href="#Exercise-7" class="headerlink" title="Exercise 7"></a>Exercise 7</h4><blockquote>
+<p><code>spawn</code> relies on the new syscall <code>sys_env_set_trapframe</code> to initialize the state of the newly created environment. Implement <code>sys_env_set_trapframe</code> in <code>kern/syscall.c</code> (don’t forget to dispatch the new system call in <code>syscall()</code>).</p>
+<p>Test your code by running the <code>user/spawnhello</code> program from <code>kern/init.c</code>, which will attempt to spawn <code>/hello</code> from the file system.</p>
+<p>Use make grade to test your code.</p>
+</blockquote>
+<p><strong><code>sys_env_set_trapframe</code></strong></p>
+<p>函数作用是将进程号为 envid 的进程的 TrapFrame 设为 tf ，并且在设置前需要检查 envid 是否存 在</p>
+<pre><code class="hljs c"><span class="hljs-comment">// Set envid's trap frame to 'tf'.</span>
+<span class="hljs-comment">// tf is modified to make sure that user environments always run at code</span>
+<span class="hljs-comment">// protection level 3 (CPL 3), interrupts enabled, and IOPL of 0.</span>
+<span class="hljs-comment">//</span>
+<span class="hljs-comment">// Returns 0 on success, &lt; 0 on error.  Errors are:</span>
+<span class="hljs-comment">//	-E_BAD_ENV if environment envid doesn't currently exist,</span>
+<span class="hljs-comment">//		or the caller doesn't have permission to change envid.</span>
+<span class="hljs-keyword">static</span> <span class="hljs-keyword">int</span>
+sys_env_set_trapframe(<span class="hljs-keyword">envid_t</span> envid, struct Trapframe *tf)
+&#123;
+	<span class="hljs-comment">// LAB 5: Your code here.</span>
+	<span class="hljs-comment">// Remember to check whether the user has supplied us with a good</span>
+	<span class="hljs-comment">// address!</span>
+	<span class="hljs-comment">// panic("sys_env_set_trapframe not implemented");</span>
+	<span class="hljs-keyword">int</span> r;
+	<span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">Env</span> * <span class="hljs-title">e</span>;</span>
+	<span class="hljs-keyword">if</span>((r=envid2env(envid, &amp;e, <span class="hljs-number">1</span>))&lt;<span class="hljs-number">0</span>) <span class="hljs-keyword">return</span> r;
+	memmove(&amp;e-&gt;env_tf,tf,<span class="hljs-keyword">sizeof</span>(struct Trapframe));
+	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+
+&#125;</code></pre>
+
+<h1 id="Part-C：The-Shell"><a href="#Part-C：The-Shell" class="headerlink" title="Part C：The Shell"></a>Part C：The Shell</h1><h4 id="Exercise-10"><a href="#Exercise-10" class="headerlink" title="Exercise 10"></a>Exercise 10</h4><blockquote>
+<p>The shell doesn’t support I/O redirection. It would be nice to run sh &lt;script instead of having to type in all the commands in the script by hand, as you did above. Add I/O redirection for &lt; to <code>user/sh.c</code>.</p>
+<p>Test your implementation by typing sh &lt;script into your shell</p>
+<p>Run make run-testshell to test your shell. <code>testshell</code> simply feeds the above commands (also found in <code>fs/testshell.sh</code>) into the shell and then checks that the output matches <code>fs/testshell.key</code>.</p>
+</blockquote>
+<p>修改<code>user/sh.c</code>中的<code>runcmd()</code>来支持重定向</p>
+<pre><code class="hljs c"><span class="hljs-comment">// LAB 5: Your code here.</span>
+<span class="hljs-comment">// panic("&lt; redirection not implemented");</span>
+<span class="hljs-keyword">if</span> ((fd = <span class="hljs-built_in">open</span>(t, O_RDONLY)) &lt; <span class="hljs-number">0</span>) 
+&#123;
+	cprintf(<span class="hljs-string">"open %s for write: %e"</span>, t, fd);
+	<span class="hljs-built_in">exit</span>();
+&#125;
+<span class="hljs-keyword">if</span> (fd != <span class="hljs-number">0</span>) 
+&#123;
+	dup(fd, <span class="hljs-number">0</span>);
+	<span class="hljs-built_in">close</span>(fd);
+&#125;
+<span class="hljs-keyword">break</span>;</code></pre>
+
+
+            </article>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/Operating-System/">Operating System</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" target="_blank" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！</p>
+              
+              
+                <div class="post-prevnext row">
+                  <div class="post-prev col-6">
+                    
+                    
+                      <a href="/2021/03/03/Graph-Representation-learning/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Graph Representation learning</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </div>
+                  <div class="post-next col-6">
+                    
+                    
+                      <a href="/2020/12/22/VPN/">
+                        <span class="hidden-mobile">VPN</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </div>
+                </div>
+              
+            </div>
+
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div id="tocbot"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+  </main>
+
+  
+    <a id="scroll-top-button" href="#" role="button">
+      <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  
+
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <div>
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a>
+      <i class="iconfont icon-love"></i>
+      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener">
+        <span>Fluid</span></a>
+    </div>
+    
+
+    
+
+    
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script  src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script  src="/js/debouncer.js" ></script>
+<script  src="/js/main.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/lazyload.js" ></script>
+  
+
+
+
+  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js" ></script>
+  <script  src="/js/clipboard-use.js" ></script>
+
+
+
+
+
+
+
+  <script  src="https://cdn.staticfile.org/tocbot/4.11.1/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var boardCtn = $('#board-ctn');
+      var boardTop = boardCtn.offset().top;
+
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: 'article.markdown-body',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        collapseDepth: 0,
+        scrollSmooth: true,
+        headingsOffset: -boardTop
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc').css('visibility', 'visible');
+      }
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "操作系统lab6实验报告&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      searchFunc(path, 'local-search-input', 'local-search-result');
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <script>
+    $('#post img:not(.no-zoom img, img[no-zoom]), img[zoom]').each(
+      function () {
+        var element = document.createElement('a');
+        $(element).attr('data-fancybox', 'images');
+        $(element).attr('href', $(this).attr('src'));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
