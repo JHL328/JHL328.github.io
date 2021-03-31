@@ -261,8 +261,10 @@
 <p>之后进行运行，成功获得root shell</p>
 <p><img src="/2021/03/24/Return-to-libc-attack/15.PNG" srcset="/img/loading.gif" alt="15"></p>
 <h2 id="Task-5-Optional-Return-Oriented-Programming"><a href="#Task-5-Optional-Return-Oriented-Programming" class="headerlink" title="Task 5 (Optional): Return-Oriented Programming"></a>Task 5 (Optional): Return-Oriented Programming</h2><p>本来我们是要在调用system函数之前调用setuid(0)，而实际上需要在bof结束之后调用10次foo，然后再调用execv()</p>
-<p>首先，我们需要获得foo、execv以及exit在内存当中的位置</p>
+<p>首先，我们需要获得foo、execv以及exit在内存当中的位置分别为<code>0x565562b0,0xf7e994b0,0xf7e04f80</code></p>
 <p><img src="/2021/03/24/Return-to-libc-attack/17.PNG" srcset="/img/loading.gif" alt="17"></p>
+<p>之后结合栈里面信息进行修改</p>
+<p><img src="/2021/03/24/Return-to-libc-attack/18.PNG" srcset="/img/loading.gif" alt="18"></p>
 
             </article>
             <hr>
