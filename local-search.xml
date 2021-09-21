@@ -4,6 +4,25 @@
   
   
   <entry>
+    <title>安全攻防综合实验一</title>
+    <link href="/2021/09/15/%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C%E4%B8%80/"/>
+    <url>/2021/09/15/%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C%E4%B8%80/</url>
+    
+    <content type="html"><![CDATA[<h2 id="DVWA——File-inclusion漏洞"><a href="#DVWA——File-inclusion漏洞" class="headerlink" title="DVWA——File inclusion漏洞"></a>DVWA——File inclusion漏洞</h2><p align="right">姓名：贾昊龙</p><p align="right">学号：18307130049</p><h3 id="Background"><a href="#Background" class="headerlink" title="Background"></a>Background</h3><blockquote><p>开发人员通常会把可重复使用的函数写到单个文件中，在使用某些函数时，直接调用此文件，而无需再次编写，这种调用文件的过程一般被称为“包含”（include）。</p><p>通常，所包含的文件是“写死”的。但是如果可在执行中，动态确定所要包含的文件，将显著增加灵活性。</p><p>然而灵活性增加的同时，也带来安全隐患</p></blockquote><p><strong>漏洞条件</strong></p><p>参考blog：<a href="https://blog.csdn.net/weixin_58660073/article/details/117867429" target="_blank" rel="noopener">文件包含漏洞</a></p><p>当服务器php配置中开启allow_ url include时，可以通过php的某些特性函数(include(),require(),include once()和 require once())利用url去动态包含文件<strong>。如果没有对文件来源进行严格审查，就会导致加载恶意文件。</strong><br>   文件包含漏洞分为<strong>本地文件包含漏洞</strong>和<strong>远程文件包含漏洞</strong>,远程文件包含漏洞是因为开启了php配置中的allow urlr fopen选项，该选项开启以后，服务器允许包含一个远程文件。<br>   需要说明的一点是，包含文件时，不管文件后缀是不是php,都会尝试当做php文件执行，如果内容是php,会正常执行并打印结果，如果不是，则会原封不动地打印文件内容，所以文件包含漏洞常常会导致任意文件读取与任意命令执行。 include:包含并运行指定文件，当包含外部文件发生错误时，系统给出警告，但整个php.文件继续执行。require:跟include不同的是，当产生错误的时候，include 下面继续运行而require 停止运行了。</p><h3 id="配置环境"><a href="#配置环境" class="headerlink" title="配置环境"></a>配置环境</h3><p>首先在自己的服务器(windows server)上搭建xampp，(apache+mysql)，并在相应目录下安装</p><p>DVWA的项目，成功的可以访问到DVWA环境。对于在file inclusion中提示的 <code>allow_url_include：</code>已禁用 的问题应该在本地对于的php代码中将其<code>php.ini</code> 中相应的权限开启即可</p><h3 id="low-level"><a href="#low-level" class="headerlink" title="low level"></a>low level</h3><pre><code class="hljs php"><span class="hljs-meta">&lt;?php</span><span class="hljs-comment">// The page we wish to display</span>$file = $_GET[ <span class="hljs-string">'page'</span> ];<span class="hljs-meta">?&gt;</span></code></pre><p>通过源码可以看到文件包含<strong>是在url通过GET传参的方式获取文件</strong>,经过测试发现可以直接获取服务器文件路径：</p><p><img src="/2021/09/15/%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C%E4%B8%80/1.PNG" srcset="/img/loading.gif" alt="1"></p><p>接下来，尝试进行包含本地文件</p><p><img src="/2021/09/15/%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C%E4%B8%80/2.PNG" srcset="/img/loading.gif" alt="2"></p><p><strong>无论文件后缀名是什么，只要文件内容为php脚本都会正确解析并且执行</strong></p><h3 id="Mid-level"><a href="#Mid-level" class="headerlink" title="Mid level"></a>Mid level</h3><p>继续来看中级的源码</p><pre><code class="hljs php"><span class="hljs-meta">&lt;?php</span><span class="hljs-comment">// The page we wish to display</span>$file = $_GET[ <span class="hljs-string">'page'</span> ];<span class="hljs-comment">// Input validation</span>$file = str_replace( <span class="hljs-keyword">array</span>( <span class="hljs-string">"http://"</span>, <span class="hljs-string">"https://"</span> ), <span class="hljs-string">""</span>, $file );$file = str_replace( <span class="hljs-keyword">array</span>( <span class="hljs-string">"../"</span>, <span class="hljs-string">"..\""</span> ), <span class="hljs-string">""</span>, $file );<span class="hljs-meta">?&gt;</span></code></pre><p>会发现对于输入进行来检查并且会进行相应替换，我们可以采用double input来进行攻击。本地文件包含：….//….//绕过过滤，远程文件包含：httphttp://://</p><h3 id="High-level"><a href="#High-level" class="headerlink" title="High level"></a>High level</h3><pre><code class="hljs php"><span class="hljs-meta">&lt;?php</span><span class="hljs-comment">// The page we wish to display</span>$file = $_GET[ <span class="hljs-string">'page'</span> ];<span class="hljs-comment">// Input validation</span><span class="hljs-keyword">if</span>( !fnmatch( <span class="hljs-string">"file*"</span>, $file ) &amp;&amp; $file != <span class="hljs-string">"include.php"</span> ) &#123;    <span class="hljs-comment">// This isn't the page we want!</span>    <span class="hljs-keyword">echo</span> <span class="hljs-string">"ERROR: File not found!"</span>;    <span class="hljs-keyword">exit</span>;&#125;<span class="hljs-meta">?&gt;</span></code></pre><p>分析源代码可知道将 <code>str_replace</code>替换为 <code>fnmatch</code> ，保证服务器只能够通过 <code>file</code>协议来获取文件。</p><p>所以这里并不能通过http协议来进行访问远程文件，通过file可以看到对应的文件内容</p><p><img src="/2021/09/15/%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C%E4%B8%80/3.PNG" srcset="/img/loading.gif" alt="3"></p>]]></content>
+    
+    
+    
+    <tags>
+      
+      <tag>安全攻防综合实验</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>meltdown lab</title>
     <link href="/2021/05/27/meltdown-lab/"/>
     <url>/2021/05/27/meltdown-lab/</url>
