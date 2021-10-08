@@ -169,6 +169,50 @@
     
     
     <div class="col-12 col-md-12 mx-auto index-info">
+      <a class="index-header" href="/2021/10/08/%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C3/">安全攻防综合实验3</a>
+
+      <a href="/2021/10/08/%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C3/" class="index-excerpt">
+        
+        
+          
+        
+        <div>网络扫描姓名：贾昊龙
+学号：18307130049
+
+TCP端口扫描
+Target：当被扫描端口收到SYN数据包的时候，返回一个SYN+ACK数据包给源主机，同时过滤RST数据包。
+Python：
+
+#!/usr/bin/python
+from scapy.all import * 
+def process(pkt): 
+    IP_src = pkt[IP].src 
+    IP_dst =</div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>&nbsp;2021-10-08
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E7%BB%BC%E5%90%88/">安全攻防综合</a>
+            
+          </div>
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <div class="col-12 col-md-12 mx-auto index-info">
       <a class="index-header" href="/2021/09/22/%E5%AE%89%E5%85%A8%E7%BB%BC%E5%90%88%E6%94%BB%E9%98%B2%E5%AE%9E%E9%AA%8C2/">安全综合攻防实验2</a>
 
       <a href="/2021/09/22/%E5%AE%89%E5%85%A8%E7%BB%BC%E5%90%88%E6%94%BB%E9%98%B2%E5%AE%9E%E9%AA%8C2/" class="index-excerpt">
@@ -540,46 +584,6 @@ task2：Passing environment variablestep 1对program进行编译，这个program
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>&nbsp;2021-04-11
-          </div>
-        
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/software-security/">software security</a>
-            
-          </div>
-        
-      </div>
-    </div>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <div class="col-12 col-md-12 mx-auto index-info">
-      <a class="index-header" href="/2021/03/24/Return-to-libc-attack/">Return to libc attack</a>
-
-      <a href="/2021/03/24/Return-to-libc-attack/" class="index-excerpt">
-        
-        
-          
-        
-        <div>Overviewreturn to libc是属于缓冲区溢出的一种攻击
-
-前提：此时堆栈不可执行，所以不能够将恶意代码注入到堆栈当中来进行执行
-
-方案：将返回地址修改为现有的代码，例如libc库里面的system()函数，该函数已经加载到内存空间
-
-
-Task 1: Finding out the Addresses of libc Functions既然说我们需要调用system()函数来帮助我</div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>&nbsp;2021-03-24
           </div>
         
         

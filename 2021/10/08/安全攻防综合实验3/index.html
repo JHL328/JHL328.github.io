@@ -17,7 +17,7 @@
   <meta name="description" content="">
   <meta name="author" content="John Doe">
   <meta name="keywords" content="">
-  <title>安全综合攻防实验2 - Hexo</title>
+  <title>安全攻防综合实验3 - Hexo</title>
 
   <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
 
@@ -153,8 +153,8 @@
               
   <div class="mt-3 post-meta">
     <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-    <time datetime="2021-09-22 10:41">
-      2021年9月22日 上午
+    <time datetime="2021-10-08 21:26">
+      2021年10月8日 晚上
     </time>
   </div>
 
@@ -164,7 +164,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      449 字
+      340 字
     </span>
   
 
@@ -174,7 +174,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      5
+      4
        分钟
     </span>
   
@@ -205,115 +205,44 @@
           <div class="post-content mx-auto" id="post">
             
             <article class="markdown-body">
-              <h2 id="安全综合攻防实验2"><a href="#安全综合攻防实验2" class="headerlink" title="安全综合攻防实验2"></a>安全综合攻防实验2</h2><h3 id="Webmail"><a href="#Webmail" class="headerlink" title="Webmail"></a>Webmail</h3><ul>
-<li>获得基本信息</li>
+              <h2 id="网络扫描"><a href="#网络扫描" class="headerlink" title="网络扫描"></a>网络扫描</h2><p align="right">姓名：贾昊龙
+</p><p align="right">学号：18307130049
+
+</p><h3 id="TCP端口扫描"><a href="#TCP端口扫描" class="headerlink" title="TCP端口扫描"></a>TCP端口扫描</h3><ul>
+<li>Target：当被扫描端口收到<code>SYN</code>数据包的时候，返回一个<code>SYN+ACK</code>数据包给源主机，同时过滤<code>RST</code>数据包。</li>
+<li>Python：</li>
 </ul>
-<table>
-<thead>
-<tr>
-<th align="center">收件人邮箱</th>
-<th align="center"><a href="mailto:cwu@fudan.edu.cn">cwu@fudan.edu.cn</a></th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center"><strong>发件人邮箱</strong></td>
-<td align="center"><a href="mailto:13601927008@sina.cn">13601927008@sina.cn</a></td>
-</tr>
-<tr>
-<td align="center"><strong>邮件标题</strong></td>
-<td align="center">Test mail</td>
-</tr>
-<tr>
-<td align="center"><strong>邮件正文</strong></td>
-<td align="center">这是一个发往新浪邮箱的测试邮件，带附件。<br>吴承荣</td>
-</tr>
-<tr>
-<td align="center"><strong>用户名</strong></td>
-<td align="center">cwu</td>
-</tr>
-<tr>
-<td align="center"><strong>口令</strong></td>
-<td align="center">ABC12345XYZ</td>
-</tr>
-</tbody></table>
-<ul>
-<li>第一封邮件</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th align="center"><strong>发件⼈邮箱</strong></th>
-<th align="center"><strong><a href="mailto:cwu@fudan.edu.cn">cwu@fudan.edu.cn</a></strong></th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center"><strong>收件⼈邮</strong></td>
-<td align="center"><strong><a href="mailto:13601927008@sina.cn">13601927008@sina.cn</a></strong></td>
-</tr>
-<tr>
-<td align="center"><strong>邮件标题</strong></td>
-<td align="center"><strong>Test+mail+1</strong></td>
-</tr>
-<tr>
-<td align="center"><strong>邮件正⽂</strong></td>
-<td align="center"><strong>这是⼀个发往新浪邮箱的测试邮件，带附件。吴承荣</strong></td>
-</tr>
-<tr>
-<td align="center"><strong>附件</strong></td>
-<td align="center"><strong>参考⽹站列表.pdf</strong></td>
-</tr>
-</tbody></table>
-<ul>
-<li>第二封邮件</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th align="center"><strong>发件⼈邮箱</strong></th>
-<th align="center"><strong><a href="mailto:13601927008@sina.cn">13601927008@sina.cn</a></strong></th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center"><strong>收件⼈邮箱</strong></td>
-<td align="center"><strong><a href="mailto:cwu@fudan.edu.cn">cwu@fudan.edu.cn</a></strong></td>
-</tr>
-<tr>
-<td align="center"><strong>邮件标题</strong></td>
-<td align="center"><strong>课程测试邮件</strong></td>
-</tr>
-<tr>
-<td align="center"><strong>附件</strong></td>
-<td align="center"><strong>IP基础题.docx</strong></td>
-</tr>
-<tr>
-<td align="center"><strong>邮件正⽂</strong></td>
-<td align="center"><strong>这是⼀个课程测试邮件。请查收。</strong></td>
-</tr>
-</tbody></table>
-<h4 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h4><p>使用wireshark追踪TCP流并且使用UTF-8J解码，之后通过流的信息来看</p>
-<p><img src="/2021/09/22/%E5%AE%89%E5%85%A8%E7%BB%BC%E5%90%88%E6%94%BB%E9%98%B2%E5%AE%9E%E9%AA%8C2/2.PNG" srcset="/img/loading.gif" alt="2"></p>
-<p>可以看到有对应的一些信息，同时通过在线解码工具来解码选中的部分</p>
-<p><img src="/2021/09/22/%E5%AE%89%E5%85%A8%E7%BB%BC%E5%90%88%E6%94%BB%E9%98%B2%E5%AE%9E%E9%AA%8C2/3.PNG" srcset="/img/loading.gif" alt="3"></p>
-<p><img src="/2021/09/22/%E5%AE%89%E5%85%A8%E7%BB%BC%E5%90%88%E6%94%BB%E9%98%B2%E5%AE%9E%E9%AA%8C2/4.PNG" srcset="/img/loading.gif" alt="4"></p>
-<p>之后进行搜索关键字，并且将对应的return Info进行解码</p>
-<p><img src="/2021/09/22/%E5%AE%89%E5%85%A8%E7%BB%BC%E5%90%88%E6%94%BB%E9%98%B2%E5%AE%9E%E9%AA%8C2/5.PNG" srcset="/img/loading.gif" alt="5"></p>
-<p>同理，通过关键词搜索找到第二封邮件，可以看到名为“课程测试邮件”</p>
-<p><img src="/2021/09/22/%E5%AE%89%E5%85%A8%E7%BB%BC%E5%90%88%E6%94%BB%E9%98%B2%E5%AE%9E%E9%AA%8C2/6.PNG" srcset="/img/loading.gif" alt="6"></p>
-<p>之后查找docx可以看到名为“IP基础题”的附件</p>
-<p>之后将所有文件进行导出，会看到有一个有docx出现，解码后docx前面是IP基础题，将名字docx后面的删去</p>
-<p><img src="/2021/09/22/%E5%AE%89%E5%85%A8%E7%BB%BC%E5%90%88%E6%94%BB%E9%98%B2%E5%AE%9E%E9%AA%8C2/7.PNG" srcset="/img/loading.gif" alt="7"></p>
-<p>同样，还原另一个参考网站列表.pdf</p>
-<p><img src="/2021/09/22/%E5%AE%89%E5%85%A8%E7%BB%BC%E5%90%88%E6%94%BB%E9%98%B2%E5%AE%9E%E9%AA%8C2/9.PNG" srcset="/img/loading.gif" alt="9"></p>
-<p>之后在还原页面的时候直接将对应的HTML代码复制到VS code就行</p>
-<p><img src="/2021/09/22/%E5%AE%89%E5%85%A8%E7%BB%BC%E5%90%88%E6%94%BB%E9%98%B2%E5%AE%9E%E9%AA%8C2/10.PNG" srcset="/img/loading.gif" alt="10"></p>
-<h3 id="ftpexample"><a href="#ftpexample" class="headerlink" title="ftpexample"></a>ftpexample</h3><p>同上面，先追踪流，并在GBK模式下进行</p>
-<p><img src="/2021/09/22/%E5%AE%89%E5%85%A8%E7%BB%BC%E5%90%88%E6%94%BB%E9%98%B2%E5%AE%9E%E9%AA%8C2/11.PNG" srcset="/img/loading.gif" alt="11"></p>
-<p>⾥看到客户向服务器指定传输⽂件的端⼝：172.16.168.21是ip地址，⽽端⼝号为192 x 256 + 27=49179 </p>
-<p>之后进行过滤并且导出为PPTX文件，内容如下：</p>
-<p><img src="/2021/09/22/%E5%AE%89%E5%85%A8%E7%BB%BC%E5%90%88%E6%94%BB%E9%98%B2%E5%AE%9E%E9%AA%8C2/12.PNG" srcset="/img/loading.gif" alt="12"></p>
-<p>docx方式同理</p>
-<p><img src="/2021/09/22/%E5%AE%89%E5%85%A8%E7%BB%BC%E5%90%88%E6%94%BB%E9%98%B2%E5%AE%9E%E9%AA%8C2/13.PNG" srcset="/img/loading.gif" alt="13"></p>
-<p><img src="/2021/09/22/%E5%AE%89%E5%85%A8%E7%BB%BC%E5%90%88%E6%94%BB%E9%98%B2%E5%AE%9E%E9%AA%8C2/14.PNG" srcset="/img/loading.gif" alt="14"></p>
+<pre><code class="hljs python"><span class="hljs-comment">#!/usr/bin/python</span>
+<span class="hljs-keyword">from</span> scapy.all <span class="hljs-keyword">import</span> * 
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">process</span><span class="hljs-params">(pkt)</span>:</span> 
+    IP_src = pkt[IP].src 
+    IP_dst = pkt[IP].dst 
+    TCP_sport = pkt[TCP].sport 
+    TCP_dport = pkt[TCP].dport 
+    TCP_seq = pkt[TCP].seq 
+    TCP.ack = pkt[TCP].ack 
+    <span class="hljs-comment">#对应的源主机端口信息的获取</span>
+    send_pkt = IP(src = IP_dst, dst = IP_src) / TCP(dport = TCP_sport, sport = TCP_dport, ack = TCP_seq + <span class="hljs-number">1</span>, flags = <span class="hljs-string">"SA"</span>) 
+    <span class="hljs-comment">#发送数据包</span>
+    send(send_pkt) 
+    
+sniff(filter = <span class="hljs-string">"tcp[tcpflags] &amp; (tcp-syn) != 0 and tcp[tcpflags] &amp; (tcp-ack) == 0"</span>, prn = process)
+<span class="hljs-comment">#进行过滤</span></code></pre>
+
+<p>通过嗅探函数来进行过滤并且抓取对应的<code>SYN</code>数据包，回复的<code>SYN+ACK</code>数据包构造如下：从抓取到的数据包当中获取源主机的IP以及端口号，之后ACK 号为抓取包的序列号加 1 。同时需要重新设置防火墙，过滤掉系统自动返回的 RST 数据包：</p>
+<pre><code class="hljs properties"><span class="hljs-attr">iptables</span> <span class="hljs-string">-F </span>
+<span class="hljs-attr">iptables</span> <span class="hljs-string">-P INPUT ACCEPt </span>
+<span class="hljs-attr">iptables</span> <span class="hljs-string">-A OUTPUT -p tcp --tcp-flags RST RST -j DROP</span></code></pre>
+
+<p>之后使用zenmap来进行扫描：</p>
+<p><img src="/2021/10/08/%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C3/1.PNG" srcset="/img/loading.gif" alt="1"></p>
+<h3 id="UDP端口扫描"><a href="#UDP端口扫描" class="headerlink" title="UDP端口扫描"></a>UDP端口扫描</h3><p>通过过滤掉 <code>ICMP port unreachable</code> 数据包，来使扫描方无法判断端口是否开放。</p>
+<p>使用防火墙来进行过滤</p>
+<pre><code class="hljs gauss">iptables -A <span class="hljs-keyword">OUTPUT</span> -p icmp --icmp-<span class="hljs-built_in">type</span> <span class="hljs-number">3</span> -j <span class="hljs-built_in">DROP</span></code></pre>
+
+<p>之后还是使用zenmap来进行扫描</p>
+<p><img src="/2021/10/08/%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C3/2.PNG" srcset="/img/loading.gif" alt="2"></p>
+<p>可以看到处于<code>ignore state</code></p>
 
             </article>
             <hr>
@@ -324,7 +253,7 @@
                   <div class="post-meta">
                     <i class="iconfont icon-tags"></i>
                     
-                      <a class="hover-with-bg" href="/tags/%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/">安全攻防综合实验</a>
+                      <a class="hover-with-bg" href="/tags/%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E7%BB%BC%E5%90%88/">安全攻防综合</a>
                     
                   </div>
                 
@@ -337,18 +266,12 @@
                   <div class="post-prev col-6">
                     
                     
-                      <a href="/2021/10/08/%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C3/">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">安全攻防综合实验3</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </div>
                   <div class="post-next col-6">
                     
                     
-                      <a href="/2021/09/15/%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C%E4%B8%80/">
-                        <span class="hidden-mobile">安全攻防综合实验一</span>
+                      <a href="/2021/09/22/%E5%AE%89%E5%85%A8%E7%BB%BC%E5%90%88%E6%94%BB%E9%98%B2%E5%AE%9E%E9%AA%8C2/">
+                        <span class="hidden-mobile">安全综合攻防实验2</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
@@ -487,7 +410,7 @@
     var typed = new Typed('#subtitle', {
       strings: [
         '  ',
-        "安全综合攻防实验2&nbsp;",
+        "安全攻防综合实验3&nbsp;",
       ],
       cursorChar: "_",
       typeSpeed: 70,

@@ -4,6 +4,25 @@
   
   
   <entry>
+    <title>安全攻防综合实验3</title>
+    <link href="/2021/10/08/%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C3/"/>
+    <url>/2021/10/08/%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C3/</url>
+    
+    <content type="html"><![CDATA[<h2 id="网络扫描"><a href="#网络扫描" class="headerlink" title="网络扫描"></a>网络扫描</h2><p align="right">姓名：贾昊龙</p><p align="right">学号：18307130049</p><h3 id="TCP端口扫描"><a href="#TCP端口扫描" class="headerlink" title="TCP端口扫描"></a>TCP端口扫描</h3><ul><li>Target：当被扫描端口收到<code>SYN</code>数据包的时候，返回一个<code>SYN+ACK</code>数据包给源主机，同时过滤<code>RST</code>数据包。</li><li>Python：</li></ul><pre><code class="hljs python"><span class="hljs-comment">#!/usr/bin/python</span><span class="hljs-keyword">from</span> scapy.all <span class="hljs-keyword">import</span> * <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">process</span><span class="hljs-params">(pkt)</span>:</span>     IP_src = pkt[IP].src     IP_dst = pkt[IP].dst     TCP_sport = pkt[TCP].sport     TCP_dport = pkt[TCP].dport     TCP_seq = pkt[TCP].seq     TCP.ack = pkt[TCP].ack     <span class="hljs-comment">#对应的源主机端口信息的获取</span>    send_pkt = IP(src = IP_dst, dst = IP_src) / TCP(dport = TCP_sport, sport = TCP_dport, ack = TCP_seq + <span class="hljs-number">1</span>, flags = <span class="hljs-string">"SA"</span>)     <span class="hljs-comment">#发送数据包</span>    send(send_pkt)     sniff(filter = <span class="hljs-string">"tcp[tcpflags] &amp; (tcp-syn) != 0 and tcp[tcpflags] &amp; (tcp-ack) == 0"</span>, prn = process)<span class="hljs-comment">#进行过滤</span></code></pre><p>通过嗅探函数来进行过滤并且抓取对应的<code>SYN</code>数据包，回复的<code>SYN+ACK</code>数据包构造如下：从抓取到的数据包当中获取源主机的IP以及端口号，之后ACK 号为抓取包的序列号加 1 。同时需要重新设置防火墙，过滤掉系统自动返回的 RST 数据包：</p><pre><code class="hljs properties"><span class="hljs-attr">iptables</span> <span class="hljs-string">-F </span><span class="hljs-attr">iptables</span> <span class="hljs-string">-P INPUT ACCEPt </span><span class="hljs-attr">iptables</span> <span class="hljs-string">-A OUTPUT -p tcp --tcp-flags RST RST -j DROP</span></code></pre><p>之后使用zenmap来进行扫描：</p><p><img src="/2021/10/08/%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C3/1.PNG" srcset="/img/loading.gif" alt="1"></p><h3 id="UDP端口扫描"><a href="#UDP端口扫描" class="headerlink" title="UDP端口扫描"></a>UDP端口扫描</h3><p>通过过滤掉 <code>ICMP port unreachable</code> 数据包，来使扫描方无法判断端口是否开放。</p><p>使用防火墙来进行过滤</p><pre><code class="hljs gauss">iptables -A <span class="hljs-keyword">OUTPUT</span> -p icmp --icmp-<span class="hljs-built_in">type</span> <span class="hljs-number">3</span> -j <span class="hljs-built_in">DROP</span></code></pre><p>之后还是使用zenmap来进行扫描</p><p><img src="/2021/10/08/%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C3/2.PNG" srcset="/img/loading.gif" alt="2"></p><p>可以看到处于<code>ignore state</code></p>]]></content>
+    
+    
+    
+    <tags>
+      
+      <tag>安全攻防综合</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>安全综合攻防实验2</title>
     <link href="/2021/09/22/%E5%AE%89%E5%85%A8%E7%BB%BC%E5%90%88%E6%94%BB%E9%98%B2%E5%AE%9E%E9%AA%8C2/"/>
     <url>/2021/09/22/%E5%AE%89%E5%85%A8%E7%BB%BC%E5%90%88%E6%94%BB%E9%98%B2%E5%AE%9E%E9%AA%8C2/</url>
