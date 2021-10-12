@@ -169,6 +169,44 @@
     
     
     <div class="col-12 col-md-12 mx-auto index-info">
+      <a class="index-header" href="/2021/10/12/%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C4/">安全攻防综合实验4</a>
+
+      <a href="/2021/10/12/%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C4/" class="index-excerpt">
+        
+        
+          
+        
+        <div>利用堆溢出修改文件Principal
+关于set-uid程序参考之前的blog
+Procedure首先，vim看一下对应的heap.c文件
+
+可以看到userinput是在低地址位置，然后outputfile是在高地址位置，注意，malloc分配并不是只分配了20个byte，需要保持对齐，参考PPT
+然后目标是在进行写入的时候使得在高地址上面的时候能够指向/etc/passwd，创建临时文件/tm</div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>&nbsp;2021-10-12
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/">安全攻防综合实验</a>
+            
+          </div>
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <div class="col-12 col-md-12 mx-auto index-info">
       <a class="index-header" href="/2021/10/08/%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C3/">安全攻防综合实验3</a>
 
       <a href="/2021/10/08/%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C3/" class="index-excerpt">
@@ -540,50 +578,6 @@ AI（4 * 感兴趣，属于第一档）
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>&nbsp;2021-04-21
-          </div>
-        
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/software-security/">software security</a>
-            
-          </div>
-        
-      </div>
-    </div>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <div class="col-12 col-md-12 mx-auto index-info">
-      <a class="index-header" href="/2021/04/11/environment-variable-and-set-uid-program/">environment variable and set-uid program</a>
-
-      <a href="/2021/04/11/environment-variable-and-set-uid-program/" class="index-excerpt">
-        
-        
-          
-        
-        <div>Lab Taskstask 1：manipulate environment variable
-打印环境变量
-
-
-
-使用export和unset来设置和取消设置环境变量
-
-
-这两条命令不是单独的程序，是bash的内部命令，而shell默认的程序是/bin/bash
-
-
-task2：Passing environment variablestep 1对program进行编译，这个program会使得</div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>&nbsp;2021-04-11
           </div>
         
         
