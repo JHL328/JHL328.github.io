@@ -169,6 +169,48 @@
     
     
     <div class="col-12 col-md-12 mx-auto index-info">
+      <a class="index-header" href="/2020/11/10/%E5%8F%A3%E4%BB%A4%E7%A0%B4%E8%A7%A3%E5%AE%9E%E9%AA%8C/">口令破解实验</a>
+
+      <a href="/2020/11/10/%E5%8F%A3%E4%BB%A4%E7%A0%B4%E8%A7%A3%E5%AE%9E%E9%AA%8C/" class="index-excerpt">
+        
+        
+          
+        
+        <div>实验目的&amp;要求
+熟悉和掌握正确的口令设计规则
+熟悉常见的防御口令攻击的方法
+
+实验内容Wordlist mode
+首先需要先创建一个新的用户：test，并把密码设置为password
+  
+  此时/etc/passwd和/etc/shadow两个文件会包含对应的用户的hash值，而需要将这两个文件通过unshadow命令来进行提取hash值并放入一个txt文件中
+  
+  之后在查看jo</div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>&nbsp;2020-11-10
+          </div>
+        
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/Software-security-lab/">Software security lab</a>
+            
+          </div>
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <div class="col-12 col-md-12 mx-auto index-info">
       <a class="index-header" href="/2020/11/06/%E5%90%8C%E6%AD%A5%E4%BA%92%E6%96%A5lab/">同步互斥lab</a>
 
       <a href="/2020/11/06/%E5%90%8C%E6%AD%A5%E4%BA%92%E6%96%A5lab/" class="index-excerpt">
@@ -496,53 +538,6 @@ Address Space Randomization(堆栈地址随机化)：主要是基于Linux操作�
             <i class="iconfont icon-tags"></i>
             
               <a href="/tags/Software-security-lab/">Software security lab</a>
-            
-          </div>
-        
-      </div>
-    </div>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <div class="col-12 col-md-12 mx-auto index-info">
-      <a class="index-header" href="/2020/10/02/Web-Security-lab1/">Web_Security_lab1</a>
-
-      <a href="/2020/10/02/Web-Security-lab1/" class="index-excerpt">
-        
-        
-          
-        
-        <div>Packet Sniffing lab[TOC]
-Task 1.1: Sniffing Packets#!/usr/bin/python3
-
-from scapy.all import *
-
-def print_pkt(pkt):
-	pkt.show()
-
-pkt = sniff(filter='icmp',prn=print_pkt)
-
-运行截图
-
-打开wireshark，进行抓包
-
-发现确实抓</div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>&nbsp;2020-10-02
-          </div>
-        
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/Packet-sniffing-and-spoofing-lab/">Packet sniffing and spoofing lab</a>
             
           </div>
         

