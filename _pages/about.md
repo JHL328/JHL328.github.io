@@ -30,7 +30,7 @@ I received my undergraduate degree from [your undergraduate institution]. Feel f
 <div class="collab-notice" markdown="1">
 🤝 **Open for Collaboration & Internship Opportunities**
 
-I'm open for academic collaborations and actively seeking <span class="collab-highlight">ML / RL-related</span> internship opportunities. If you have suitable opportunities, feel free to email me at [jhl18307130049@gmail.com](mailto:jhl18307130049@gmail.com).
+I'm open for academic collaborations and actively seeking <span class="collab-highlight">ML / RL-related</span> internship opportunities. If you have suitable opportunities, feel free to email me at [Haolong.Jia@rutgers.edu](mailto:Haolong.Jia@rutgers.edu).
 </div>
 
 # 🔥 News
