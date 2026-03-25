@@ -56,19 +56,25 @@ $darker-gray                : mix(#000, $gray, 60%);
 $light-gray                 : mix(#fff, $gray, 50%);
 $lighter-gray               : mix(#fff, $gray, 90%);
 
-$body-color                 : #fff;
-$background-color           : #fff;
-$code-background-color      : #fafafa;
-$code-background-color-dark : $light-gray;
-$text-color                 : $dark-gray;
-$border-color               : $lighter-gray;
+// Custom palette: https://coolors.co/palette/606c38-283618-fefae0-dda15e-bc6c25
+$palette-olive              : #606c38;
+$palette-dark-green         : #283618;
+$palette-cream              : #fefae0;
+$palette-tan                : #dda15e;
+$palette-brown              : #bc6c25;
 
-$primary-color              : #7a8288;
+$body-color                 : $palette-cream;
+$background-color           : $palette-cream;
+$code-background-color      : mix(#fff, $palette-cream, 50%);
+$code-background-color-dark : mix($palette-olive, $palette-cream, 20%);
+$text-color                 : $palette-dark-green;
+$border-color               : mix($palette-olive, $palette-cream, 30%);
+
+$primary-color              : $palette-olive;
 $success-color              : #62c462;
 $warning-color              : #f89406;
 $danger-color               : #ee5f5b;
-$info-color                 : #224b8d;
-// $info-color                 : #52adc8;
+$info-color                 : $palette-brown;
 
 /* brands */
 $behance-color              : #1769FF;
@@ -94,11 +100,11 @@ $xing-color                 : #006567;
 
 
 /* links */
-$link-color                 : $info-color;
+$link-color                 : $palette-brown;
 $link-color-hover           : mix(#000, $link-color, 25%);
-$link-color-visited         : mix(#fff, $link-color, 25%);
-$masthead-link-color        : $primary-color;
-$masthead-link-color-hover  : mix(#000, $primary-color, 25%);
+$link-color-visited         : mix(#000, $link-color, 15%);
+$masthead-link-color        : $palette-cream;
+$masthead-link-color-hover  : mix(#fff, $palette-cream, 25%);
 
 
 /*
