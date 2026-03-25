@@ -13,15 +13,12 @@ $paragraph-indent           : false; // true, false (default)
 $indent-var                 : 0.5em;
 
 /* system typefaces */
-$serif                      : Georgia, Times, serif;
-$sans-serif                 : "Trebuchet MS", Helvetica, sans-serif;
-// $sans-serif                 : Georgia, serif, sans-serif;
-
-// $sans-serif                 : -apple-system, ".SFNSText-Regular", "San Francisco", "Roboto", "Segoe UI", "Helvetica Neue", "Lucida Grande", Arial, sans-serif;
+$serif                      : Georgia, "Times New Roman", Times, serif;
+$sans-serif                 : -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif;
 $monospace                  : Monaco, Consolas, "Lucida Console", monospace;
 
 /* sans serif typefaces */
-$sans-serif-narrow          : $sans-serif;
+$sans-serif-narrow          : $serif;
 $helvetica                  : Helvetica, "Helvetica Neue", Arial, sans-serif;
 
 /* serif typefaces */
@@ -31,8 +28,8 @@ $bodoni                     : "Bodoni MT", serif;
 $calisto                    : "Calisto MT", serif;
 $garamond                   : Garamond, serif;
 
-$global-font-family         : $sans-serif;
-$header-font-family         : $sans-serif;
+$global-font-family         : $serif;
+$header-font-family         : $serif;
 $caption-font-family        : $serif;
 
 /* type scale */
@@ -56,30 +53,29 @@ $darker-gray                : mix(#000, $gray, 60%);
 $light-gray                 : mix(#fff, $gray, 50%);
 $lighter-gray               : mix(#fff, $gray, 90%);
 
-// Custom palette: https://coolors.co/palette/eddcd2-fff1e6-fde2e4-fad2e1-c5dedd-dbe7e4-f0efeb-d6e2e9-bcd4e6-99c1de
+// Palette accent variables (background stays white)
+// Source: https://coolors.co/palette/eddcd2-fff1e6-fde2e4-fad2e1-c5dedd-dbe7e4-f0efeb-d6e2e9-bcd4e6-99c1de
 $palette-peach              : #eddcd2;
-$palette-cream              : #fff1e6;
 $palette-rose               : #fde2e4;
 $palette-blush              : #fad2e1;
 $palette-teal               : #c5dedd;
 $palette-sage               : #dbe7e4;
-$palette-ivory              : #f0efeb;
 $palette-blue-gray          : #d6e2e9;
 $palette-steel-light        : #bcd4e6;
 $palette-steel              : #99c1de;
 
-$body-color                 : $palette-cream;
-$background-color           : $palette-cream;
-$code-background-color      : mix(#fff, $palette-cream, 60%);
-$code-background-color-dark : mix($palette-steel, $palette-cream, 20%);
+$body-color                 : #fff;
+$background-color           : #ffffff;
+$code-background-color      : #f5f7fa;
+$code-background-color-dark : $light-gray;
 $text-color                 : #2c3e50;
-$border-color               : $palette-sage;
+$border-color               : #e0e4e8;
 
-$primary-color              : $palette-steel;
-$success-color              : #62c462;
-$warning-color              : #f89406;
-$danger-color               : #ee5f5b;
-$info-color                 : mix(#000, $palette-steel, 35%);
+$primary-color              : mix(#000, $palette-steel, 35%);
+$success-color              : #48bb78;
+$warning-color              : #ed8936;
+$danger-color               : #f56565;
+$info-color                 : mix(#000, $palette-steel, 15%);
 
 /* brands */
 $behance-color              : #1769FF;
@@ -105,11 +101,11 @@ $xing-color                 : #006567;
 
 
 /* links */
-$link-color                 : mix(#000, $palette-steel, 35%);
-$link-color-hover           : mix(#000, $palette-steel, 55%);
-$link-color-visited         : mix(#000, $palette-steel, 25%);
-$masthead-link-color        : mix(#000, $palette-steel, 65%);
-$masthead-link-color-hover  : mix(#000, $palette-steel, 85%);
+$link-color                 : mix(#000, $palette-steel, 38%);
+$link-color-hover           : mix(#000, $palette-steel, 58%);
+$link-color-visited         : mix(#6b46c1, $palette-steel, 55%);
+$masthead-link-color        : $primary-color;
+$masthead-link-color-hover  : $info-color;
 
 
 /*
@@ -161,8 +157,9 @@ $susy: (
    Other
    ========================================================================== */
 
-$border-radius              : 4px;
-$box-shadow                 : 0 1px 1px rgba(0, 0, 0, 0.125);
+$border-radius              : 8px;
+$box-shadow                 : 0 2px 8px rgba(0, 0, 0, 0.1);
+$box-shadow-hover           : 0 4px 16px rgba(0, 0, 0, 0.15);
 $navicon-width              : 28px;
 $navicon-height             : 4px;
-$global-transition          : all 0.2s ease-in-out;
+$global-transition          : all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
