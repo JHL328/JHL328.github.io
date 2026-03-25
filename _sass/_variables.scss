@@ -56,25 +56,30 @@ $darker-gray                : mix(#000, $gray, 60%);
 $light-gray                 : mix(#fff, $gray, 50%);
 $lighter-gray               : mix(#fff, $gray, 90%);
 
-// Custom palette: https://coolors.co/palette/606c38-283618-fefae0-dda15e-bc6c25
-$palette-olive              : #606c38;
-$palette-dark-green         : #283618;
-$palette-cream              : #fefae0;
-$palette-tan                : #dda15e;
-$palette-brown              : #bc6c25;
+// Custom palette: https://coolors.co/palette/eddcd2-fff1e6-fde2e4-fad2e1-c5dedd-dbe7e4-f0efeb-d6e2e9-bcd4e6-99c1de
+$palette-peach              : #eddcd2;
+$palette-cream              : #fff1e6;
+$palette-rose               : #fde2e4;
+$palette-blush              : #fad2e1;
+$palette-teal               : #c5dedd;
+$palette-sage               : #dbe7e4;
+$palette-ivory              : #f0efeb;
+$palette-blue-gray          : #d6e2e9;
+$palette-steel-light        : #bcd4e6;
+$palette-steel              : #99c1de;
 
 $body-color                 : $palette-cream;
 $background-color           : $palette-cream;
-$code-background-color      : mix(#fff, $palette-cream, 50%);
-$code-background-color-dark : mix($palette-olive, $palette-cream, 20%);
-$text-color                 : $palette-dark-green;
-$border-color               : mix($palette-olive, $palette-cream, 30%);
+$code-background-color      : mix(#fff, $palette-cream, 60%);
+$code-background-color-dark : mix($palette-steel, $palette-cream, 20%);
+$text-color                 : #2c3e50;
+$border-color               : $palette-sage;
 
-$primary-color              : $palette-olive;
+$primary-color              : $palette-steel;
 $success-color              : #62c462;
 $warning-color              : #f89406;
 $danger-color               : #ee5f5b;
-$info-color                 : $palette-brown;
+$info-color                 : mix(#000, $palette-steel, 35%);
 
 /* brands */
 $behance-color              : #1769FF;
@@ -100,11 +105,11 @@ $xing-color                 : #006567;
 
 
 /* links */
-$link-color                 : $palette-brown;
-$link-color-hover           : mix(#000, $link-color, 25%);
-$link-color-visited         : mix(#000, $link-color, 15%);
-$masthead-link-color        : $palette-cream;
-$masthead-link-color-hover  : mix(#fff, $palette-cream, 25%);
+$link-color                 : mix(#000, $palette-steel, 35%);
+$link-color-hover           : mix(#000, $palette-steel, 55%);
+$link-color-visited         : mix(#000, $palette-steel, 25%);
+$masthead-link-color        : mix(#000, $palette-steel, 65%);
+$masthead-link-color-hover  : mix(#000, $palette-steel, 85%);
 
 
 /*

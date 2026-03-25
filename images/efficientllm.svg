@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 300">
+  <!-- Background -->
+  <rect width="500" height="300" fill="#c5dedd" rx="8"/>
+  <!-- Top label bar -->
+  <rect width="500" height="44" fill="#99c1de" rx="8"/>
+  <rect y="36" width="500" height="8" fill="#99c1de"/>
+  <text x="250" y="28" font-family="Georgia, serif" font-size="18" font-weight="bold" fill="#fff" text-anchor="middle">EfficientLLM</text>
+
+  <!-- Three column benchmark chart -->
+  <!-- Column labels -->
+  <text x="95"  y="72" font-family="Arial" font-size="11" fill="#2c3e50" text-anchor="middle" font-weight="bold">Architecture</text>
+  <text x="250" y="72" font-family="Arial" font-size="11" fill="#2c3e50" text-anchor="middle" font-weight="bold">Fine-Tuning</text>
+  <text x="405" y="72" font-family="Arial" font-size="11" fill="#2c3e50" text-anchor="middle" font-weight="bold">Inference</text>
+
+  <!-- Dividers -->
+  <line x1="170" y1="58" x2="170" y2="285" stroke="#bcd4e6" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <line x1="330" y1="58" x2="330" y2="285" stroke="#bcd4e6" stroke-width="1.5" stroke-dasharray="4,3"/>
+
+  <!-- Architecture bars (col 1) -->
+  <rect x="28" y="90"  width="60" height="16" fill="#99c1de" rx="3"/>
+  <rect x="28" y="112" width="48" height="16" fill="#bcd4e6" rx="3"/>
+  <rect x="28" y="134" width="72" height="16" fill="#99c1de" rx="3"/>
+  <rect x="28" y="156" width="40" height="16" fill="#bcd4e6" rx="3"/>
+  <text x="95" y="102"  font-family="Arial" font-size="9" fill="#2c3e50">MQA</text>
+  <text x="82" y="124"  font-family="Arial" font-size="9" fill="#2c3e50">GQA</text>
+  <text x="106" y="146" font-family="Arial" font-size="9" fill="#2c3e50">MLA</text>
+  <text x="74"  y="168" font-family="Arial" font-size="9" fill="#2c3e50">MoE</text>
+
+  <!-- Fine-tuning bars (col 2) -->
+  <rect x="183" y="90"  width="54" height="16" fill="#fad2e1" rx="3"/>
+  <rect x="183" y="112" width="68" height="16" fill="#fde2e4" rx="3"/>
+  <rect x="183" y="134" width="44" height="16" fill="#fad2e1" rx="3"/>
+  <text x="243" y="102"  font-family="Arial" font-size="9" fill="#2c3e50">LoRA</text>
+  <text x="257" y="124"  font-family="Arial" font-size="9" fill="#2c3e50">RSLoRA</text>
+  <text x="233" y="146"  font-family="Arial" font-size="9" fill="#2c3e50">DoRA</text>
+
+  <!-- Inference bars (col 3) -->
+  <rect x="343" y="90"  width="76" height="16" fill="#eddcd2" rx="3"/>
+  <rect x="343" y="112" width="58" height="16" fill="#f0efeb" rx="3"/>
+  <text x="425" y="102"  font-family="Arial" font-size="9" fill="#2c3e50">int4</text>
+  <text x="407" y="124"  font-family="Arial" font-size="9" fill="#2c3e50">float16</text>
+
+  <!-- Bottom stats row -->
+  <rect x="20" y="200" width="460" height="70" fill="#dbe7e4" rx="6"/>
+  <text x="250" y="220" font-family="Arial" font-size="10" fill="#2c3e50" text-anchor="middle" font-weight="bold">100+ Model-Technique Pairs · 0.5B–72B Parameters</text>
+  <text x="250" y="238" font-family="Arial" font-size="10" fill="#2c3e50" text-anchor="middle">48 × GH200 &amp; 8 × H200 Production Cluster</text>
+
+  <!-- Model size chips -->
+  <rect x="42"  y="248" width="42" height="14" fill="#99c1de" rx="7"/>
+  <text x="63"  y="259" font-family="Arial" font-size="9" fill="#fff" text-anchor="middle">0.5B</text>
+  <rect x="94"  y="248" width="36" height="14" fill="#bcd4e6" rx="7"/>
+  <text x="112" y="259" font-family="Arial" font-size="9" fill="#2c3e50" text-anchor="middle">1B</text>
+  <rect x="140" y="248" width="36" height="14" fill="#99c1de" rx="7"/>
+  <text x="158" y="259" font-family="Arial" font-size="9" fill="#fff" text-anchor="middle">7B</text>
+  <rect x="186" y="248" width="38" height="14" fill="#bcd4e6" rx="7"/>
+  <text x="205" y="259" font-family="Arial" font-size="9" fill="#2c3e50" text-anchor="middle">13B</text>
+  <rect x="234" y="248" width="38" height="14" fill="#99c1de" rx="7"/>
+  <text x="253" y="259" font-family="Arial" font-size="9" fill="#fff" text-anchor="middle">32B</text>
+  <rect x="282" y="248" width="38" height="14" fill="#bcd4e6" rx="7"/>
+  <text x="301" y="259" font-family="Arial" font-size="9" fill="#2c3e50" text-anchor="middle">70B</text>
+  <rect x="330" y="248" width="38" height="14" fill="#99c1de" rx="7"/>
+  <text x="349" y="259" font-family="Arial" font-size="9" fill="#fff" text-anchor="middle">72B</text>
+
+  <!-- Subtitle -->
+  <text x="250" y="290" font-family="Arial" font-size="10" fill="#2c3e50" text-anchor="middle" font-style="italic">First Large-Scale LLM Efficiency Benchmark · arXiv 2025</text>
+</svg>

@@ -46,7 +46,7 @@
     align-items: center;
     flex-direction: row;
     flex-wrap: wrap;
-    border-bottom: 1px mix(#606c38, #fefae0, 30%) solid;
+    border-bottom: 1px #dbe7e4 solid;
     padding: 2em 0 2em 0;
     
 
@@ -103,7 +103,7 @@ h1:before, .anchor:before {
     position: absolute;
     margin-top: .5em;
     margin-left: -.5em;
-    color: #fefae0;
-    background-color: #606c38;
+    color: mix(#000, #99c1de, 75%);
+    background-color: #c5dedd;
     font-size: .8em;
 }
