@@ -17,6 +17,7 @@ redirect_from:
 
 <span class='anchor' id='about-me'></span>
 
+<div class="bio-card" markdown="1">
 I am a PhD student at **Rutgers University**, advised by [your advisor's name]. My research focuses on **machine learning** and **reinforcement learning**, with the goal of developing intelligent agents that can reason, learn, and adapt in complex environments.
 
 My research interests include deep reinforcement learning, multi-agent systems, and the theoretical foundations of learning algorithms. I am broadly interested in building AI systems that are both sample-efficient and generalizable.
@@ -24,6 +25,13 @@ My research interests include deep reinforcement learning, multi-agent systems, 
 I received my undergraduate degree from [your undergraduate institution]. Feel free to reach out if you're interested in collaboration or have questions about my work!
 
 <a href='https://scholar.google.com/citations?user=-S8DjWYAAAAJ&hl=en'>Google Scholar</a> &nbsp;|&nbsp; <a href='https://github.com/JHL328'>GitHub</a> &nbsp;|&nbsp; <a href='https://www.linkedin.com/in/haolong-jia-274a3823a/'>LinkedIn</a> &nbsp;|&nbsp; <a href='https://x.com/Haolong_Jia'>Twitter/X</a>
+</div>
+
+<div class="collab-notice" markdown="1">
+🤝 **Open for Collaboration & Internship Opportunities**
+
+I'm open for academic collaborations and actively seeking <span class="collab-highlight">ML / RL-related</span> internship opportunities. If you have suitable opportunities, feel free to email me at [jhl18307130049@gmail.com](mailto:jhl18307130049@gmail.com).
+</div>
 
 # 🔥 News
 - *2025.01*: &nbsp;🎉 Started my PhD at Rutgers University.

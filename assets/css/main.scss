@@ -107,3 +107,57 @@ h1:before, .anchor:before {
     background-color: #99c1de;
     font-size: .8em;
 }
+
+/* =====================================================
+   Section header underline (palette: steel #99c1de)
+   ===================================================== */
+h2 {
+    padding-bottom: 0.4em;
+    border-bottom: 2px solid #bcd4e6;
+}
+
+/* =====================================================
+   Sidebar card
+   ===================================================== */
+.sidebar {
+    background: #ffffff;
+    border: 1px solid #dbe7e4;
+    border-radius: 12px;
+    padding: 1.2em 1em !important;
+    box-shadow: 0 2px 12px rgba(153, 193, 222, 0.12);
+}
+
+/* =====================================================
+   Bio intro card
+   ===================================================== */
+.bio-card {
+    background: #ffffff;
+    border: 1px solid #dbe7e4;
+    border-radius: 10px;
+    padding: 1.5em 2em;
+    margin-bottom: 1.8em;
+    box-shadow: 0 2px 8px rgba(153, 193, 222, 0.10);
+}
+
+/* =====================================================
+   Open for Collaboration notice
+   ===================================================== */
+.collab-notice {
+    background: #f0f8fb;
+    border-left: 4px solid #99c1de;
+    border-radius: 0 8px 8px 0;
+    padding: 1em 1.5em;
+    margin: 0 0 1.5em 0;
+
+    strong {
+        color: mix(#000, #99c1de, 40%);
+    }
+
+    .collab-highlight {
+        background: #fad2e1;
+        border-radius: 4px;
+        padding: 0.1em 0.4em;
+        font-weight: bold;
+        color: #2c3e50;
+    }
+}
